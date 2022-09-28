@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../static/login_signup.css">
+  <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+<title> WayGrade - Signup </title>
+
+</head>
+<body>
+  <body>
+    <div class="auth-page">
+      <div class="form">
+        <div class="signup">
+          <div class="signup-header">
+            <h3>UCE SIGNUP</h3>
+            <p>Please enter credentials to signup.</p>
+          </div>
+        </div>
+        <form class="signup-form" method="post">
+          <input type="text" name="email" placeholder="email">
+          <input type="password" name="pass" placeholder="password">
+          <div class="tos-agree-section">
+            <input class="tos-agree-box" type="checkbox" name="tos-agree">
+            <label class="tos-agree-message">By clicking this, you agree to our <a target="_blank" rel="noopener noreferrer" href="/terms-of-service">terms of service.</a></label>
+
+          </div>
+
+
+          {% if message %}
+            <p class="error-occurrence" id="error-occurrence">{{ message["message"] }}</p>
+          {% endif %}
+          <button id="submit-form-button" type="submit" value="SIGNUP" onclick="hide_button('submit-form-button')">SIGNUP</button>
+          <p class="message">Already have an account?
+            <a href="/login">Login here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+    <script>
+    function hide_button(idName) {
+       var elementHid = document.querySelector(".form button");
+       console.log("HIDDEN BUTTON FUNCTION OCCURRED!");
+       elementHid.classList.toggle("active");
+
+
+    }
+
+  </script>
+</body>
+</body>
+</html>
