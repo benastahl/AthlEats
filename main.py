@@ -20,11 +20,12 @@ def display_signup():
 
 @app.route("/signup", methods=["POST"])
 def process_signup():
-    tos_agree = request.form["tos-agree"]
-    email = request.form["email"]
-    password = request.form["pass"]
-
-    return render_template("signup.html")
+    try:
+        tos_agree = request.form["tos-agree"]
+        email = request.form["email"]
+        password = request.form["pass"]
+    except:
+        return render_template("signup.html")
 
 
 if __name__ == '__main__':
