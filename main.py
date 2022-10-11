@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from controls import UserDB
+from controls import UserDB, AdminDB
 from validate_email_address import validate_email
 from datetime import datetime
 
@@ -46,6 +46,30 @@ def display_signup():
     return render_template("signup.html")
 
 
+@app.route("/admin-login", methods=["GET"])
+def display_admin_login():
+    return render_template("admin-login.html")
+
+
+@app.route("/admin-login", methods=["POST"])
+def process_admin_login():
+    email = request.form["email"]
+    password = request.form["pass"]
+
+    admin = AdminDB().admin_login(email=email, password=password)
+    if not admin:
+        return redirect("/login", 302)
+
+    response = redirect("/admin-dashboard", 302)
+    response.set_cookie('admin_auth_token', admin.auth_token, max_age=60 * 60 * 24)  # 24 hour expiration (in seconds)
+
+    return response
+
+@app.route("/admin-dashboard", methods=["GET"])
+def display_admin_dashboard():
+    if
+
+
 @app.route("/signup", methods=["POST"])
 def process_signup():
     # Collect POST request params from signup
@@ -88,7 +112,8 @@ def process_signup():
     creation_date = int(datetime.timestamp(datetime.now()))
 
     # Add user to database
-    UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade, hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date)
+    UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade,
+                      hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date)
 
     return response
 
