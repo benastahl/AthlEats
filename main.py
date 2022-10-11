@@ -36,9 +36,22 @@ def process_login():
     # - use email variable to get user data from database.
     #   (Use email as arg in the `get_user` function to get a User object).
 
-    # - If `get_user` func returns False (no user with that email), return the login.html page with an error message (see process_signup).
+    if not UserDB().login_user(email, password):
+        return render_template("login.html", message="Password or email incorrect not found")
 
-    # - use the `bcrypt.checkpw` function to check the plaintext password against the hashed password in the User object. (If false, return login.html with message)
+    response = redirect("/dashboard", 302)
+
+    # Create an auth browser cookie (random letters and numbers) as our authentication
+    # token so the user doesn't have to log in every single time.
+    auth_token = secrets.token_hex()
+    response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
+
+    # BUG sqlite3.ProgrammingError: Cannot operate on a closed database.
+    UserDB().edit_user(email=email, password=password, auth_token=auth_token)
+    return response
+
+
+
 
 
 @app.route("/signup", methods=["GET"])

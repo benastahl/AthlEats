@@ -39,14 +39,18 @@ class UserDB:
             return False
         student = students[0]
         # Returns user object
-        return User(email=student[2], grade=student[3],
-                    hashed_password=student[4], auth_token=student[5], creation_date=student[6])
+        return User(first_name=student[0], last_name= student[1], email=student[2], grade=student[3],
+                    hashed_password=student[4], auth_token=student[5])
 
     def login_user(self, email, password):
 
-        user = self.get_user(email=email)
-        if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        try:
+            user = self.get_user(email=email)
+            if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+                return False
+        except:
             return False
+
         return True
 
     def edit_user(self, email, password, **kwargs):
