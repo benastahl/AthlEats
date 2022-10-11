@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, redirect
 from controls import UserDB
 from validate_email_address import validate_email
-from datetime import datetime
-
 import bcrypt
 import secrets
 
-app = Flask(__name__)
 
+app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -16,7 +14,9 @@ def home():
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         if UserDB().get_user(auth_token=auth_token):
+
             return redirect("/dashboard", 302)
+
     return redirect("/signup", 302)
 
 
@@ -27,6 +27,7 @@ def display_login():
 
 @app.route("/login", methods=["POST"])
 def process_login():
+    print("POST REQUEST")
     email = request.form["email"]
     password = request.form["pass"]  # plain text password
 
@@ -36,10 +37,20 @@ def process_login():
     # - use email variable to get user data from database.
     #   (Use email as arg in the `get_user` function to get a User object).
 
-    # - If `get_user` func returns False (no user with that email), return the login.html page with an error message (see process_signup).
+    # - If `get_user` func returns False (no user with that email),
+    # return the login.html page with an error message (see process_signup).
 
-    # - use the `bcrypt.checkpw` function to check the plaintext password against the hashed password in the User object. (If false, return login.html with message)
+    if not UserDB.get_user(email=email):
+        return render_template("signup.html", message="Email not found.")
 
+    # - use the `bcrypt.checkpw` function to check the plaintext password against the
+    # hashed password in the User object. (If false, return login.html with message)
+
+    user = UserDB().get_user(email=email)
+    if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        return render_template('signup.html', message="Password or email incorrect")
+
+    return redirect("/dashboard", code=302)
 
 @app.route("/signup", methods=["GET"])
 def display_signup():
@@ -65,8 +76,8 @@ def process_signup():
         return render_template("signup.html", message="Not a valid WHS student email.")
 
     # Checks if email is a real valid email address
-    # if not validate_email(email, verify=True):
-    #     return render_template("signup.html", message="Not a real email address.")
+    if not validate_email(email, verify=True):
+        return render_template("signup.html", message="Not a real email address.")
 
     # Check to see if Terms of Service is agreed to
     if tos_agree != "on":
@@ -80,15 +91,10 @@ def process_signup():
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # Parse first and last name from email address.
+    # Add user to database
     first_name = email.split("_")[0].capitalize()
     last_name = email.split("_")[1].split("@")[0].capitalize()
-
-    # Create timestamp of the creation date of the account
-    creation_date = int(datetime.timestamp(datetime.now()))
-
-    # Add user to database
-    UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade, hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date)
+    UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade, hashed_password=hashed_password, auth_token=auth_token)
 
     return response
 
