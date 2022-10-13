@@ -29,30 +29,37 @@ class UserDB:
         return True
 
     def get_user(self, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
+        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs if kwarg != "close_conn"])
         # Finds a user based on the keyword arguments. Gives back all the data on the user.
         students = self.cursor.execute(
             f"SELECT first_name, last_name, email, grade, hashed_password, auth_token, creation_date FROM students WHERE {conditions}").fetchall()
-        self.connection.close()
+
         if not students:
             # No student found
             return False
         student = students[0]
-        # Returns user object
-        return User(email=student[2], grade=student[3],
+
+        user = User(email=student[2], grade=student[3],
                     hashed_password=student[4], auth_token=student[5], creation_date=student[6])
+
+        # Adds option in args to not close the database connection for underlying function using get_user
+        if "close_conn" in kwargs and not kwargs.get("close_conn"):
+            return user
+
+        self.connection.close()
+        # Returns user object
+        return user
 
     def login_user(self, email, password):
 
         user = self.get_user(email=email)
-        if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
         return True
 
     def edit_user(self, email, password, **kwargs):
         # Check the password is correct before it allows to edit a user's details
-        user = self.get_user(email=email)
-        if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        if not self.login_user(email=email, password=password):
             return False
 
         # Update the user's details
@@ -60,10 +67,9 @@ class UserDB:
         self.cursor.execute(f'''
                 UPDATE students
                 SET {conditions}
-                WHERE email = {email}
+                WHERE email = '{email}'
                 ''')
-        self.connection.commit()
-        self.connection.close()
+
         # Return new user object with updated args/details.
         return self.get_user(email=email)
 
