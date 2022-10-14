@@ -7,283 +7,161 @@
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> WayGrade - Sports
+    <title> WayGrade - About
     </title>
    </head>
 
-<body>
-  <div class="sidebar">
-    <div class="logo-details">
-      <img src='https://cdn5-ss2.sharpschool.com/UserFiles/Servers/Server_1036540/Templates/FY19_WHS_White.png' width="65" height="60">
-      <span class="logo_name">WayGrade</span>
+  <body>
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src='https://cdn5-ss2.sharpschool.com/UserFiles/Servers/Server_1036540/Templates/FY19_WHS_White.png' width="65" height="60">
+        <span class="logo_name">WayGrade</span>
+      </div>
+        <ul class="nav-links">
+
+          <!-- IF ACCOUNT IS LINKED -->
+          <li>
+            <a href="/sports/{{username}}">
+              <i class='bx bx-ball' ></i>
+              <span class="links_name">Sports</span>
+            </a>
+          </li>
+          <li>
+            <a href="/grades/{{username}}">
+              <i class='bx bx-book-bookmark' ></i>
+              <span class="links_name">Grades</span>
+            </a>
+          </li>
+          <li>
+            <a href="/community_service/{{username}}">
+              <i class='bx bx-book-heart' ></i>
+              <span class="links_name">Community Service</span>
+            </a>
+          </li>
+          <li>
+            <a href="/about/{{username}}" class="active">
+              <i class='bx bx-info-circle'></i>
+              <span class="links_name">About</span>
+            </a>
+          </li>
+          <li>
+            <a href="/settings/{{username}}">
+              <i class='bx bx-cog' ></i>
+              <span class="links_name">Settings</span>
+            </a>
+          </li>
+          <li class="log_out">
+            <a href="/logout">
+              <i class='bx bx-log-out'></i>
+              <span class="links_name">Log out</span>
+            </a>
+          </li>
+
+        </ul>
     </div>
-      <ul class="nav-links">
+    <section class="home-section">
+      <nav>
+        <div class="sidebar-button">
+          <span class="dashboard">About WayGrade</span>
+        </div>
 
-        <!-- IF ACCOUNT IS LINKED -->
-        <li>
-          <a href="/dashboard/{{username}}" class="active">
-            <i class='bx bx-grid-alt' ></i>
-            <span class="links_name">Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a href="/sports/{{username}}">
-            <i class='bx bx-ball' ></i>
-            <span class="links_name">Sports</span>
-          </a>
-        </li>
-        <li>
-          <a href="/grades/{{username}}">
-            <i class='bx bx-book-bookmark' ></i>
-            <span class="links_name">Grades</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class='bx bx-message' ></i>
-            <span class="links_name">Messages</span>
-          </a>
-        </li>
-        <li>
-          <a href="/settings/{{username}}">
-            <i class='bx bx-cog' ></i>
-            <span class="links_name">Settings</span>
-          </a>
-        </li>
-        <li class="log_out">
-          <a href="/logout">
-            <i class='bx bx-log-out'></i>
-            <span class="links_name">Log out</span>
-          </a>
-        </li>
+        <!-- Quarter Selection -->
 
-      </ul>
-  </div>
-  <section class="home-section">
-    <nav>
-      <div class="sidebar-button">
-        <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Sports</span>
-      </div>
-      <div class="search-box">
-        <input type="text" placeholder="Search...">
-        <i class='bx bx-search' ></i>
+      </nav>
+
+      <div class="home-content">
+
+        <!-- Creator -->
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">Creator</div>
+
+            WayGrade is solely developed by Wayland High School Junior Ben Stahl.
+
+          </div>
+
+        </div>
+
+        <!-- About WayGrade -->
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">About WayGrade</div>
+
+            WayGrade is developed to help students stay up to date with sports games, keep track of their community service, and view their grades/GPA in the easiest way possible. The project is completely FREE and NON-PROFIT (No ads, etc.).
+
+              <a href="signup">Start your account today!</a>
+
+          </div>
+
+        </div>
+
+        <!-- Privacy -->
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">Privacy</div>
+
+            WayGrade does not store any of your grades.
+            <a href="/privacy">View our privacy policy here</a>
+
+          </div>
+
       </div>
 
-      <!-- Quarter Selection -->
+        <!-- Terms of Service -->
+        <div class="sales-boxes">
+          <div class="recent-sales box">
+            <div class="title">Terms of Service</div>
 
+            To use WayGrade, all Terms of Service must be followed and agreed with.
+            <a href="/terms-of-service">View the Terms of Service here</a>
 
-      <div class="profile-details">
-        <img src="https://c4.wallpaperflare.com/wallpaper/273/268/863/appa-avatar-the-last-airbender-glasses-wallpaper-thumb.jpg" alt="">
-        <span class="admin_name">{{username}}</span>
-        <i class='bx bx-chevron-down' ></i>
-      </div>
-    </nav>
-
-    <div class="home-content">
-      <div class="overview-boxes">
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Order</div>
-            <div class="number">40,876</div>
-            <div class="indicator">
-              <i class='bx bx-up-arrow-alt'></i>
-              <span class="text">Up from yesterday</span>
-            </div>
           </div>
-          <i class='bx bx-cart-alt cart'></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Sales</div>
-            <div class="number">38,876</div>
-            <div class="indicator">
-              <i class='bx bx-up-arrow-alt'></i>
-              <span class="text">Up from yesterday</span>
-            </div>
-          </div>
-          <i class='bx bxs-cart-add cart two' ></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Profit</div>
-            <div class="number">$12,876</div>
-            <div class="indicator">
-              <i class='bx bx-up-arrow-alt'></i>
-              <span class="text">Up from yesterday</span>
-            </div>
-          </div>
-          <i class='bx bx-cart cart three' ></i>
-        </div>
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">Total Return</div>
-            <div class="number">11,086</div>
-            <div class="indicator">
-              <i class='bx bx-down-arrow-alt down'></i>
-              <span class="text">Down From Today</span>
-            </div>
-          </div>
-          <i class='bx bxs-cart-download cart four' ></i>
         </div>
       </div>
+    </section>
 
-      <div class="sales-boxes">
-        <div class="recent-sales box">
-          <div class="title">Sports Events</div>
-          <div class="sales-details">
+    <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
 
-
-            <ul class="details">
-
-              <li class="topic">Date</li>
-              {% for game in sportSchedule %}
-              <li><a href="#">{{game["DATE"]}}</a></li>
-              {% endfor %}
-
-            </ul>
-
-            <ul class="details">
-
-            <li class="topic">Opponent</li>
-              {% for game in sportSchedule %}
-            <li><a href="#">{{game["OPPONENT"]}}</a></li>
-              {% endfor %}
-
-          </ul>
-
-            <ul class="details">
-              <li class="topic">Location</li>
-              {% for game in sportSchedule %}
-              <li><a href="#">{{game["LOCATION"]}}</a></li>
-              {% endfor %}
-            </ul>
-
-            <ul class="details">
-              <li class="topic">Score</li>
-              {% for game in sportSchedule %}
-              <li><a href="#">{{game["SCORE"]}}</a></li>
-              {% endfor %}
-            </ul>
-
-            <ul class="details">
-              <li class="topic">Status</li>
-              {% for game in sportSchedule %}
-              <li><a href="#">{{game["STATUS"]}}</a></li>
-              {% endfor %}
-            </ul>
-
-          </div>
-          <div class="button">
-            <a href="#">See All</a>
-          </div>
-        </div>
-<!--        <div class="top-sales box">-->
-<!--          <div class="title">Top Seling Product</div>-->
-<!--          <ul class="top-sales-details">-->
-<!--            <li>-->
-<!--            <a href="#">-->
-<!--              &lt;!&ndash;<img src="images/sunglasses.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Vuitton Sunglasses</span>-->
-<!--            </a>-->
-<!--            <span class="price">$1107</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--               &lt;!&ndash;<img src="images/jeans.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Hourglass Jeans </span>-->
-<!--            </a>-->
-<!--            <span class="price">$1567</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--             &lt;!&ndash; <img src="images/nike.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Nike Sport Shoe</span>-->
-<!--            </a>-->
-<!--            <span class="price">$1234</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--              &lt;!&ndash;<img src="images/scarves.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Hermes Silk Scarves.</span>-->
-<!--            </a>-->
-<!--            <span class="price">$2312</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--              &lt;!&ndash;<img src="images/blueBag.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Succi Ladies Bag</span>-->
-<!--            </a>-->
-<!--            <span class="price">$1456</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--              &lt;!&ndash;<img src="images/bag.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Gucci Womens's Bags</span>-->
-<!--            </a>-->
-<!--            <span class="price">$2345</span>-->
-<!--          <li>-->
-<!--            <a href="#">-->
-<!--              &lt;!&ndash;<img src="images/addidas.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Addidas Running Shoe</span>-->
-<!--            </a>-->
-<!--            <span class="price">$2345</span>-->
-<!--          </li>-->
-<!--<li>-->
-<!--            <a href="#">-->
-<!--             &lt;!&ndash;<img src="images/shirt.jpg" alt="">&ndash;&gt;-->
-<!--              <span class="product">Bilack Wear's Shirt</span>-->
-<!--            </a>-->
-<!--            <span class="price">$1245</span>-->
-<!--          </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-      </div>
-    </div>
-  </section>
-
-  <script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
 
 
-    var content = this.nextElementSibling;
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = "1000px";
-    }
-  });
-}
-</script>
-  <script>
-  let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
-  let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
-  collapseBtn.onclick = function() {
-  assignmentCollapse.classList.toggle("active");
-
-  if(assignmentCollapse.classList.contains("active")){
-  collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
-  }else
-    collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = "1000px";
+      }
+    });
   }
-</script>
-  <script>
-     let sidebar = document.querySelector(".sidebar");
-    let sidebarBtn = document.querySelector(".sidebarBtn");
-    sidebarBtn.onclick = function() {
-    sidebar.classList.toggle("active");
-    if(sidebar.classList.contains("active")){
-    sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+  </script>
+    <script>
+    let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
+    let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
+    collapseBtn.onclick = function() {
+    assignmentCollapse.classList.toggle("active");
+
+    if(assignmentCollapse.classList.contains("active")){
+    collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
     }else
-    sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
     }
-   </script>
-</body>
+  </script>
+    <script>
+       let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".sidebarBtn");
+      sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+      }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+      }
+     </script>
+  </body>
 
 </html>
 
