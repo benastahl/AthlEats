@@ -26,18 +26,18 @@ def home():
 @app.route("/dashboard", methods=["GET"])
 def display_dashboard():
 
-    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
-    auth_token = request.cookies.get("auth_token")
-
-    if not auth_token:
-        # Redirects back to log in if no auth token found
-        return redirect("/login", 302)
-
-    # Checks to see if there's a corresponding user with auth token.
-    user = UserDB().get_user(auth_token=auth_token)
-    if not user:
-        # Redirects back to log in if user not found
-        return redirect("/login", 302)
+    # # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    # auth_token = request.cookies.get("auth_token")
+    #
+    # if not auth_token:
+    #     # Redirects back to log in if no auth token found
+    #     return redirect("/login", 302)
+    #
+    # # Checks to see if there's a corresponding user with auth token.
+    # user = UserDB().get_user(auth_token=auth_token)
+    # if not user:
+    #     # Redirects back to log in if user not found
+    #     return redirect("/login", 302)
 
     return render_template("dashboard.html", user=user)
 
