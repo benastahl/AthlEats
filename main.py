@@ -39,7 +39,7 @@ def display_dashboard():
     #     # Redirects back to log in if user not found
     #     return redirect("/login", 302)
 
-    return render_template("dashboard.html", user=user)
+    return render_template("dashboard.html")
 
 
 @app.route("/login", methods=["GET"])

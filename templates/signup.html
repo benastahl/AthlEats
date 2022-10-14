@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="../static/login_signup.css">
   <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
 <title> WayGrade - Signup </title>
@@ -19,8 +21,8 @@
         <form class="signup-form" method="post">
           <input type="text" name="email" placeholder="email">
           <input type="password" name="pass" placeholder="password">
-          <label for="grade">Select your grade:</label>
-          <select name="grade" id="grade">
+          <select class="grade-selection" name="grade" id="grade">
+            <option value="" disabled selected>grade</option>
             <option value="9">9</option>
             <option value="10">10</option>
             <option value="11">11</option>
