@@ -13,11 +13,33 @@ app = Flask(__name__)
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         if UserDB().get_user(auth_token=auth_token):
             return redirect("/dashboard", 302)
-    return redirect("/signup", 302)
+
+    # Redirects back to log in if no auth token found
+    return redirect("/login", 302)
+
+
+@app.route("/dashboard", methods=["GET"])
+def display_dashboard():
+
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if not auth_token:
+        # Redirects back to log in if no auth token found
+        return redirect("/login", 302)
+
+    # Checks to see if there's a corresponding user with auth token.
+    user = UserDB().get_user(auth_token=auth_token)
+    if not user:
+        # Redirects back to log in if user not found
+        return redirect("/login", 302)
+
+    return render_template("dashboard.html", user=user)
 
 
 @app.route("/login", methods=["GET"])
@@ -30,24 +52,16 @@ def process_login():
     email = request.form["email"]
     password = request.form["pass"]  # plain text password
 
-    # Use process_signup func to help you write this.
-
-    # Requirements:
-    # - use email variable to get user data from database.
-    #   (Use email as arg in the `get_user` function to get a User object).
-
-    if not UserDB().login_user(email, password):
+    # login_user returns auth_token of user if email and password correct
+    auth_token = UserDB().login_user(email, password)
+    if not auth_token:
         return render_template("login.html", message="Password or email incorrect not found")
 
     response = redirect("/dashboard", 302)
-
     # Create an auth browser cookie (random letters and numbers) as our authentication
     # token so the user doesn't have to log in every single time.
-    auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # BUG sqlite3.ProgrammingError: Cannot operate on a closed database.
-    UserDB().edit_user(email=email, password=password, auth_token=auth_token)
     return response
 
 

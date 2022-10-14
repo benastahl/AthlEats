@@ -50,16 +50,29 @@ class UserDB:
         # Returns user object
         return user
 
-    def login_user(self, email, password):
+    def login_user(self, email, password, new_auth=True):
 
-        user = self.get_user(email=email)
+        # Authenticates user email and password
+        user = self.get_user(email=email, close_conn=False)
         if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
-        return True
+
+        if new_auth:
+            # Creates new random auth token string
+            auth_token = secrets.token_hex()
+            # Sets new auth token to user database row
+            authenticated_user = self.edit_user(email=password, password=password, auth_token=auth_token)
+            if not authenticated_user:
+                return False
+            # Returns new auth token of authenticated user
+            return authenticated_user.auth_token
+
+        # Returns current auth token of user
+        return user.auth_token
 
     def edit_user(self, email, password, **kwargs):
         # Check the password is correct before it allows to edit a user's details
-        if not self.login_user(email=email, password=password):
+        if not self.login_user(email=email, password=password, new_auth=False):
             return False
 
         # Update the user's details
