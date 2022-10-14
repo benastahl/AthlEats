@@ -29,30 +29,50 @@ class UserDB:
         return True
 
     def get_user(self, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
+        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs if kwarg != "close_conn"])
         # Finds a user based on the keyword arguments. Gives back all the data on the user.
         students = self.cursor.execute(
             f"SELECT first_name, last_name, email, grade, hashed_password, auth_token, creation_date FROM students WHERE {conditions}").fetchall()
-        self.connection.close()
+
         if not students:
             # No student found
             return False
         student = students[0]
-        # Returns user object
-        return User(email=student[2], grade=student[3],
+
+        user = User(email=student[2], grade=student[3],
                     hashed_password=student[4], auth_token=student[5], creation_date=student[6])
 
-    def login_user(self, email, password):
+        # Adds option in args to not close the database connection for underlying function using get_user
+        if "close_conn" in kwargs and not kwargs.get("close_conn"):
+            return user
 
-        user = self.get_user(email=email)
-        if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        self.connection.close()
+        # Returns user object
+        return user
+
+    def login_user(self, email, password, new_auth=True):
+
+        # Authenticates user email and password
+        user = self.get_user(email=email, close_conn=False)
+        if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
-        return True
+
+        if new_auth:
+            # Creates new random auth token string
+            auth_token = secrets.token_hex()
+            # Sets new auth token to user database row
+            authenticated_user = self.edit_user(email=password, password=password, auth_token=auth_token)
+            if not authenticated_user:
+                return False
+            # Returns new auth token of authenticated user
+            return authenticated_user.auth_token
+
+        # Returns current auth token of user
+        return user.auth_token
 
     def edit_user(self, email, password, **kwargs):
         # Check the password is correct before it allows to edit a user's details
-        user = self.get_user(email=email)
-        if not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
+        if not self.login_user(email=email, password=password, new_auth=False):
             return False
 
         # Update the user's details
@@ -60,10 +80,9 @@ class UserDB:
         self.cursor.execute(f'''
                 UPDATE students
                 SET {conditions}
-                WHERE email = {email}
+                WHERE email = '{email}'
                 ''')
-        self.connection.commit()
-        self.connection.close()
+
         # Return new user object with updated args/details.
         return self.get_user(email=email)
 

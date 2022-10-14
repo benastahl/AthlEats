@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
   <link rel="stylesheet" href="../static/login_signup.css">
-  <title> UCE Login </title>
+  <title> UCE Admin Login </title>
 </head>
 <body>
   <body>
@@ -11,12 +11,12 @@
       <div class="form">
         <div class="login">
           <div class="login-header">
-            <h3 >UCE Login</h3>
+            <h3 >UCE Admin Login</h3>
             <p>Please enter your UCE credentials to login.</p>
           </div>
         </div>
         <form class="login-form" method="post">
-          <input type="text" id="Login Email" name="email" placeholder="email">
+          <input type="text" id="Login Email" name="email" placeholder="admin email">
           <input type="password" id="Login Password" name="pass" placeholder="password">
           {% if message %}
             <p class="error-occurrence" id="error-occurrence">{{ message }}</p>

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from controls import UserDB, AdminDB
-from validate_email_address import validate_email
+# from validate_email_address import validate_email
 from datetime import datetime
 
 import bcrypt
@@ -13,11 +13,33 @@ app = Flask(__name__)
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         if UserDB().get_user(auth_token=auth_token):
             return redirect("/dashboard", 302)
-    return redirect("/signup", 302)
+
+    # Redirects back to log in if no auth token found
+    return redirect("/login", 302)
+
+
+@app.route("/dashboard", methods=["GET"])
+def display_dashboard():
+
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if not auth_token:
+        # Redirects back to log in if no auth token found
+        return redirect("/login", 302)
+
+    # Checks to see if there's a corresponding user with auth token.
+    user = UserDB().get_user(auth_token=auth_token)
+    if not user:
+        # Redirects back to log in if user not found
+        return redirect("/login", 302)
+
+    return render_template("dashboard.html", user=user)
 
 
 @app.route("/login", methods=["GET"])
@@ -30,15 +52,17 @@ def process_login():
     email = request.form["email"]
     password = request.form["pass"]  # plain text password
 
-    # Use process_signup func to help you write this.
+    # login_user returns auth_token of user if email and password correct
+    auth_token = UserDB().login_user(email, password)
+    if not auth_token:
+        return render_template("login.html", message="Password or email incorrect not found")
 
-    # Requirements:
-    # - use email variable to get user data from database.
-    #   (Use email as arg in the `get_user` function to get a User object).
+    response = redirect("/dashboard", 302)
+    # Create an auth browser cookie (random letters and numbers) as our authentication
+    # token so the user doesn't have to log in every single time.
+    response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # - If `get_user` func returns False (no user with that email), return the login.html page with an error message (see process_signup).
-
-    # - use the `bcrypt.checkpw` function to check the plaintext password against the hashed password in the User object. (If false, return login.html with message)
+    return response
 
 
 @app.route("/signup", methods=["GET"])
@@ -65,9 +89,10 @@ def process_admin_login():
 
     return response
 
+
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
-    if
+    return render_template("admin-dashboard.html")
 
 
 @app.route("/signup", methods=["POST"])
