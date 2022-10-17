@@ -48,9 +48,9 @@ def process_signup(_request):
     # We can now only check to see if a plain text input matches the hashed password (bcrypt.checkpw).
     hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
-    # # Check if email is already in use (get_student returns list of users with that email).
-    # if UserDB().get_user(email=email):
-    #     return render_template("home.html", signup_message="Email is already in use.")
+    # Check if email is already in use (get_student returns list of users with that email).
+    if UserDB().get_user(email=email):
+        return render_template("home.html", signup_message="Email is already in use.")
 
     # Check if email is valid student email
     if "@student.waylandps.org" not in email:
