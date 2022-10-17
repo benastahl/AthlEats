@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../static/home.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> UCE Home </title>
+   </head>
+
+  <body>
+    <section class="home-section">
+      <nav>
+          <span class="navbar-title">UnderclassmenEats</span>
+
+          {% if not user %}
+              <div class="access-buttons-section">
+                  <button id="login-button" class="access-button"> LOGIN </button>
+                  <button id="signup-button" class="access-button"> SIGNUP </button>
+              </div>
+          {% else %}
+              <div class="profile-details">
+                <i class="bx bx-user-circle guest-profile-picture"></i>
+                <span class="admin_name">{{user.first_name | capitalize}} {{user.last_name | capitalize }}</span>
+                <i class='bx bx-chevron-down' ></i>
+              </div>
+          {% endif %}
+
+
+      </nav>
+
+      <div class="home-content">
+
+      <div class="home-content-buttons">
+              <button class="reserve-pickup-button" >Reserve Pickup</button>
+          </div>
+
+          <!-- HIDDEN -->
+          <!-- Signup Form -->
+          <div style="visibility: hidden; opacity: 0; transition: opacity 200ms ease-in;" id="signup-form" class="access-form">
+            <div class="signup-form">
+                <i class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>UCE SIGNUP</h3>
+                <p>Please enter details to signup.</p>
+              </div>
+                <form name="signup" method="post">
+                  <input type="text" name="email" placeholder="email">
+                          <input type="password" name="pass" placeholder="password">
+                          <select required class="form-selection" name="grade" id="grade">
+                            <option class="form-selection-placeholder" value="" disabled selected>grade</option>
+                            <option style="color: #f4f4f4" value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                          </select>
+                            <select required class="form-selection" name="tos" id="tos">
+                            <option class="form-selection-placeholder" value="" disabled selected>terms of service</option>
+                            <option value="agree">agree</option>
+                          </select>
+
+
+
+                          <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ signup_message }}</p>
+                          <button id="submit-form-button" type="submit" value="SIGNUP" onclick="hide_button('submit-form-button')">SIGNUP</button>
+                          <p class="message">Already have an account?
+                            <a href="/login">Login here</a>
+                          </p>
+                            <a class="tos-agree-link" target="_blank" rel="noopener noreferrer" href="/terms-of-service">terms of service.</a>
+
+              </form>
+            </div>
+          </div>
+          <!-- Login Form -->
+          <div style="visibility: hidden; opacity: 0; transition: opacity 200ms ease-in;" id="login-form" class="access-form">
+            <div class="login-form">
+                <i class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>UCE LOGIN</h3>
+                <p>Please enter credentials to login.</p>
+              </div>
+
+              <form name="login" method="post">
+                  <input type="text" name="email" placeholder="email">
+                  <input type="password" name="pass" placeholder="password">
+
+
+                    <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
+
+                  <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
+                  <p class="message">Not registered?
+                    <a href="/login">Create an account</a>
+                  </p>
+
+              </form>
+            </div>
+          </div>
+
+
+
+
+      </div>
+    </section>
+
+  <script>
+      if (window.outerWidth < 450) {
+          document.querySelector(".navbar-title").innerHTML = "UCE"
+      }
+
+  </script>
+
+    <!-- Show Login and Signup Forms -->
+  <script>
+      let login_button = document.getElementById("login-button")
+      let login_form = document.getElementById("login-form")
+
+      let signup_button = document.getElementById("signup-button")
+      let signup_form = document.getElementById("signup-form")
+
+      let close_form_button = document.querySelector("#login-form .bx-x")
+
+      let reserve_pickup_button_div = document.querySelector(".home-content-buttons")
+      let reserve_pickup_button = document.querySelector(".reserve-pickup-button")
+
+      let signup_message_element = document.querySelector("#signup-form .error-occurrence")
+      let login_message_element = document.querySelector("#login-form .error-occurrence")
+
+      let hide_login_form = function () {
+          login_form.style.visibility = "hidden";
+          login_form.style.opacity = "0";
+          login_form.style.display = "none";
+
+          reserve_pickup_button_div.style.display = "none"
+      }
+      let hide_signup_form = function () {
+          signup_form.style.visibility = "hidden";
+          signup_form.style.opacity = "0";
+          signup_form.style.display = "none";
+
+          reserve_pickup_button_div.style.display = "none"
+      }
+      let show_login_form = function () {
+          login_form.style.visibility = "visible";
+          login_form.style.opacity = "1";
+          login_form.style.display = "block";
+
+          hide_signup_form()
+
+      }
+      let show_signup_form = function () {
+          signup_form.style.visibility = "visible";
+          signup_form.style.opacity = "1";
+          signup_form.style.display = "block";
+
+          hide_login_form()
+      }
+
+
+      // Reveal login popup div
+      login_button.onclick = function() {
+          login_form.style.transition = "opacity 200ms ease-in"
+          show_login_form()
+      }
+
+      // Reveal signup popup div
+      signup_button.onclick = function () {
+          signup_form.style.transition = "opacity 200ms ease-in"
+          show_signup_form()
+      }
+
+      // If message return in render_template (flask)
+      let login_message = "{{ login_message }}"
+      let signup_message = "{{ signup_message }}"
+      if (login_message) {
+          login_message_element.style.display = "block";
+          login_form.style.transition = ""
+          show_login_form()
+      } else if (signup_message) {
+          signup_message_element.style.display = "block";
+          signup_form.style.transition = ""
+          show_signup_form()
+      }
+
+
+      // Close form buttons
+      close_form_button.onclick = function () {
+          hide_signup_form()
+          hide_login_form()
+
+          // Re-show reserve pickup button
+          reserve_pickup_button_div.style.display = "flex"
+
+          // Hide error message for next time they open up login/signup form
+          login_message_element.style.display = "none"
+          login_message = ""
+
+          signup_message_element.style.display = "none"
+          signup_message = ""
+      }
+
+
+  </script>
+
+  </body>
+
+</html>
+
