@@ -17,7 +17,7 @@ def home():
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         user = UserDB().get_user(auth_token=auth_token)
-        return render_template("home.html", user=False)
+        return render_template("home.html", user=user)
 
     # Redirects back to log in if no auth token found
     return render_template("home.html", user=False)
@@ -41,7 +41,7 @@ def process_login(_request):
 
 def process_signup(_request):
     # Collect POST request params from signup
-    tos_agree = _request.form.get("tos-agree")
+    tos_agree = _request.form.get("tos")
     email = _request.form["email"]
     grade = int(_request.form["grade"])
     # Hash password (hashing means that it is encrypted and impossible to decrypt)
@@ -61,7 +61,7 @@ def process_signup(_request):
     #     return render_template("signup.html", message="Not a real email address.")
 
     # Check to see if Terms of Service is agreed to
-    if tos_agree != "on":
+    if tos_agree != "agree":
         return render_template("home.html", signup_message="Please agree to TOS to access the website.")
 
     # Set auth cookie token
@@ -94,7 +94,6 @@ def process_homepage():
         return process_login(_request=request)
 
 
-
 @app.route("/admin-login", methods=["GET"])
 def display_admin_login():
     return render_template("admin-login.html")
@@ -117,7 +116,7 @@ def process_admin_login():
 
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
-    return render_template("admin-home.html")
+    return render_template("admin-dashboard.html")
 
 
 if __name__ == '__main__':
