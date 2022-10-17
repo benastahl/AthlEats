@@ -116,7 +116,7 @@ def process_admin_login():
 
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
-    return render_template("admin-home.html")
+    return render_template("admin-dashboard.html")
 
 
 if __name__ == '__main__':

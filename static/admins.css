@@ -287,9 +287,11 @@ nav .profile-details i{
   width: 98%;
   background: #fff;
   padding: 20px 30px;
+  height: 200px;
   margin: 0 20px;
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 .home-content .sales-boxes .sales-details{
   display: flex;
