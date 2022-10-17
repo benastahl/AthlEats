@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:if="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/admin.css">
+    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> WayGrade - Admin Dashboard
+    </title>
+   </head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <img src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1' width="65" height="60">
+      <span class="logo_name">WayGrade</span>
+    </div>
+      <ul class="nav-links">
+
+        <li class="log_out">
+          <a href="/logout">
+            <i class='bx bx-log-out'></i>
+            <span class="links_name">Log out</span>
+          </a>
+        </li>
+
+      </ul>
+  </div>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <span class="dashboard">Admin Dashboard</span>
+      </div>
+
+      <!-- Quarter Selection -->
+
+
+      <div class="profile-details">
+        <img src="https://c4.wallpaperflare.com/wallpaper/273/268/863/appa-avatar-the-last-airbender-glasses-wallpaper-thumb.jpg" alt="">
+        <span class="admin_name">{{username}}</span>
+        <i class='bx bx-chevron-down' ></i>
+      </div>
+    </nav>
+
+    <div class="home-content">
+      <div class="overview-boxes">
+        <div class="box">
+          <div class="right-side">
+            <div class="box-topic">User Count</div>
+            <div class="number">{{userCount}}</div>
+          </div>
+          <i class='bx bx-cart-alt cart'></i>
+        </div>
+      </div>
+
+      <div class="sales-boxes">
+        <div class="recent-sales box">
+          <div class="title">Users</div>
+          <div class="sales-details">
+
+
+            <ul class="details">
+
+              <li class="topic">Email</li>
+              {% for user in users %}
+              <li><a href="#">{{user}}</a></li>
+              {% endfor %}
+
+            </ul>
+
+            <ul class="details">
+
+            <li class="topic">Username</li>
+              {% for user in users.values() %}
+              <li><a href="#">{{user["username"]}}</a></li>
+              {% endfor %}
+
+          </ul>
+
+            <ul class="details">
+              <li class="topic">Creation</li>
+              {% for user in users.values() %}
+              <li><a href="#">{{user["creationDate"]}}</a></li>
+              {% endfor %}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+
+
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = "1000px";
+    }
+  });
+}
+</script>
+  <script>
+  let assignmentCollapse = document.querySelector(".home-content .sales-boxes .recent-sales");
+  let collapseBtn = document.querySelector(".home-content .sales-boxes .recent-sales .collapsible");
+  collapseBtn.onclick = function() {
+  assignmentCollapse.classList.toggle("active");
+
+  if(assignmentCollapse.classList.contains("active")){
+  collapseBtn.classList.replace("bxs-chevron-down", "bxs-chevron-up");
+  }else
+    collapseBtn.classList.replace("bxs-chevron-up", "bxs-chevron-down");
+  }
+</script>
+  <script>
+     let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function() {
+    sidebar.classList.toggle("active");
+    if(sidebar.classList.contains("active")){
+    sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+    }else
+    sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
+   </script>
+</body>
+
+</html>
+
