@@ -17,7 +17,7 @@ def home():
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         user = UserDB().get_user(auth_token=auth_token)
-        return render_template("home.html", user=False)
+        return render_template("home.html", user=user)
 
     # Redirects back to log in if no auth token found
     return render_template("home.html", user=False)
@@ -41,16 +41,16 @@ def process_login(_request):
 
 def process_signup(_request):
     # Collect POST request params from signup
-    tos_agree = _request.form.get("tos-agree")
+    tos_agree = _request.form.get("tos")
     email = _request.form["email"]
     grade = int(_request.form["grade"])
     # Hash password (hashing means that it is encrypted and impossible to decrypt)
     # We can now only check to see if a plain text input matches the hashed password (bcrypt.checkpw).
     hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
-    # Check if email is already in use (get_student returns list of users with that email).
-    if UserDB().get_user(email=email):
-        return render_template("home.html", signup_message="Email is already in use.")
+    # # Check if email is already in use (get_student returns list of users with that email).
+    # if UserDB().get_user(email=email):
+    #     return render_template("home.html", signup_message="Email is already in use.")
 
     # Check if email is valid student email
     if "@student.waylandps.org" not in email:
@@ -61,7 +61,7 @@ def process_signup(_request):
     #     return render_template("signup.html", message="Not a real email address.")
 
     # Check to see if Terms of Service is agreed to
-    if tos_agree != "on":
+    if tos_agree != "agree":
         return render_template("home.html", signup_message="Please agree to TOS to access the website.")
 
     # Set auth cookie token
@@ -92,7 +92,6 @@ def process_homepage():
         return process_signup(_request=request)
     else:
         return process_login(_request=request)
-
 
 
 @app.route("/admin-login", methods=["GET"])

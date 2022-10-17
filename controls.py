@@ -56,12 +56,11 @@ class UserDB:
         user = self.get_user(email=email, close_conn=False)
         if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
-
         if new_auth:
             # Creates new random auth token string
             auth_token = secrets.token_hex()
             # Sets new auth token to user database row
-            authenticated_user = self.edit_user(email=password, password=password, auth_token=auth_token)
+            authenticated_user = self.edit_user(email=email, password=password, auth_token=auth_token)
             if not authenticated_user:
                 return False
             # Returns new auth token of authenticated user
@@ -82,9 +81,11 @@ class UserDB:
                 SET {conditions}
                 WHERE email = '{email}'
                 ''')
+        self.connection.commit()
 
         # Return new user object with updated args/details.
-        return self.get_user(email=email)
+        user = self.get_user(email=email)
+        return user
 
     def delete_student(self, email: str) -> bool:
         self.cursor.execute(f"DELETE FROM students WHERE email = '{email}'")
@@ -103,7 +104,7 @@ class AdminDB:
 
         # Finds a user based on the keyword arguments. Gives back all the data on the user.
         admins = self.cursor.execute(
-            f"SELECT first_name, last_name, email, hashed_password, admin_auth_token FROM admins WHERE {conditions}").fetchall()
+            f"SELECT username, hashed_password, admin_auth_token FROM admins WHERE {conditions}").fetchall()
         self.connection.close()
         if not admins:
             # No administrator found
