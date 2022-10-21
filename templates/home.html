@@ -13,19 +13,32 @@
   <body>
     <section class="home-section">
       <nav>
-          <span class="navbar-title">UnderclassmenEats</span>
+          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>
 
           {% if not user %}
               <div class="access-buttons-section">
-                  <button id="login-button" class="access-button"> LOGIN </button>
+                  <button onclick="show_form()" id="login-button" class="access-button"> LOGIN </button>
                   <button id="signup-button" class="access-button"> SIGNUP </button>
               </div>
           {% else %}
               <div class="profile-details">
                 <i class="bx bx-user-circle guest-profile-picture"></i>
                 <span class="admin_name">{{user.first_name | capitalize}} {{user.last_name | capitalize }}</span>
-                <i class='bx bx-chevron-down' ></i>
+                <i class='arrow bx bx-chevron-down' ></i>
+
               </div>
+              <div style="visibility: hidden" class="profile-dropdown">
+                      <ul>
+                          <li id="profile-selection">Profile</li>
+                          <li id="settings-selection">Settings</li>
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+
           {% endif %}
 
 
@@ -34,29 +47,38 @@
       <div class="home-content">
 
       <div class="home-content-buttons">
-              <button class="reserve-pickup-button" >Reserve Pickup</button>
-          </div>
+{#              <button class="" >Reserve Pickup</button>#}
+            <button class="reserve-pickup-button">
+              <span class="front">
+                Reserve Pickup
+              </span>
+            </button>
+      </div>
 
           <!-- HIDDEN -->
           <!-- Signup Form -->
           <div style="visibility: hidden; opacity: 0; transition: opacity 200ms ease-in;" id="signup-form" class="access-form">
-            <div class="signup-form">
+            <div class="signup-form form-section">
                 <i class='bx bx-x'></i>
                 <div class="form-header">
                 <h3>UCE SIGNUP</h3>
                 <p>Please enter details to signup.</p>
               </div>
                 <form name="signup" method="post">
-                  <input type="text" name="email" placeholder="email">
-                          <input type="password" name="pass" placeholder="password">
-                          <select required class="form-selection" name="grade" id="grade">
+                    <label>
+                        <input type="text" name="email" placeholder="email">
+                    </label>
+                    <label>
+                        <input type="password" name="pass" placeholder="password">
+                    </label>
+                    <label for="grade"></label><select required class="form-selection" name="grade" id="grade">
                             <option class="form-selection-placeholder" value="" disabled selected>grade</option>
                             <option style="color: #f4f4f4" value="9">9</option>
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
                           </select>
-                            <select required class="form-selection" name="tos" id="tos">
+                    <label for="tos"></label><select required class="form-selection" name="tos" id="tos">
                             <option class="form-selection-placeholder" value="" disabled selected>terms of service</option>
                             <option value="agree">agree</option>
                           </select>
@@ -83,11 +105,40 @@
               </div>
 
               <form name="login" method="post">
-                  <input type="text" name="email" placeholder="email">
-                  <input type="password" name="pass" placeholder="password">
+                  <label>
+                      <input type="text" name="email" placeholder="email">
+                  </label>
+                  <label>
+                      <input type="password" name="pass" placeholder="password">
+                  </label>
 
 
-                    <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
+                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
+
+                  <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
+                  <p class="message">Not registered?
+                    <a href="/login">Create an account</a>
+                  </p>
+
+              </form>
+            </div>
+          </div>
+          <!-- Settings Form -->
+          <div style="display: none;" id="settings-form" class="access-form">
+            <div class="settings-form">
+                <i class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>UCE SETTINGS</h3>
+              </div>
+
+              <form name="settings" method="post">
+                  <button onclick="show_delete_confirm()">Delete account</button>
+                  <!-- Confirm Account Deletion Form -->
+                  <div style="display: none;" id="account-deletion-form" class="access-form">
+
+                  </div>
+
+                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
 
                   <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
                   <p class="message">Not registered?
@@ -104,14 +155,25 @@
       </div>
     </section>
 
+    <!-- Mobile Adapting -->
   <script>
-      if (window.outerWidth < 450) {
-          document.querySelector(".navbar-title").innerHTML = "UCE"
-      }
+
+      window.addEventListener('resize', function() {
+          if (window.outerWidth < 650) {
+
+            document.querySelector(".navbar-title").innerHTML = "UCE";
+            document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
+
+          } else if (window.outerWidth >= 650) {
+              document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
+              document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
+          }
+      })
+
 
   </script>
 
-    <!-- Show Login and Signup Forms -->
+    <!-- Show Login, Signup, Settings Forms -->
   <script>
       let login_button = document.getElementById("login-button")
       let login_form = document.getElementById("login-form")
@@ -119,14 +181,19 @@
       let signup_button = document.getElementById("signup-button")
       let signup_form = document.getElementById("signup-form")
 
+      let settings_button = document.getElementById("settings-selection")
+      let settings_form = document.getElementById("settings-form")
+
       let close_login_form_button = document.querySelector("#login-form .bx-x")
       let close_signup_form_button = document.querySelector("#signup-form .bx-x")
+      let close_settings_form_button = document.querySelector("#settings-form .bx-x")
 
       let reserve_pickup_button_div = document.querySelector(".home-content-buttons")
       let reserve_pickup_button = document.querySelector(".reserve-pickup-button")
 
       let signup_message_element = document.querySelector("#signup-form .error-occurrence")
       let login_message_element = document.querySelector("#login-form .error-occurrence")
+      let settings_message_element = document.querySelector("#settings-form .error-occurrence")
 
       let hide_login_form = function () {
           login_form.style.visibility = "hidden";
@@ -141,6 +208,10 @@
           signup_form.style.display = "none";
 
           reserve_pickup_button_div.style.display = "none"
+      }
+      let hide_settings_form = function() {
+          settings_form.style.display = "none";
+
       }
       let show_login_form = function () {
           login_form.style.display = "block";
@@ -157,8 +228,33 @@
 
           hide_login_form()
       }
+      let show_settings_form = function () {
 
+          settings_form.style.display = "block";
 
+          hide_login_form()
+          hide_signup_form()
+      }
+
+      let show_form = function (id_name) {
+          // Hide all other forms besides id_name form
+          let all_form_elements = document.querySelectorAll(".access-form")
+          for (let i = 0; i < all_form_elements.length; i++) {
+              var form = all_form_elements[i];
+              if (form.id === id_name) {
+                form.style.display = "block";
+              }
+          }
+      }
+
+      {% if user %}
+      // Reveal settings popup div
+      settings_button.onclick = function() {
+          console.log("Activated settings form")
+          show_settings_form()
+          hide_profile_dropdown()
+      }
+      {% else %}
       // Reveal login popup div
       login_button.onclick = function() {
           login_form.style.transition = "opacity 200ms ease-in"
@@ -171,9 +267,14 @@
           show_signup_form()
       }
 
+      {% endif %}
+
+
+
       // If message return in render_template (flask)
       let login_message = "{{ login_message }}"
       let signup_message = "{{ signup_message }}"
+      let settings_message = "{{ settings_message }}"
       if (login_message) {
           login_message_element.style.display = "block";
           login_form.style.transition = ""
@@ -182,6 +283,9 @@
           signup_message_element.style.display = "block";
           signup_form.style.transition = ""
           show_signup_form()
+      } else if (settings_message) {
+          settings_message_element.style.display = "block"
+          show_settings_form()
       }
 
 
@@ -212,8 +316,80 @@
           signup_message_element.style.display = "none"
           signup_message = ""
       }
+      close_settings_form_button.onclick = function () {
+          hide_settings_form()
+
+          // Re-show reserve pickup button
+          reserve_pickup_button_div.style.display = "flex"
+
+          // Hide error message for next time they open up login/signup form
+          login_message_element.style.display = "none"
+          login_message = ""
+
+          signup_message_element.style.display = "none"
+          signup_message = ""
+
+          settings_message_element.style.display = "none"
+          settings_message = ""
+      }
 
 
+  </script>
+
+    <!-- Profile Drop-Down -->
+  <script>
+      let profile_button = document.querySelector(".profile-details")
+      let profile_dropdown = document.querySelector(".profile-dropdown")
+      let profile_chevron = document.querySelector(".profile-details .arrow")
+      let profile_dropdown_activated = false;
+      let profile_dropdown_options = document.querySelectorAll(".home-section nav .profile-dropdown ul li")
+
+      window.addEventListener('load', function() {
+          for (let i = 0; i < profile_dropdown_options.length; i++) {
+              console.log("Set size of options.")
+              profile_dropdown_options[i].style.width = profile_button.getBoundingClientRect().width + "px";
+          }
+      })
+
+
+      let hide_profile_dropdown = function () {
+          profile_button.style.borderRadius = "25px";
+          profile_button.style.border = "2px solid black"
+          profile_dropdown.style.visibility = "hidden"
+          profile_chevron.className = "arrow bx bx-chevron-down"
+          profile_dropdown_activated = false;
+
+          document.querySelector(".home-content").removeEventListener('click', hide_profile_dropdown)
+
+      }
+
+      let show_profile_dropdown = function () {
+          profile_button.style.borderRadius = "25px 25px 0px 0px";
+          profile_button.style.borderBottom = "0px"
+          profile_dropdown.style.visibility = "visible"
+          profile_chevron.className = "arrow bx bx-chevron-up"
+          profile_dropdown_activated = true;
+
+          document.querySelector(".home-content").addEventListener('click', hide_profile_dropdown)
+
+      }
+
+      profile_button.onclick = function () {
+          if (!profile_dropdown_activated) {
+                show_profile_dropdown()
+          } else {
+              hide_profile_dropdown()
+          }
+      }
+
+
+  </script>
+
+  <!-- Delete Account Confirm Popup -->
+  <script>
+      let show_delete_confirm = function () {
+
+      }
   </script>
 
   </body>

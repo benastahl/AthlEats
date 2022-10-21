@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from controls import UserDB, AdminDB
+from controls import UserDB
 # from validate_email_address import validate_email
 from datetime import datetime
 
@@ -81,7 +81,7 @@ def process_signup(_request):
 
     # Add user to database
     UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade,
-                      hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date)
+                      hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date, admin=False)
 
     return response
 
@@ -94,29 +94,24 @@ def process_homepage():
         return process_login(_request=request)
 
 
-@app.route("/admin-login", methods=["GET"])
-def display_admin_login():
-    return render_template("admin-login.html")
-
-
-@app.route("/admin-login", methods=["POST"])
-def process_admin_login():
-    email = request.form["email"]
-    password = request.form["pass"]
-
-    admin = AdminDB().admin_login(email=email, password=password)
-    if not admin:
-        return redirect("/login", 302)
-
-    response = redirect("/admin-dashboard", 302)
-    response.set_cookie('admin_auth_token', admin.auth_token, max_age=60 * 60 * 24)  # 24 hour expiration (in seconds)
-
-    return response
-
-
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
+    auth_token = request.cookies.get("auth_token")
+    user = UserDB().get_user(auth_token=auth_token)
+
+    if not user or not user.admin:
+        return redirect("/", 302)
+
     return render_template("admin-dashboard.html")
+
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    # Remove auth token cookie
+    response = redirect("/", 302)
+    response.set_cookie("auth_token", "", expires=0)
+
+    return response
 
 
 if __name__ == '__main__':
