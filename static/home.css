@@ -126,8 +126,20 @@ body {
     width: 400px;
 }
 .popular-restaurants h3 {
-  font-size: 50px;
+  font-size: 40px;
 }
+
+.restaurant-title {
+    margin: 7px 0px 0px 0px;
+    font-weight: 700;
+}
+.restaurant-desc{
+
+
+    font-weight: 200;
+    font-size: 15px;
+}
+
 
 /* HOME PROCESS VISUAL */
 /*.process-visual {
