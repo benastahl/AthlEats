@@ -37,6 +37,13 @@ body {
 .navbar-title {
   font-size: 35px;
   font-weight: bold;
+  color: white;
+  background: hsl(360, 89%, 61%);
+  border-radius: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  cursor: pointer;
+  user-select: none;
 }
 .access-buttons-section {
   padding: 10px;
@@ -69,10 +76,26 @@ body {
 
 }
 .reserve-pickup-button {
-  background: red;
-  font-size: 30px;
-  padding: 25px;
-}
+    background: hsl(340deg 89% 32%);
+    border-radius: 50px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+  }
+  .reserve-pickup-button .front {
+    font-family: 'Poppins', sans-serif;
+    display: block;
+    padding: 12px 42px;
+    border-radius: 50px;
+    font-size: 40px;
+    background: hsl(360, 89%, 61%);
+    color: white;
+    transform: translateY(-6px);
+  }
+  .reserve-pickup-button:active .front {
+    transform: translateY(-2px);
+  }
 
 /* * PROFILE * */
 .home-section nav .profile-details{
@@ -84,6 +107,40 @@ body {
   height: 50px;
   min-width: 190px;
   padding: 0 10px 0 2px;
+  user-select: none;
+  cursor: pointer;
+}
+.home-section nav .profile-dropdown{
+  position: absolute;
+  right: 0;
+  margin-top: 200px;
+  margin-right: 20px;
+}
+.home-section nav .profile-dropdown ul li {
+  display: flex;
+  align-items: center;
+  background: #F5F6FA;
+  border-radius: 0;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  height: 50px;
+  padding: 15px;
+  font-weight: bold;
+  user-select: none;
+  justify-content: center;
+  cursor: pointer;
+}
+.home-section nav .profile-dropdown ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.home-section nav .profile-dropdown ul .last-option {
+  border-radius: 0 0 25px 25px;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
 }
 
 nav .profile-details img{
@@ -118,7 +175,7 @@ nav .profile-details i{
 }
 
 
-.login-form, .signup-form {
+.form-section {
   position: relative;
   z-index: 1;
   background: #FFFFFF;
@@ -129,8 +186,7 @@ nav .profile-details i{
   border-radius: 40px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-
-.login-form .bx, .signup-form .bx  {
+.form-section .bx-x  {
   display: flex;
   float: right;
   font-size: 30px;
@@ -197,9 +253,7 @@ select {
   /* for Chrome */
   -webkit-appearance: none;
 }
-.form-selection .form-selection-placeholder {
-  color: #777777;
-}
+
 .form-selection {
   font-family: "Roboto", sans-serif;
   outline: 0;
@@ -210,12 +264,13 @@ select {
   padding: 15px;
   box-sizing: border-box;
   border-radius: 10px;
-  font-size: 14px;;
+  font-size: 14px;
   color: black;
 }
-select:invalid {
+.form-selection .form-selection-placeholder {
   color: #777777;
 }
+
 .container {
   position: relative;
   z-index: 1;
