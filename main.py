@@ -7,7 +7,8 @@ import bcrypt
 import secrets
 
 app = Flask(__name__)
-
+# TODO: Make new logo
+# TODO: make info for process visual
 
 @app.route("/", methods=["GET"])
 def home():
@@ -30,7 +31,7 @@ def process_login(_request):
     # login_user returns auth_token of user if email and password correct
     auth_token = UserDB().login_user(email, password)
     if not auth_token:
-        return render_template("home.html", login_message="Password or email incorrect not found")
+        return render_template("home.html", message_type="login", message="Password or email incorrect not found")
 
     response = redirect("/", 302)
     # Create an auth browser cookie (random letters and numbers) as our authentication
@@ -50,11 +51,11 @@ def process_signup(_request):
 
     # Check if email is already in use (get_student returns list of users with that email).
     if UserDB().get_user(email=email):
-        return render_template("home.html", signup_message="Email is already in use.")
+        return render_template("home.html", message_type="signup", message="Email is already in use.")
 
     # Check if email is valid student email
     if "@student.waylandps.org" not in email:
-        return render_template("home.html", signup_message="Not a valid WHS student email.")
+        return render_template("home.html", message_type="signup", message="Not a valid WHS student email.")
 
     # Checks if email is a real valid email address
     # if not validate_email(email, verify=True):
@@ -62,7 +63,7 @@ def process_signup(_request):
 
     # Check to see if Terms of Service is agreed to
     if tos_agree != "agree":
-        return render_template("home.html", signup_message="Please agree to TOS to access the website.")
+        return render_template("home.html", message_type="signup", message="Please agree to TOS to access the website.")
 
     # Set auth cookie token
     response = redirect("/", 302)

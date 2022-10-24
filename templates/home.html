@@ -17,8 +17,8 @@
 
           {% if not user %}
               <div class="access-buttons-section">
-                  <button onclick="show_form()" id="login-button" class="access-button"> LOGIN </button>
-                  <button id="signup-button" class="access-button"> SIGNUP </button>
+                  <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
+                  <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
               </div>
           {% else %}
               <div class="profile-details">
@@ -30,7 +30,7 @@
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
                           <li id="profile-selection">Profile</li>
-                          <li id="settings-selection">Settings</li>
+                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
                           {% if user.admin %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
@@ -57,9 +57,9 @@
 
           <!-- HIDDEN -->
           <!-- Signup Form -->
-          <div style="visibility: hidden; opacity: 0; transition: opacity 200ms ease-in;" id="signup-form" class="access-form">
+          <div style="display: none;" id="signup-form" class="access-form">
             <div class="signup-form form-section">
-                <i class='bx bx-x'></i>
+                <i onclick="hide_form('signup-form')" class='bx bx-x'></i>
                 <div class="form-header">
                 <h3>UCE SIGNUP</h3>
                 <p>Please enter details to signup.</p>
@@ -96,9 +96,9 @@
             </div>
           </div>
           <!-- Login Form -->
-          <div style="visibility: hidden; opacity: 0; transition: opacity 200ms ease-in;" id="login-form" class="access-form">
-            <div class="login-form">
-                <i class='bx bx-x'></i>
+          <div style="display: none;" id="login-form" class="access-form">
+            <div class="login-form form-section">
+                <i onclick="hide_form('login-form')" class='bx bx-x'></i>
                 <div class="form-header">
                 <h3>UCE LOGIN</h3>
                 <p>Please enter credentials to login.</p>
@@ -113,7 +113,7 @@
                   </label>
 
 
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
+                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ message }}</p>
 
                   <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
                   <p class="message">Not registered?
@@ -125,14 +125,13 @@
           </div>
           <!-- Settings Form -->
           <div style="display: none;" id="settings-form" class="access-form">
-            <div class="settings-form">
-                <i class='bx bx-x'></i>
+            <div class="settings-form form-section">
+                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
                 <div class="form-header">
                 <h3>UCE SETTINGS</h3>
               </div>
 
               <form name="settings" method="post">
-                  <button onclick="show_delete_confirm()">Delete account</button>
                   <!-- Confirm Account Deletion Form -->
                   <div style="display: none;" id="account-deletion-form" class="access-form">
 
@@ -140,204 +139,167 @@
 
                   <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
 
-                  <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
-                  <p class="message">Not registered?
-                    <a href="/login">Create an account</a>
-                  </p>
+              </form>
+              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
+
+
+            </div>
+          </div>
+          <!-- Delete Account Form -->
+          <div style="display: none;" id="delete-account-form" class="access-form">
+            <div class="delete-account-form form-section">
+                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>CONFIRM ACCOUNT DELETION</h3>
+              </div>
+
+              <form name="settings" method="post">
+                  <!-- Confirm Account Deletion Form -->
+                  <div style="display: none;" id="account-deletion-form" class="access-form">
+                    You are about to delete your account.
+                  </div>
+                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
+
 
               </form>
             </div>
           </div>
 
+          <div class="process-visual">
+              <div class="process-info-section">
+                  <i class='bx bx-store-alt'></i>
+                  <span class="process-info">
+                      Place an order at your favorite restaurant.
+                  </span>
+              </div>
+              <div class="process-info-section">
+                  <i class='bx bx-receipt' ></i>
+                  <span class="process-info">
+                      Receipt message here
+                  </span>
+              </div>
+              <div class="process-info-section">
+                <img src="../static/car.png" alt="car">
+                <span class="process-info">
+                    Driving message here.
+                </span>
+              </div>
+              <div class="process-info-section">
+                  <i class='bx bx-bowl-hot' ></i>
+                  <span class="process-info">
+                      Food message here
+                  </span>
+              </div>
+              <div class="process-info-section">
+                  <i class='bx bxs-school' ></i>
+                  <span class="process-info">
+                      School message here
+                  </span>
+              </div>
 
+          </div>
 
 
       </div>
     </section>
 
     <!-- Mobile Adapting -->
-  <script>
+    <script>
+      function adaptive_home_visual() {
+          if (document.querySelector(".process-visual").className.includes("mobile")) {
+              return false;
+          }
+          document.querySelector(".process-visual").classList.toggle("mobile")
+
+      }
+      function default_home_visual() {
+          if (!document.querySelector(".process-visual").className.includes("mobile")) {
+              return false;
+          }
+
+          document.querySelector(".process-visual").classList.remove("mobile")
+
+      }
+
+      function adapt_mobile() {
+          {#adaptive_home_visual()#}
+
+          document.querySelector(".navbar-title").innerHTML = "UCE";
+          document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
+      }
 
       window.addEventListener('resize', function() {
           if (window.outerWidth < 650) {
+              adapt_mobile()
+          } else if (!document.fullscreenElement){
+              {#adaptive_home_visual()#}
+          } else if (window.outerWidth >= 1440) {
+              {#default_home_visual()#}
+          }
 
-            document.querySelector(".navbar-title").innerHTML = "UCE";
-            document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
-
-          } else if (window.outerWidth >= 650) {
+          if (window.outerWidth >= 650) {
               document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
               document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
           }
       })
 
 
+      if (window.outerWidth < 650) {
+          adapt_mobile()
+      } else if (!document.fullscreenElement){
+          {#adaptive_home_visual()#}
+      } else if (window.outerWidth >= 1440) {
+          {#default_home_visual()#}
+      }
+
+      if (window.outerWidth >= 650) {
+          document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
+          document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
+      }
   </script>
 
     <!-- Show Login, Signup, Settings Forms -->
-  <script>
-      let login_button = document.getElementById("login-button")
-      let login_form = document.getElementById("login-form")
+    <script>
+          let hide_form = function (id_name) {
+              document.getElementById(id_name).style.display = "none"
+              document.querySelector(".home-content-buttons").style.display = "flex"
+          }
+          let show_form = function (id_name) {
+              // BLUR
+              let form = document.getElementById(id_name);
+              document.querySelector("body").classList.toggle("blurred")
+              form.style.filter = "none"
 
-      let signup_button = document.getElementById("signup-button")
-      let signup_form = document.getElementById("signup-form")
-
-      let settings_button = document.getElementById("settings-selection")
-      let settings_form = document.getElementById("settings-form")
-
-      let close_login_form_button = document.querySelector("#login-form .bx-x")
-      let close_signup_form_button = document.querySelector("#signup-form .bx-x")
-      let close_settings_form_button = document.querySelector("#settings-form .bx-x")
-
-      let reserve_pickup_button_div = document.querySelector(".home-content-buttons")
-      let reserve_pickup_button = document.querySelector(".reserve-pickup-button")
-
-      let signup_message_element = document.querySelector("#signup-form .error-occurrence")
-      let login_message_element = document.querySelector("#login-form .error-occurrence")
-      let settings_message_element = document.querySelector("#settings-form .error-occurrence")
-
-      let hide_login_form = function () {
-          login_form.style.visibility = "hidden";
-          login_form.style.opacity = "0";
-          login_form.style.display = "none";
-
-          reserve_pickup_button_div.style.display = "none"
-      }
-      let hide_signup_form = function () {
-          signup_form.style.visibility = "hidden";
-          signup_form.style.opacity = "0";
-          signup_form.style.display = "none";
-
-          reserve_pickup_button_div.style.display = "none"
-      }
-      let hide_settings_form = function() {
-          settings_form.style.display = "none";
-
-      }
-      let show_login_form = function () {
-          login_form.style.display = "block";
-          login_form.style.visibility = "visible";
-          login_form.style.opacity = "1";
-
-          hide_signup_form()
-
-      }
-      let show_signup_form = function () {
-          signup_form.style.display = "block";
-          signup_form.style.visibility = "visible";
-          signup_form.style.opacity = "1";
-
-          hide_login_form()
-      }
-      let show_settings_form = function () {
-
-          settings_form.style.display = "block";
-
-          hide_login_form()
-          hide_signup_form()
-      }
-
-      let show_form = function (id_name) {
-          // Hide all other forms besides id_name form
-          let all_form_elements = document.querySelectorAll(".access-form")
-          for (let i = 0; i < all_form_elements.length; i++) {
-              var form = all_form_elements[i];
-              if (form.id === id_name) {
-                form.style.display = "block";
+              console.log("Showing form: " + id_name)
+              document.querySelector(".home-content-buttons").style.display = "none"
+              // Hide all other forms besides id_name form
+              let all_form_elements = document.querySelectorAll(".access-form")
+              for (let i = 0; i < all_form_elements.length; i++) {
+                  let form = all_form_elements[i];
+                  if (form.id !== id_name) {
+                      form.style.display = "none"
+                      continue;
+                  }
+                  if (form.id === "settings-form")
+                      hide_profile_dropdown()
+                  form.style.display = "flex";
               }
           }
-      }
 
-      {% if user %}
-      // Reveal settings popup div
-      settings_button.onclick = function() {
-          console.log("Activated settings form")
-          show_settings_form()
-          hide_profile_dropdown()
-      }
-      {% else %}
-      // Reveal login popup div
-      login_button.onclick = function() {
-          login_form.style.transition = "opacity 200ms ease-in"
-          show_login_form()
-      }
+          // If message return in render_template (flask)
+          let message = null;
+          if ("{{message_type}}") {
+              message = document.querySelector("#{{ message_type }}-form .error-occurrence")
+              message.style.display = "block";
+              message.innerHTML =  "{{ message }}"
+              show_form("{{message_type}}-form")
+          }
 
-      // Reveal signup popup div
-      signup_button.onclick = function () {
-          signup_form.style.transition = "opacity 200ms ease-in"
-          show_signup_form()
-      }
-
-      {% endif %}
-
-
-
-      // If message return in render_template (flask)
-      let login_message = "{{ login_message }}"
-      let signup_message = "{{ signup_message }}"
-      let settings_message = "{{ settings_message }}"
-      if (login_message) {
-          login_message_element.style.display = "block";
-          login_form.style.transition = ""
-          show_login_form()
-      } else if (signup_message) {
-          signup_message_element.style.display = "block";
-          signup_form.style.transition = ""
-          show_signup_form()
-      } else if (settings_message) {
-          settings_message_element.style.display = "block"
-          show_settings_form()
-      }
-
-
-      // Close form buttons
-      close_login_form_button.onclick = function () {
-          hide_login_form()
-
-          // Re-show reserve pickup button
-          reserve_pickup_button_div.style.display = "flex"
-
-          // Hide error message for next time they open up login/signup form
-          login_message_element.style.display = "none"
-          login_message = ""
-
-          signup_message_element.style.display = "none"
-          signup_message = ""
-      }
-      close_signup_form_button.onclick = function () {
-          hide_signup_form()
-
-          // Re-show reserve pickup button
-          reserve_pickup_button_div.style.display = "flex"
-
-          // Hide error message for next time they open up login/signup form
-          login_message_element.style.display = "none"
-          login_message = ""
-
-          signup_message_element.style.display = "none"
-          signup_message = ""
-      }
-      close_settings_form_button.onclick = function () {
-          hide_settings_form()
-
-          // Re-show reserve pickup button
-          reserve_pickup_button_div.style.display = "flex"
-
-          // Hide error message for next time they open up login/signup form
-          login_message_element.style.display = "none"
-          login_message = ""
-
-          signup_message_element.style.display = "none"
-          signup_message = ""
-
-          settings_message_element.style.display = "none"
-          settings_message = ""
-      }
-
-
-  </script>
+      </script>
 
     <!-- Profile Drop-Down -->
-  <script>
+    {% if user %}
+    <script>
       let profile_button = document.querySelector(".profile-details")
       let profile_dropdown = document.querySelector(".profile-dropdown")
       let profile_chevron = document.querySelector(".profile-details .arrow")
@@ -384,13 +346,7 @@
 
 
   </script>
-
-  <!-- Delete Account Confirm Popup -->
-  <script>
-      let show_delete_confirm = function () {
-
-      }
-  </script>
+    {% endif %}
 
   </body>
 
