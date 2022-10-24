@@ -10,6 +10,7 @@ app = Flask(__name__)
 # TODO: Make new logo
 # TODO: make info for process visual
 
+
 @app.route("/", methods=["GET"])
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
@@ -94,6 +95,18 @@ def process_homepage():
     else:
         return process_login(_request=request)
 
+
+@app.route("/reserve-pickup", methods=["GET"])
+def display_reserve_pickup():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UserDB().get_user(auth_token=auth_token)
+        return render_template("reserve_pickup.html", user=user)
+
+    return redirect("/", 302)
 
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():

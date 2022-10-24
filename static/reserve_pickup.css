@@ -101,17 +101,15 @@ body {
 
 /* HOME POPULAR RESTAURANTS */
 .popular-restaurants {
-  position: absolute;
   background: #e9e9e9;
   border-radius: 10px;
-  top: 550px;
+  margin: 180px 10px 10px 10px;
   padding: 10px;
-  width: 1400px;
-  margin-left: 20px;
 }
-.restaurant-list {
-  display: flex;
-  flex-direction: row;
+
+.Restaurant-list {
+    display: flex;
+    flex-direction: row;
   justify-content: space-between;
 
 }
@@ -123,7 +121,6 @@ body {
     height: 230px;
     /*margin: 35px;*/
     border-radius: 10px;
-    width: 400px;
 }
 .popular-restaurants h3 {
   font-size: 50px;
