@@ -99,8 +99,14 @@ body {
   transform: translateY(-2px);
 }
 
+/* HOME POPULAR RESTAURANTS */
+.Restaurant-List {
+    display: flex;
+
+}
+
 /* HOME PROCESS VISUAL */
-.process-visual {
+/*.process-visual {
   display: flex;
   position: absolute;
   justify-content: space-between;
@@ -121,7 +127,7 @@ body {
   width: 140px;
   border-radius: 40px;
   margin-bottom: 150px;
-  /* hsl(360, 89%, 61%); */
+  *//* hsl(360, 89%, 61%); *//*
 }
 .process-visual img {
   height: 140px;
@@ -145,10 +151,10 @@ body {
   left: 130px;
   margin-top: 100px;
   width: 250px;
-}
+}*/
 
 /* mobile visual adapt */
-.process-visual.mobile {
+/*.process-visual.mobile {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -165,7 +171,7 @@ body {
 }
 .process-visual.mobile .arrow {
   margin-top: 0
-}
+}*/
 
 /* * PROFILE * */
 .home-section nav .profile-details{
