@@ -100,9 +100,20 @@ body {
 }
 
 /* HOME POPULAR RESTAURANTS */
-.Restaurant-List {
+.Restaurant-list {
     display: flex;
+    flex-direction: row;
 
+}
+.restaurant-visual {
+
+    display: flex;
+    flex-direction: column;
+}
+.restaurant-visual img{
+    height: 230px;
+    margin: 35px;
+    border-radius: 10px;
 }
 
 /* HOME PROCESS VISUAL */
