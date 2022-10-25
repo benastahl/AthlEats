@@ -9,6 +9,9 @@
 body {
   background: #f7f7f7;
 }
+html {
+  height: 2000px;
+}
 .home-section{
   position: relative;
   width: 100%;
@@ -34,16 +37,23 @@ body {
   transition: all 0.5s ease;
   background: rgba(255,255,255,0.9);
 }
+.home-section nav .uce-logo {
+  height: 80px;
+  /*position: absolute;*/
+  /*left: 0;*/
+}
 .navbar-title {
   font-size: 35px;
   font-weight: bold;
   color: white;
   background: hsl(360, 89%, 61%);
   border-radius: 15px;
+  /*border-radius: 2px 15px 15px 2px;*/
   padding-right: 15px;
   padding-left: 15px;
   cursor: pointer;
   user-select: none;
+  margin-left: 110px;
 }
 .access-buttons-section {
   padding: 10px;
@@ -51,9 +61,10 @@ body {
 }
 .home-content-buttons {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 250px;
+  padding-top: 175px;
 }
 .access-button, .reserve-pickup-button {
   margin: 10px;
@@ -98,6 +109,18 @@ body {
 .reserve-pickup-button:active .front {
   transform: translateY(-2px);
 }
+.welcome-message {
+  display: flex;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+  /*width: 400px;*/
+  padding: 5px 15px 5px 15px;
+  background: rgba(244, 67, 67, 0.8);
+  border-radius: 25px;
+  margin-bottom: 10px;
+}
 
 /* HOME POPULAR RESTAURANTS */
 .popular-restaurants {
@@ -105,7 +128,7 @@ body {
   background: #e9e9e9;
   border-radius: 10px;
   top: 550px;
-  padding: 10px;
+  padding: 10px 20px;
   width: 1400px;
   margin-left: 20px;
 }
@@ -113,11 +136,14 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
 
 }
 .restaurant-visual {
+  margin-top: 10px;
     display: flex;
     flex-direction: column;
+  width: 400px;
 }
 .restaurant-visual img{
     height: 230px;
@@ -130,7 +156,7 @@ body {
 }
 
 .restaurant-title {
-    margin: 7px 0px 0px 0px;
+    margin: 7px 0 0 0;
     font-weight: 700;
 }
 .restaurant-desc{

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/home.css">
-    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UCE Home </title>
@@ -13,7 +13,9 @@
   <body>
     <section class="home-section">
       <nav>
-          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>
+          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+
+{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
 
           {% if not user %}
               <div class="access-buttons-section">
@@ -45,17 +47,17 @@
       </nav>
 
       <div class="home-content">
+          <div class="home-content-buttons">
+              <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
 
-      <div class="home-content-buttons">
-          <form method="get" action="/reserve-pickup">
-              <button class="reserve-pickup-button">
-                  <span class="front">
-                    Reserve Pickup
-                  </span>
-              </button>
-          </form>
-
-      </div>
+              <form method="get" action="/reserve-pickup">
+                  <button class="reserve-pickup-button">
+                      <span class="front">
+                        Reserve Pickup
+                      </span>
+                  </button>
+              </form>
+          </div>
 
           <!-- HIDDEN -->
           <!-- Signup Form -->
@@ -192,6 +194,33 @@
                       <img src="https://i.insider.com/5a95b8fabbba8d1a008b45ba?width=700" alt="">
                       <span class="restaurant-title">
                           McDicks
+                      </span>
+                      <span class="restaurant-desc">
+
+                      </span>
+                  </div>
+                  <div class="restaurant-visual">
+                      <img src="https://i.insider.com/5a95b8fabbba8d1a008b45ba?width=700" alt="">
+                      <span class="restaurant-title">
+                          Starbucks
+                      </span>
+                      <span class="restaurant-desc">
+
+                      </span>
+                  </div>
+                  <div class="restaurant-visual">
+                      <img src="https://i.insider.com/5a95b8fabbba8d1a008b45ba?width=700" alt="">
+                      <span class="restaurant-title">
+                          Panera
+                      </span>
+                      <span class="restaurant-desc">
+
+                      </span>
+                  </div>
+                  <div class="restaurant-visual">
+                      <img src="https://i.insider.com/5a95b8fabbba8d1a008b45ba?width=700" alt="">
+                      <span class="restaurant-title">
+                          Five Guys
                       </span>
                       <span class="restaurant-desc">
 
