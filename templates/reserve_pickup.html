@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/reserve_pickup.css">
-    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UCE Home </title>
@@ -13,7 +13,9 @@
   <body>
     <section class="home-section">
       <nav>
-          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>
+          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+
+          <span class="navbar-title">Reserve Pickup</span>
 
           {% if not user %}
               <div class="access-buttons-section">
@@ -46,85 +48,21 @@
 
       <div class="home-content">
 
-      <div class="home-content-buttons">
-          <form method="post" action="/reserve-pickup">
-              <button class="reserve-pickup-button">
-                  <span class="front">
-                    Reserve Pickup
-                  </span>
-              </button>
-          </form>
-
-      </div>
-
-          <!-- HIDDEN -->
-          <!-- Signup Form -->
-          <div style="display: none;" id="signup-form" class="access-form">
-            <div class="signup-form form-section">
-                <i onclick="hide_form('signup-form')" class='bx bx-x'></i>
+          <!-- Reserve Pickup Details -->
+          <div id="reserve-form" class="access-form">
+            <div class="reserve-form form-section">
                 <div class="form-header">
-                <h3>UCE SIGNUP</h3>
-                <p>Please enter details to signup.</p>
-              </div>
-                <form name="signup" method="post">
-                    <label>
-                        <input type="text" name="email" placeholder="email">
-                    </label>
-                    <label>
-                        <input type="password" name="pass" placeholder="password">
-                    </label>
-                    <label for="grade"></label><select required class="form-selection" name="grade" id="grade">
-                            <option class="form-selection-placeholder" value="" disabled selected>grade</option>
-                            <option style="color: #f4f4f4" value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                          </select>
-                    <label for="tos"></label><select required class="form-selection" name="tos" id="tos">
-                            <option class="form-selection-placeholder" value="" disabled selected>terms of service</option>
-                            <option value="agree">agree</option>
-                          </select>
-
-
-
-                          <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ signup_message }}</p>
-                          <button id="submit-form-button" type="submit" value="SIGNUP" onclick="hide_button('submit-form-button')">SIGNUP</button>
-                          <p class="message">Already have an account?
-                            <a href="/login">Login here</a>
-                          </p>
-                            <a class="tos-agree-link" target="_blank" rel="noopener noreferrer" href="/terms-of-service">terms of service.</a>
-
-              </form>
-            </div>
-          </div>
-          <!-- Login Form -->
-          <div style="display: none;" id="login-form" class="access-form">
-            <div class="login-form form-section">
-                <i onclick="hide_form('login-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>UCE LOGIN</h3>
-                <p>Please enter credentials to login.</p>
               </div>
 
-              <form name="login" method="post">
-                  <label>
-                      <input type="text" name="email" placeholder="email">
-                  </label>
-                  <label>
-                      <input type="password" name="pass" placeholder="password">
-                  </label>
+              <form name="reserve" method="post">
 
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ message }}</p>
-
-                  <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
-                  <p class="message">Not registered?
-                    <a href="/login">Create an account</a>
-                  </p>
+                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
 
               </form>
+
             </div>
           </div>
+
           <!-- Settings Form -->
           <div style="display: none;" id="settings-form" class="access-form">
             <div class="settings-form form-section">
@@ -166,66 +104,6 @@
               </form>
             </div>
           </div>
-          <div class="popular-restaurants">
-              <h3>Popular Restaurants</h3>
-              <div class="Restaurant-list">
-                  <div class="restaurant-visual">
-                      <img src="https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F210920131610-chipotle-brisket.jpg" alt="">
-
-                      <span class="restaurant-title">
-                          Chipotle
-                      </span>
-                  </div>
-                  <div class="restaurant-visual">
-                      <img src="https://legendary-digital-network-assets.s3.amazonaws.com/wp-content/uploads/2018/05/14213240/dunkin-donuts.jpg" alt="">
-                      <span class="restaurant-title">
-                          Dunkin Donuts
-                      </span>
-                  </div>
-                  <div class="restaurant-visual">
-                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkmT8iJk9BXF8IwP94y4522OIT1zZg1urrYQ&usqp=CAU" alt="">
-                      <span class="restaurant-title">
-                          McDicks
-                      </span>
-                  </div>
-              </div>
-          </div>
-
-
-          <div style="display: none;" class="process-visual">
-              <div class="process-info-section">
-                  <i class='bx bx-store-alt'></i>
-                  <span class="process-info">
-                      Place an order at your favorite restaurant.
-                  </span>
-              </div>
-              <div class="process-info-section">
-                  <i class='bx bx-receipt' ></i>
-                  <span class="process-info">
-                      Receipt message here
-                  </span>
-              </div>
-              <div class="process-info-section">
-                <img src="../static/car.png" alt="car">
-                <span class="process-info">
-                    Driving message here.
-                </span>
-              </div>
-              <div class="process-info-section">
-                  <i class='bx bx-bowl-hot' ></i>
-                  <span class="process-info">
-                      Food message here
-                  </span>
-              </div>
-              <div class="process-info-section">
-                  <i class='bx bxs-school' ></i>
-                  <span class="process-info">
-                      School message here
-                  </span>
-              </div>
-
-          </div>
-
 
       </div>
     </section>
@@ -249,9 +127,8 @@
       }
 
       function adapt_mobile() {
-          {#adaptive_home_visual()#}
 
-          document.querySelector(".navbar-title").innerHTML = "UCE";
+          document.querySelector(".navbar-title").style.display = "none";
           document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
       }
 
@@ -265,7 +142,7 @@
           }
 
           if (window.outerWidth >= 650) {
-              document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
+              document.querySelector(".navbar-title").style.display = "";
               document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
           }
       })
@@ -280,7 +157,7 @@
       }
 
       if (window.outerWidth >= 650) {
-          document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
+          document.querySelector(".navbar-title").style.display = "";
           document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
       }
   </script>

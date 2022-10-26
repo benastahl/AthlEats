@@ -39,6 +39,7 @@ html {
 }
 .home-section nav .uce-logo {
   height: 80px;
+  cursor: pointer;
   /*position: absolute;*/
   /*left: 0;*/
 }
@@ -53,7 +54,8 @@ html {
   padding-left: 15px;
   cursor: pointer;
   user-select: none;
-  margin-left: 110px;
+  margin-left: 80px;
+  position: absolute;
 }
 .access-buttons-section {
   padding: 10px;
@@ -119,7 +121,8 @@ html {
   padding: 5px 15px 5px 15px;
   background: rgba(244, 67, 67, 0.8);
   border-radius: 25px;
-  margin-bottom: 10px;
+  margin: 10px 50px 10px 50px;
+  text-align: center;
 }
 
 /* HOME POPULAR RESTAURANTS */
@@ -154,7 +157,6 @@ html {
 .popular-restaurants h3 {
   font-size: 40px;
 }
-
 .restaurant-title {
     margin: 7px 0 0 0;
     font-weight: 700;
@@ -165,7 +167,25 @@ html {
     font-weight: 200;
     font-size: 15px;
 }
-
+ /* mobile hpr */
+.popular-restaurants.mobile {
+  width: 350px;
+}
+.popular-restaurants.mobile .restaurant-list {
+  flex-direction: column;
+}
+.popular-restaurants.mobile img {
+  /* 16:12 ratio (width:height) */
+  /*width: calc(16px * 19);*/
+  /*height: calc(12px * 19);*/
+  height: auto;
+}
+.popular-restaurants.mobile .restaurant-visual {
+  width: 310px;
+}
+.popular-restaurants.mobile .restaurant-list {
+  flex-direction: column;
+}
 
 /* HOME PROCESS VISUAL */
 /*.process-visual {
@@ -216,13 +236,13 @@ html {
 }*/
 
 /* mobile visual adapt */
-/*.process-visual.mobile {
+.process-visual.mobile {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
-.process-visual.mobile i, img {
+.process-visual.mobile i, .process-visual.mobile img {
   font-size: 120px;
   width: 160px;
   height: 160px;
@@ -233,7 +253,7 @@ html {
 }
 .process-visual.mobile .arrow {
   margin-top: 0
-}*/
+}
 
 /* * PROFILE * */
 .home-section nav .profile-details{
