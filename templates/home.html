@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../static/defaults.css">
+    <link rel="stylesheet" href="../static/nav_bar.css">
+    <link rel="stylesheet" href="../static/access_forms.css">
     <link rel="stylesheet" href="../static/home.css">
     <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
@@ -50,7 +53,7 @@
           <div class="home-content-buttons">
               {% if user %}
               <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
-              <form method="get" action="/reserve-pickup">
+              <form method="get" action="/reserve-calendar">
                   <button class="reserve-pickup-button">
                       <span class="front">
                         Reserve Pickup

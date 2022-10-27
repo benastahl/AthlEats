@@ -1,0 +1,61 @@
+html {
+  height: 800px;
+}
+
+/* Reserve Form (Calendar) */
+.reserve-calendar-form {
+  justify-content: space-between;
+  margin: 50px auto;
+}
+
+.calendar-list {
+  display: flex;
+  flex-wrap: nowrap;
+  /*justify-content: center;*/
+}
+.home-section.mobile .calendar-list {
+  flex-wrap: wrap;
+}
+.calendar-day-container {
+  visibility: hidden;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: center;
+  min-height: 359px;
+  max-width: 1200px;
+  /*min-width: 350px;*/
+  width: 0; /*350px; */
+  transition: width 2s;
+}
+.calendar-day-container.active {
+  visibility: visible;
+  width: 350px;
+}
+.calendar-day-container span {
+  display: flex;
+}
+
+.form-section {
+  padding: 30px;
+  width: min-content;
+  max-width: none;
+}
+.form-header h3 {
+  text-align: center;
+  font-size: 25px;
+  margin: 0;
+}
+
+/* mobile */
+.home-section.mobile .form-header h3 {
+    font-size: 25px;
+}
+.home-section.mobile .reserve-calendar-form {
+  margin: 65px auto;
+}
+.home-section.mobile .calendar-container {
+}
+

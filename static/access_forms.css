@@ -1,0 +1,104 @@
+/* FORMS */
+.access-form {
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form-section {
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 60px auto;
+  padding: 20px 30px 30px;
+  text-align: center;
+  border-radius: 40px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form-section .bx-x  {
+  display: flex;
+  float: right;
+  font-size: 30px;
+  cursor: pointer;
+}
+.form-header {
+  padding-bottom: 15px;
+}
+.form-header h3 {
+  text-align: left;
+  font-size: 30px;
+  margin: 5px 15px 15px 22px;
+  border-bottom: 1px solid lightgray;
+  padding: 0 0 15px 0;
+}
+.access-form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.access-form button {
+  pointer-events: auto;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background-color: #43a0f2;
+  width: 50%;
+  border: 0;
+  border-radius: 50px;
+  font-weight: bold;
+  padding: 15px;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.access-form .delete-account-button {
+  background-color: red;
+  min-width: 150px;
+}
+.access-form .message {
+  color: #b3b3b3;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.access-form .error-occurrence {
+  margin: 20px 5px 10px;
+  color: red;
+  font-size: 12px;
+}
+.access-form a {
+  color: red;
+  text-decoration: none;
+}
+.tos-agree-link {
+  font-size: 10px;
+}
+select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+.form-selection {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+  color: black;
+}
+.form-selection .form-selection-placeholder {
+  color: #777777;
+}

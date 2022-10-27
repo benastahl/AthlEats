@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request, redirect
 from controls import UserDB
-# from validate_email_address import validate_email
+import calendar
 from datetime import datetime
 
 import bcrypt
 import secrets
 
 app = Flask(__name__)
+week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
+          "december"]
+
+
 # TODO: Make new logo
 # TODO: make info for process visual
 
@@ -96,17 +101,60 @@ def process_homepage():
         return process_login(_request=request)
 
 
-@app.route("/reserve-pickup", methods=["GET"])
-def display_reserve_pickup():
+@app.route("/reserve-calendar", methods=["GET"])
+def display_reserve_calendar():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if not auth_token:
+        return redirect("/", 302)
+    # Checks to see if there's a corresponding user with auth token.
+    user = UserDB().get_user(auth_token=auth_token)
+
+    now = datetime.now()
+
+    month_name = months[now.month - 1].upper()
+    month = months.index(month_name.lower()) + 1
+    year = now.year
+
+    day = now.day
+
+    first_weekday, past_month_days = calendar.monthrange(year, month - 1)
+    first_weekday, num_days_in_month = calendar.monthrange(year, month)
+    next_month_weekday, next_month_days = calendar.monthrange(year, month + 1)
+
+    weekends = [day_num + 1 for day_num in range(num_days_in_month) if datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
+    return render_template("reserve_calendar.html",
+                           user=user,
+
+                           # Calendar data
+                           month_name=month_name,
+                           month=month,
+                           year=year,
+                           day=day,
+
+                           weekends=weekends,
+                           past_month_days=past_month_days,
+                           num_days_in_month=num_days_in_month,
+                           next_month_weekday=next_month_weekday,
+                           first_weekday=first_weekday,
+
+                           available_days=["1", "9", "20"]
+                           )
+
+
+@app.route("/reserve-form", methods=["GET"])
+def display_reserve_form():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
 
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         user = UserDB().get_user(auth_token=auth_token)
-        return render_template("reserve_pickup.html", user=user)
+        return render_template("reserve_form.html", user=user)
 
     return redirect("/", 302)
+
 
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():

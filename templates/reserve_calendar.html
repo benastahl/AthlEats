@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../static/reserve_pickup.css">
+    <link rel="stylesheet" href="../static/defaults.css">
+    <link rel="stylesheet" href="../static/nav_bar.css">
+    <link rel="stylesheet" href="../static/access_forms.css">
+    <link rel="stylesheet" href="../static/calendar.css">
+    <link rel="stylesheet" href="../static/reserve_calendar.css">
     <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UCE Home </title>
+    <title> UCE Reserve Calendar </title>
    </head>
 
   <body>
@@ -15,7 +19,7 @@
       <nav>
           <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
 
-          <span class="navbar-title">Reserve Pickup</span>
+          <span class="navbar-title">Reserve Calendar</span>
 
           {% if not user %}
               <div class="access-buttons-section">
@@ -49,16 +53,56 @@
       <div class="home-content">
 
           <!-- Reserve Pickup Details -->
-          <div id="reserve-form" class="access-form">
-            <div class="reserve-form form-section">
+          <div id="reserve-calendar-form" class="access-form">
+            <div class="reserve-calendar-form form-section">
                 <div class="form-header">
-              </div>
+                    <h3>Reserve Availability</h3>
+                </div>
 
-              <form name="reserve" method="post">
+                <div class="calendar-list">
+                    <div class="calendar-container">
+                      <div class="calendar-header">
+                        <h1>
+                          {{month_name}}
+                          <button onclick="dropdownFunc()" class="dropbtn">▾</button>
+                          <div id="month-dropdown" class="month-dropdown">
+                              <a href="/?month=january">January</a>
+                              <a href="/?month=february">February</a>
+                              <a href="/?month=march">March</a>
+                              <a href="/?month=april">April</a>
+                              <a href="/?month=may">May</a>
+                              <a href="/?month=june">June</a>
+                              <a href="/?month=july">July</a>
+                              <a href="/?month=august">August</a>
+                              <a href="/?month=september">September</a>
+                              <a href="/?month=october">October</a>
+                              <a href="/?month=november">November</a>
+                              <a href="/?month=december">December</a>
+                          </div>
+                        </h1>
+                        <p>{{year}}</p>
+                      </div>
+                      <div class="calendar">
+                          <span class="day-name">Mon</span><span class="day-name">Tue</span><span class="day-name">Wed</span><span class="day-name">Thu</span><span class="day-name">Fri</span>
 
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
+                          <!-- REGULAR DAYS -->
+                          {% for _day in range(num_days_in_month) %}
+                              {% if _day + 1 not in weekends %}
+                                  <div class="day" style="cursor: pointer">
+                                      {{ _day + 1 }}
+                                  </div>
+                              {% endif %}
+                          {% endfor %}
 
-              </form>
+                      </div>
+                    </div>
+                    {% for available_day in available_days %}
+                        <div id="day-details-{{ available_day }}" class="calendar-day-container">
+                            Available day: {{ available_day }}
+
+                        </div>
+                    {% endfor %}
+                </div>
 
             </div>
           </div>
@@ -108,6 +152,49 @@
       </div>
     </section>
 
+    <!-- Calendar Day Details Popup -->
+    <script>
+        function show_day_details(day) {
+            let dayy = parseInt(day);
+            console.log("day-details-" + dayy);
+            let day_popup = document.getElementById("day-details-" + dayy);
+
+            if (day_popup) {
+                console.log("Activated");
+                day_popup.classList.toggle("active");
+            }
+        }
+
+        let calendar_days = document.querySelectorAll(".calendar-container .day");
+        for (let i = 0; i < calendar_days.length; i++) {
+            let calendar_day = calendar_days[i];
+            calendar_day.onclick = function () {
+                show_day_details(calendar_day.innerHTML)
+            }
+        }
+    </script>
+
+    <!-- Calendar Dropdown -->
+    <script>
+        function dropdownFunc() {
+            document.getElementById("month-dropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+            let dropdowns = document.getElementsByClassName("month-dropdown");
+            let i;
+            for (i = 0; i < dropdowns.length; i++) {
+              let openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
+
+    </script>
+
     <!-- Mobile Adapting -->
     <script>
       function adaptive_home_visual() {
@@ -127,7 +214,7 @@
       }
 
       function adapt_mobile() {
-
+          document.querySelector(".home-section").classList.toggle("mobile")
           document.querySelector(".navbar-title").style.display = "none";
           document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
       }
@@ -169,10 +256,6 @@
               document.querySelector(".home-content-buttons").style.display = "flex"
           }
           let show_form = function (id_name) {
-              // BLUR
-              let form = document.getElementById(id_name);
-              document.querySelector("body").classList.toggle("blurred")
-              form.style.filter = "none"
 
               console.log("Showing form: " + id_name)
               document.querySelector(".home-content-buttons").style.display = "none"
