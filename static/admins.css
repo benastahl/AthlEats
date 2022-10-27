@@ -282,6 +282,9 @@ nav .profile-details i{
   /* padding: 0 20px; */
 }
 
+
+
+
 /* left box */
 .home-content .sales-boxes .recent-sales{
   width: 98%;
@@ -291,7 +294,6 @@ nav .profile-details i{
   margin: 0 20px;
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-
   overflow: auto;
 }
 .home-content .sales-boxes .sales-details{
@@ -438,4 +440,107 @@ nav .profile-details i{
   .sidebar.active ~ .home-section nav .profile-details{
     display: none;
   }
+}
+
+/* admin buttons */
+.admin-buttons {
+  width: 98%;
+  background: #fff;
+  padding: 20px 30px;
+  max-height: 50000px;
+  margin: 20px 20px 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.manage-buttons {
+  font-family: "Roboto", sans-serif;
+  border-radius: 15px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24)
+  font-weight: 1000;
+  font-size: 40px;
+  padding: 15px;
+  background-color: #342a6b;
+  color: #FFF2FF;
+  margin: 0px 30px 0px 30px
+
+}
+
+/* profile details */
+.home-section nav .profile-details{
+  display: flex;
+  align-items: center;
+  background: #F5F6FA;
+  border: 2px solid black;
+  border-radius: 25px;
+  height: 50px;
+  min-width: 190px;
+  padding: 0 10px 0 2px;
+  user-select: none;
+  cursor: pointer;
+}
+.home-section nav .profile-dropdown{
+  position: absolute;
+  right: 0;
+  margin-top: 200px;
+  margin-right: 20px;
+}
+.home-section nav .profile-dropdown ul li {
+  display: flex;
+  align-items: center;
+  background: #F5F6FA;
+  border-radius: 0;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  height: 50px;
+  padding: 15px;
+  font-weight: bold;
+  user-select: none;
+  justify-content: center;
+  cursor: pointer;
+}
+.home-section nav .profile-dropdown ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.home-section nav .profile-dropdown ul .last-option {
+  border-radius: 0 0 25px 25px;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+
+nav .profile-details img{
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+nav .profile-details .guest-profile-picture {
+  height: 40px;
+  width: 40px;
+  font-size: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+nav .profile-details .admin_name{
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 10px;
+  white-space: nowrap;
+}
+nav .profile-details i{
+  font-size: 25px;
+  color: #333;
 }

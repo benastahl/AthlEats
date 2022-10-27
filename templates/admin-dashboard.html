@@ -17,14 +17,41 @@
     <nav>
       <div class="sidebar-button">
         <span class="dashboard">Admin Dashboard</span>
+
+        {% if not user %}
+              <div class="access-buttons-section">
+                  <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
+                  <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
+              </div>
+          {% else %}
+              <div class="profile-details">
+                <i class="bx bx-user-circle guest-profile-picture"></i>
+                <span class="admin_name">{{user.first_name | capitalize}} {{user.last_name | capitalize }}</span>
+                <i class='arrow bx bx-chevron-down' ></i>
+
+              </div>
+              <div style="visibility: hidden" class="profile-dropdown">
+                      <ul>
+                          <li id="profile-selection">Profile</li>
+                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+
+          {% endif %}
+
       </div>
 
       <!-- Quarter Selection -->
 
 
       <div class="profile-details">
-        <img src="https://c4.wallpaperflare.com/wallpaper/273/268/863/appa-avatar-the-last-airbender-glasses-wallpaper-thumb.jpg" alt="">
-        <span class="admin_name">{{ user.first_name | capitalize}} {{ user.last_name | capitalize }}</span>
+        <img src="https://drive.google.com/file/d/1glOnmjhuU_2veZaXbgtPBznVE9tKZQv8/preview" alt="">
+        <span class="admin_name">USERNAME</span>
         <i class='bx bx-chevron-down' ></i>
       </div>
     </nav>
@@ -40,29 +67,206 @@
         </div>
       </div>
 
+      <div class="admin-buttons">
+        <form method="get" action="">
+                  <button class="manage-buttons">
+                      <span class="front">
+                        Manage Current Orders
+                      </span>
+                  </button>
+        </form>
+        <form method="get" action="">
+                  <button class="manage-buttons">
+                      <span class="front">
+                        Manage Past Orders
+                      </span>
+                  </button>
+        </form>
+        <form method="get" action="">
+                  <button class="manage-buttons">
+                      <span class="front">
+                        Manage Users
+                      </span>
+                  </button>
+        </form>
+
+      </div>
+<!--CURRENT ORDERS-->
+      <div class="sales-boxes">
+        <div class="recent-sales box">
+          <div class="title">Current Orders</div>
+            <div class="sales-details">
+
+
+            <ul class="details">
+
+              <li class="topic">Name</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+            </ul>
+
+            <ul class="details">
+
+            <li class="topic">Restaurant order</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW MEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+          </ul>
+
+            <ul class="details">
+              <li class="topic">Block</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+
+            </ul>
+              <ul class="details">
+              <li class="topic">Pickup location</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+
+            </ul>
+
+          </div>
+        </div>
+      </div>
+<!--      PAST ORDERS-->
+      <div class="sales-boxes">
+        <div class="recent-sales box">
+          <div class="title">Past Orders</div>
+            <div class="sales-details">
+
+
+            <ul class="details">
+
+              <li class="topic">Name</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+            </ul>
+
+            <ul class="details">
+
+            <li class="topic">Restaurant order</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW MEOWMEOWMEOMEOW MEOW MEOW MEOW MEOW WMEOWMEOWMEOWMEOWMEOWMEOWMEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+          </ul>
+
+            <ul class="details">
+              <li class="topic">Block</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+
+            </ul>
+              <ul class="details">
+              <li class="topic">Pickup location</li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
+
+            </ul>
+
+          </div>
+        </div>
+      </div>
+<!--USER DATA-->
       <div class="sales-boxes">
         <div class="recent-sales box">
           <div class="title">Users</div>
-          <div class="sales-details">
+            <div class="sales-details">
 
 
             <ul class="details">
 
               <li class="topic">Email</li>
-              <li><a href="#">AVERAGE DICK</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
 
             </ul>
 
             <ul class="details">
 
             <li class="topic">Username</li>
-              <li><a href="#">AVERAGE DICK</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
 
           </ul>
 
             <ul class="details">
               <li class="topic">Creation</li>
-              <li><a href="#">AVERAGE DICK</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+              <li><a href="#">MEOW</a></li>
+
 
             </ul>
 
@@ -71,6 +275,56 @@
       </div>
     </div>
   </section>
+
+{% if user %}
+    <script>
+      let profile_button = document.querySelector(".profile-details")
+      let profile_dropdown = document.querySelector(".profile-dropdown")
+      let profile_chevron = document.querySelector(".profile-details .arrow")
+      let profile_dropdown_activated = false;
+      let profile_dropdown_options = document.querySelectorAll(".home-section nav .profile-dropdown ul li")
+
+      window.addEventListener('load', function() {
+          for (let i = 0; i < profile_dropdown_options.length; i++) {
+              console.log("Set size of options.")
+              profile_dropdown_options[i].style.width = profile_button.getBoundingClientRect().width + "px";
+          }
+      })
+
+
+      let hide_profile_dropdown = function () {
+          profile_button.style.borderRadius = "25px";
+          profile_button.style.border = "2px solid black"
+          profile_dropdown.style.visibility = "hidden"
+          profile_chevron.className = "arrow bx bx-chevron-down"
+          profile_dropdown_activated = false;
+
+          document.querySelector(".home-content").removeEventListener('click', hide_profile_dropdown)
+
+      }
+
+      let show_profile_dropdown = function () {
+          profile_button.style.borderRadius = "25px 25px 0px 0px";
+          profile_button.style.borderBottom = "0px"
+          profile_dropdown.style.visibility = "visible"
+          profile_chevron.className = "arrow bx bx-chevron-up"
+          profile_dropdown_activated = true;
+
+          document.querySelector(".home-content").addEventListener('click', hide_profile_dropdown)
+
+      }
+
+      profile_button.onclick = function () {
+          if (!profile_dropdown_activated) {
+                show_profile_dropdown()
+          } else {
+              hide_profile_dropdown()
+          }
+      }
+
+
+  </script>
+    {% endif %}
 
 </body>
 
