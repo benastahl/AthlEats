@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" xmlns:if="http://www.w3.org/1999/xhtml">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../static/admins.css">
-    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwaylandhs.sharpschool.net%2FUserFiles%2FServers%2FServer_1036540%2FImage%2FImages%2Fwaylandlogo_color.png&f=1&nofb=1">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../static/defaults.css">
+    <link rel="stylesheet" href="../static/nav_bar.css">
+    <link rel="stylesheet" href="../static/access_forms.css">
+    <link rel="stylesheet" href="../static/admin-dashboard.css">    <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UCE - Admin Dashboard
-    </title>
+    <title> UCE Admin Dashboard </title>
    </head>
 
-<body>
+  <body>
+    <section class="home-section">
+      <nav>
+          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
 
-  <section class="home-section">
-    <nav>
-      <div class="sidebar-button">
-        <span class="dashboard">Admin Dashboard</span>
+          <span class="navbar-title">Admin Dashboard</span>
 
-        {% if not user %}
+          {% if not user %}
               <div class="access-buttons-section">
                   <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
                   <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
@@ -44,239 +45,195 @@
 
           {% endif %}
 
-      </div>
 
-      <!-- Quarter Selection -->
+      </nav>
+
+      <div class="home-content">
+
+          <!-- Admin Data Details -->
+          <div class="admin-data-container">
+              <div id="admin-data" class="access-form">
+                <div class="admin-data form-section">
+                    <div class="form-header">
+                        <h3>Users</h3>
+                    </div>
+
+                  <form name="reserve" method="post">
 
 
-      <div class="profile-details">
-        <img src="https://drive.google.com/file/d/1glOnmjhuU_2veZaXbgtPBznVE9tKZQv8/preview" alt="">
-        <span class="admin_name">USERNAME</span>
-        <i class='bx bx-chevron-down' ></i>
-      </div>
-    </nav>
+                  </form>
 
-    <div class="home-content">
-      <div class="overview-boxes">
-        <div class="box">
-          <div class="right-side">
-            <div class="box-topic">User Count</div>
-            <div class="number">COUNT</div>
+                </div>
+              </div>
+              <div id="admin-data" class="access-form">
+                <div class="admin-data form-section">
+                    <div class="form-header">
+                        <h3>Current Orders</h3>
+                    </div>
+
+                  <form name="reserve" method="post">
+
+
+                  </form>
+
+                </div>
+              </div>
+              <div id="admin-data" class="access-form">
+                <div class="admin-data form-section">
+                    <div class="form-header">
+                        <h3>Past Orders</h3>
+                    </div>
+
+                  <form name="reserve" method="post">
+
+
+                  </form>
+
+                </div>
+              </div>
           </div>
-          <i class='bx bx-cart-alt cart'></i>
-        </div>
-      </div>
-
-      <div class="admin-buttons">
-        <form method="get" action="">
-                  <button class="manage-buttons">
-                      <span class="front">
-                        Manage Current Orders
-                      </span>
-                  </button>
-        </form>
-        <form method="get" action="">
-                  <button class="manage-buttons">
-                      <span class="front">
-                        Manage Past Orders
-                      </span>
-                  </button>
-        </form>
-        <form method="get" action="">
-                  <button class="manage-buttons">
-                      <span class="front">
-                        Manage Users
-                      </span>
-                  </button>
-        </form>
-
-      </div>
-<!--CURRENT ORDERS-->
-      <div class="sales-boxes">
-        <div class="recent-sales box">
-          <div class="title">Current Orders</div>
-            <div class="sales-details">
 
 
-            <ul class="details">
+          <!-- Settings Form -->
+          <div style="display: none;" id="settings-form" class="access-form">
+            <div class="settings-form form-section">
+                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>UCE SETTINGS</h3>
+              </div>
 
-              <li class="topic">Name</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
+              <form name="settings" method="post">
+                  <!-- Confirm Account Deletion Form -->
+                  <div style="display: none;" id="account-deletion-form" class="access-form">
 
-            </ul>
+                  </div>
 
-            <ul class="details">
+                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
 
-            <li class="topic">Restaurant order</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW MEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOWMEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-          </ul>
-
-            <ul class="details">
-              <li class="topic">Block</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
+              </form>
+              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
 
 
-            </ul>
-              <ul class="details">
-              <li class="topic">Pickup location</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-
-            </ul>
-
+            </div>
           </div>
-        </div>
-      </div>
-<!--      PAST ORDERS-->
-      <div class="sales-boxes">
-        <div class="recent-sales box">
-          <div class="title">Past Orders</div>
-            <div class="sales-details">
+          <!-- Delete Account Form -->
+          <div style="display: none;" id="delete-account-form" class="access-form">
+            <div class="delete-account-form form-section">
+                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>CONFIRM ACCOUNT DELETION</h3>
+              </div>
+
+              <form name="settings" method="post">
+                  <!-- Confirm Account Deletion Form -->
+                  <div style="display: none;" id="account-deletion-form" class="access-form">
+                    You are about to delete your account.
+                  </div>
+                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
 
 
-            <ul class="details">
-
-              <li class="topic">Name</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-            </ul>
-
-            <ul class="details">
-
-            <li class="topic">Restaurant order</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW MEOWMEOWMEOMEOW MEOW MEOW MEOW MEOW WMEOWMEOWMEOWMEOWMEOWMEOWMEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-          </ul>
-
-            <ul class="details">
-              <li class="topic">Block</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-
-            </ul>
-              <ul class="details">
-              <li class="topic">Pickup location</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOWMEOW MEOW MEOW MEOW MEOW MEOW MEOW </a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-
-            </ul>
-
+              </form>
+            </div>
           </div>
-        </div>
+
       </div>
-<!--USER DATA-->
-      <div class="sales-boxes">
-        <div class="recent-sales box">
-          <div class="title">Users</div>
-            <div class="sales-details">
+    </section>
+
+    <!-- Mobile Adapting -->
+    <script>
+      function adaptive_home_visual() {
+          if (document.querySelector(".process-visual").className.includes("mobile")) {
+              return false;
+          }
+          document.querySelector(".process-visual").classList.toggle("mobile")
+
+      }
+      function default_home_visual() {
+          if (!document.querySelector(".process-visual").className.includes("mobile")) {
+              return false;
+          }
+
+          document.querySelector(".process-visual").classList.remove("mobile")
+
+      }
+
+      function adapt_mobile() {
+
+          document.querySelector(".navbar-title").style.display = "none";
+          document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
+      }
+
+      window.addEventListener('resize', function() {
+          if (window.outerWidth < 650) {
+              adapt_mobile()
+          } else if (!document.fullscreenElement){
+              {#adaptive_home_visual()#}
+          } else if (window.outerWidth >= 1440) {
+              {#default_home_visual()#}
+          }
+
+          if (window.outerWidth >= 650) {
+              document.querySelector(".navbar-title").style.display = "";
+              document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
+          }
+      })
 
 
-            <ul class="details">
+      if (window.outerWidth < 650) {
+          adapt_mobile()
+      } else if (!document.fullscreenElement){
+          {#adaptive_home_visual()#}
+      } else if (window.outerWidth >= 1440) {
+          {#default_home_visual()#}
+      }
 
-              <li class="topic">Email</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
+      if (window.outerWidth >= 650) {
+          document.querySelector(".navbar-title").style.display = "";
+          document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
+      }
+  </script>
 
-            </ul>
+    <!-- Show Login, Signup, Settings Forms -->
+    <script>
+          let hide_form = function (id_name) {
+              document.getElementById(id_name).style.display = "none"
+              document.querySelector(".home-content-buttons").style.display = "flex"
+          }
+          let show_form = function (id_name) {
+              // BLUR
+              let form = document.getElementById(id_name);
+              document.querySelector("body").classList.toggle("blurred")
+              form.style.filter = "none"
 
-            <ul class="details">
+              console.log("Showing form: " + id_name)
+              document.querySelector(".home-content-buttons").style.display = "none"
+              // Hide all other forms besides id_name form
+              let all_form_elements = document.querySelectorAll(".access-form")
+              for (let i = 0; i < all_form_elements.length; i++) {
+                  let form = all_form_elements[i];
+                  if (form.id !== id_name) {
+                      form.style.display = "none"
+                      continue;
+                  }
+                  if (form.id === "settings-form")
+                      hide_profile_dropdown()
+                  form.style.display = "flex";
+              }
+          }
 
-            <li class="topic">Username</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
+          // If message return in render_template (flask)
+          let message = null;
+          if ("{{message_type}}") {
+              message = document.querySelector("#{{ message_type }}-form .error-occurrence")
+              message.style.display = "block";
+              message.innerHTML =  "{{ message }}"
+              show_form("{{message_type}}-form")
+          }
 
-          </ul>
+      </script>
 
-            <ul class="details">
-              <li class="topic">Creation</li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-              <li><a href="#">MEOW</a></li>
-
-
-            </ul>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-{% if user %}
+    <!-- Profile Drop-Down -->
+    {% if user %}
     <script>
       let profile_button = document.querySelector(".profile-details")
       let profile_dropdown = document.querySelector(".profile-dropdown")
@@ -326,7 +283,7 @@
   </script>
     {% endif %}
 
-</body>
+  </body>
 
 </html>
 

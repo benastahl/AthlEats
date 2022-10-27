@@ -1,0 +1,28 @@
+html {
+}
+
+.access-form {
+  padding: 0;
+}
+
+.admin-data-container {
+  overflow: scroll;
+  display: flex;
+  position: relative;
+  top: 100px;
+  flex-direction: row;
+  justify-content: space-between;
+  background: #f4f4f4;
+  border: 1px solid lightgray;
+  padding: 20px;
+}
+
+/* Admin Data */
+#admin-data .admin-data {
+  max-width: 1400px;
+  height: 500px;
+  margin: 0 20px;
+  width: 700px;
+}
+
+
