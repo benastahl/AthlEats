@@ -87,8 +87,17 @@ def process_signup(_request):
     creation_date = int(datetime.timestamp(datetime.now()))
 
     # Add user to database
-    UserDB().add_user(first_name=first_name, last_name=last_name, email=email, grade=grade,
-                      hashed_password=hashed_password, auth_token=auth_token, creation_date=creation_date, admin=False)
+    UserDB().add_user(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        grade=grade,
+        hashed_password=hashed_password,
+        auth_token=auth_token,
+        creation_date=creation_date,
+        staff=0,
+        admin=0
+    )
 
     return response
 
@@ -155,6 +164,17 @@ def display_reserve_form():
         return render_template("reserve_form.html", user=user)
 
     return redirect("/", 302)
+
+
+@app.route("/staff-dashboard", methods=["GET"])
+def display_staff_dashboard():
+    auth_token = request.cookies.get("auth_token")
+    user = UserDB().get_user(auth_token=auth_token)
+
+    if not user or not user.staff:
+        return redirect("/", 302)
+
+    return render_template("staff-dashboard.html", user=user)
 
 
 @app.route("/admin-dashboard", methods=["GET"])

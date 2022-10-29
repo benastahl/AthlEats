@@ -1,28 +1,168 @@
 html {
 }
 
+.admin-data-container {
+  /*overflow: scroll;*/
+  position: relative;
+  top: 100px;
+  /*background: #f4f4f4;*/
+  border: 1px solid lightgray;
+
+}
 .access-form {
   padding: 0;
 }
-
-.admin-data-container {
-  overflow: scroll;
-  display: flex;
-  position: relative;
-  top: 100px;
+.admin-data-list {
   flex-direction: row;
   justify-content: space-between;
-  background: #f4f4f4;
-  border: 1px solid lightgray;
+  display: flex;
+  /*flex-wrap: wrap;*/
+  overflow-y: scroll;
   padding: 20px;
 }
-
-/* Admin Data */
-#admin-data .admin-data {
+.admin-data {
   max-width: 1400px;
   height: 500px;
-  margin: 0 20px;
+  margin: 0 40px 20px 0;
   width: 700px;
 }
+.admin-table-container {
+  margin-top: 20px;
+  border: 1px solid lightgray;
+  overflow-y: auto;
+  max-height: 350px;
 
+}
+table {
+  border-spacing: 0;
+  width: 640px;
+  justify-content: space-between;
+}
 
+.admin-data-title {
+  font-size: 35px;
+  border-bottom: 1px solid lightgray;
+  margin: 20px;
+}
+
+.header th {
+  position: sticky;
+  top: 0;
+}
+table td, table th {
+  text-align: center;
+  padding: 5px;
+  max-width: 50px;
+  overflow: auto;
+  border-bottom: 1px solid lightgray;
+}
+table tr:nth-child(odd) {
+  background-color: #f4f4f4;
+}
+table th:nth-child(even), table td:nth-child(even) {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+}
+
+.form-header {
+  display: flex;
+  border-bottom: 1px solid lightgray;
+  padding: 10px;
+  align-items: center;
+}
+.form-header .bx, table .bx {
+  height: 40px;
+  width: 90px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-size: 30px;
+}
+.view-profile-button {
+  width: 34px;
+  padding: 0;
+}
+table .bx {
+  border-radius: 2px;
+  height: 36px;
+  width: 34px;
+  font-size: 26px;
+  line-height: 36px;
+  cursor: pointer;
+}
+.form-header h3 {
+  border-bottom: none;
+  margin: 0 15px 0 15px;
+  width: 520px;
+  padding: 0;
+}
+.search-box{
+  position: relative;
+  height: 50px;
+  max-width: 550px;
+  width: 100%;
+  margin: 0 20px;
+}
+.search-box input{
+  height: 100%;
+  width: 100%;
+  outline: none;
+  background: #F5F6FA;
+  border: 2px solid #EFEEF1;
+  border-radius: 6px;
+  font-size: 18px;
+  padding: 0 15px;
+  margin-bottom: 0;
+}
+.search-box .bx-filter-alt{
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+  transition: all 0.4 ease;
+}
+
+/* Admin Data Color Theme */
+#users-data .form-header .bx,
+#users-data table .bx
+{
+  background: #2697FF;
+}
+#users-data .header th {
+    background-color: rgba(38, 151, 255, 0.8)
+}
+
+#staff-data .form-header .bx,
+#staff-data table .bx
+{
+  background: #f44343;
+}
+#staff-data .header th {
+  background-color: rgba(244, 67, 67, 0.8)
+}
+
+#current-orders-data .form-header .bx,
+#current-orders-data table .bx
+{
+  background: #00cc00;
+}
+#current-orders-data .header th {
+  background-color: rgba(0, 204, 0, 0.8)
+}
+
+#past-orders-data .form-header .bx,
+#past-orders-data table .bx
+{
+  background: #9933ff;
+}
+#past-orders-data .header th {
+  background-color: rgba(153, 51, 255, 0.8)
+}
