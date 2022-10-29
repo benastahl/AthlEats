@@ -185,7 +185,7 @@ def display_admin_dashboard():
     if not user or not user.admin:
         return redirect("/", 302)
 
-    return render_template("admin-dashboard.html", user=user)
+    return render_template("admin-dashboard.html")
 
 
 @app.route("/profile", methods=["GET"])
