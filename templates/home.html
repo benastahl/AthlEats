@@ -34,11 +34,12 @@
               </div>
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
-                          <li id="profile-selection">Profile</li>
+                          <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
                           <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
                           {% if user.admin %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+
                           {% endif %}
                           <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
                       </ul>

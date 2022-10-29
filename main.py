@@ -123,7 +123,8 @@ def display_reserve_calendar():
     first_weekday, num_days_in_month = calendar.monthrange(year, month)
     next_month_weekday, next_month_days = calendar.monthrange(year, month + 1)
 
-    weekends = [day_num + 1 for day_num in range(num_days_in_month) if datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
+    weekends = [day_num + 1 for day_num in range(num_days_in_month) if
+                datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
     return render_template("reserve_calendar.html",
                            user=user,
 
@@ -165,6 +166,11 @@ def display_admin_dashboard():
         return redirect("/", 302)
 
     return render_template("admin-dashboard.html", user=user)
+
+
+@app.route("/profile", methods=["GET"])
+def profile_dashboard():
+    return render_template("profile.html")
 
 
 @app.route("/logout", methods=["GET"])
