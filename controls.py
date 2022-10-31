@@ -14,16 +14,16 @@ class UserDB:
     def create_user_table(self) -> bool:
         # Create user table. should only be used once and never again. Only really for resetting.
         self.cursor.execute(
-            'CREATE TABLE students (first_name TEXT, last_name TEXT, email TEXT, grade INTEGER, hashed_password TEXT, auth_token TEXT, creation_date INT, admin BOOLEAN)')
+            'CREATE TABLE users (first_name TEXT, last_name TEXT, email TEXT, grade INTEGER, hashed_password TEXT, auth_token TEXT, creation_date INT, staff INT, admin INT)')
         self.connection.commit()
         self.connection.close()
         return True
 
     def add_user(self, first_name: str, last_name: str, email: str, grade: int, hashed_password: str,
-                 auth_token: str, creation_date: int, admin: bool) -> bool:
+                 auth_token: str, creation_date: int, staff: int, admin: int) -> bool:
         # Creates a row in our database table for a user
         self.cursor.execute(
-            f"INSERT INTO students VALUES ('{first_name}', '{last_name}', '{email}', {grade}, '{hashed_password}', '{auth_token}', {creation_date}, {admin})")
+            f"INSERT INTO users VALUES ('{first_name}', '{last_name}', '{email}', {grade}, '{hashed_password}', '{auth_token}', {creation_date}, {staff}, {admin})")
         self.connection.commit()
         self.connection.close()
         return True
@@ -31,16 +31,16 @@ class UserDB:
     def get_user(self, **kwargs):
         conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs if kwarg != "close_conn"])
         # Finds a user based on the keyword arguments. Gives back all the data on the user.
-        students = self.cursor.execute(
-            f"SELECT first_name, last_name, email, grade, hashed_password, auth_token, creation_date, admin FROM students WHERE {conditions}").fetchall()
+        users = self.cursor.execute(
+            f"SELECT first_name, last_name, email, grade, hashed_password, auth_token, creation_date, staff, admin FROM users WHERE {conditions}").fetchall()
 
-        if not students:
-            # No student found
+        if not users:
+            # No user found
             return False
-        student = students[0]
+        user = users[0]
 
-        user = User(email=student[2], grade=student[3],
-                    hashed_password=student[4], auth_token=student[5], creation_date=student[6], admin=student[7])
+        user = User(email=user[2], grade=user[3],
+                    hashed_password=user[4], auth_token=user[5], creation_date=user[6], staff=user[7], admin=user[8])
 
         # Adds option in args to not close the database connection for underlying function using get_user
         if "close_conn" in kwargs and not kwargs.get("close_conn"):
@@ -76,8 +76,9 @@ class UserDB:
 
         # Update the user's details
         conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
+        print(conditions)
         self.cursor.execute(f'''
-                UPDATE students
+                UPDATE users
                 SET {conditions}
                 WHERE email = '{email}'
                 ''')
@@ -87,8 +88,8 @@ class UserDB:
         user = self.get_user(email=email)
         return user
 
-    def delete_student(self, email: str) -> bool:
-        self.cursor.execute(f"DELETE FROM students WHERE email = '{email}'")
+    def delete_user(self, email: str) -> bool:
+        self.cursor.execute(f"DELETE FROM users WHERE email = '{email}'")
         self.connection.commit()
         self.connection.close()
         return True
