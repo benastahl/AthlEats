@@ -6,20 +6,30 @@
     <link rel="stylesheet" href="../static/defaults.css">
     <link rel="stylesheet" href="../static/nav_bar.css">
     <link rel="stylesheet" href="../static/access_forms.css">
-    <link rel="stylesheet" href="../static/admin-dashboard.css">    <link rel="icon" href="../static/uce-logo.png">
+    <link rel="stylesheet" href="../static/admin-dashboard.css">
+      <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UCE Admin Dashboard </title>
    </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GZ107HT565');
+    </script>
 
   <body>
     <section class="home-section">
       <nav>
           <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
 
-          <span class="navbar-title">Admin Dashboard</span>
-
-          {% if not user %}
+{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
+            {% if not user %}
               <div class="access-buttons-section">
                   <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
                   <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
@@ -32,20 +42,22 @@
 
               </div>
               <div style="visibility: hidden" class="profile-dropdown">
-                  <ul>
-                      <li id="profile-selection">Profile</li>
-                      <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
-                      {% if user.staff %}
-                          <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
-                          <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
-                      {% endif %}
-                      {% if user.admin %}
-                          <script>document.querySelector(".profile-dropdown").style.marginTop = "500px";</script>
-                          <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
-                      {% endif %}
-                      <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
-                  </ul>
-              </div>
+                      <ul>
+                          <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
+                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          {% if user.staff %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
+                          {% endif %}
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "300px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+
           {% endif %}
 
 
@@ -64,7 +76,7 @@
                               <h3>Users</h3>
                               <div class="search-box">
                                 <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
+                                    <input onkeyup="filterAdminTable('users-data')" type="text" placeholder="Search...">
                                 </label>
                                 <i class='bx bx-filter-alt' ></i>
                             </div>
@@ -114,7 +126,7 @@
                               <h3>Staff Members</h3>
                               <div class="search-box">
                                 <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
+                                    <input onkeyup="filterAdminTable('staff-data')" type="text" placeholder="Search...">
                                 </label>
                                 <i class='bx bx-filter-alt' ></i>
                             </div>
@@ -165,7 +177,7 @@
                               <h3>Current Orders</h3>
                               <div class="search-box">
                                 <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
+                                    <input onkeyup="filterAdminTable('current-orders-data')" type="text" placeholder="Search...">
                                 </label>
                                 <i class='bx bx-filter-alt' ></i>
                             </div>
@@ -216,7 +228,7 @@
                               <h3>Past Orders</h3>
                               <div class="search-box">
                                 <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
+                                    <input onkeyup="filterAdminTable('past-orders-data')" type="text" placeholder="Search...">
                                 </label>
                                 <i class='bx bx-filter-alt' ></i>
                             </div>
@@ -310,12 +322,13 @@
 
     <!-- Search/Filter Bar -->
     <script>
-        function filterAdminTable() {
+        function filterAdminTable(data_id) {
           // Declare variables
           var input, filter, table, tr, td, i, txtValue;
-          input = document.querySelector(".search-box input");
+          console.log("#" + data_id + " .search-box input")
+          input = document.querySelector("#" + data_id + " .search-box input");
           filter = input.value.toUpperCase();
-          table = document.getElementById("myTable");
+          table = document.querySelector("#" + data_id + " #myTable");
           tr = table.getElementsByTagName("tr");
 
           // Loop through all table rows, and hide those who don't match the search query

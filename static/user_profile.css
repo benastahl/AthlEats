@@ -1,18 +1,4 @@
-
-/* Reserve Form */
-#account-info .account-info {
-  max-width: 1400px;
-  height: 1000px;
-  margin: 0 20px;
-}
-
-.home-content {
-  display: flex;
-  flex-direction: column;
-}
-
 /* account info */
-
 .acc-data-container {
   overflow: scroll;
   display: flex;
@@ -25,26 +11,37 @@
   padding: 20px;
 }
 .acc-order-data-container {
-  overflow: scroll;
-  display: flex;
-  position: relative;
-  top: 100px;
-  flex-direction: row;
-  justify-content: space-between;
   background: #f4f4f4;
   border: 1px solid lightgray;
   padding: 20px;
+  margin-top: 150px;
+}
+.acc-order-data-list {
+  justify-content: space-between;
+  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+}
+
+.acc-data-information {
+  background: #FFFFFF;
+  border-radius: 100px;
+  position: relative;
+  top: 100px;
+  left: 500px;
+  margin: 0 20px 0 20px;
+  padding: 50px;
+  border: 1px solid lightgray;
+  max-width: 400px;
+  height: 500px;
+  align-items: center;
 }
 
 .acc-data {
-  margin: 0 20px;
-  display: flex;
-  flex-direction: column;
   background: #FFFFFF;
   border: 1px solid lightgrey;
   border-radius: 25px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  padding: 20px;
+  margin-right: 20px;
 }
 
 .receipt {
@@ -52,16 +49,16 @@
   min-width: 300px;
   padding: 20px;
 }
-.acc-data-header {
-  margin: 5px 0px 5px 0px;
+.acc-data-name-title {
+  font-weight: 700;
+  margin-bottom: 10px;
 }
-
-.acc-data-header h3 {
+.acc-data-header {
   font-size: 36px;
   font-weight: 400;
-  position: relative;
-  top: 100px;
-  margin: 10px 0px 10px 50px;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 25px;
+  padding: 5px;
 }
 
 .acc-data-header h4 {
@@ -72,7 +69,6 @@
 
 .acc-data-header h5 {
   font-size: 28px;
-
 }
 
 .acc-data-box {
@@ -85,7 +81,7 @@
 .acc-data-title {
   margin: 7px 0 0 0;
   font-size: 16px;
-  font-weight: 200;
+  font-weight: 500;
 }
 
 .acc-data-info {

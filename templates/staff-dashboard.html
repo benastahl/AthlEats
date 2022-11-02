@@ -12,14 +12,23 @@
     <title> UCE Staff Dashboard </title>
    </head>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GZ107HT565');
+    </script>
+
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+          <img onclick="location.href = '/'" class="uce-logo" src="uce-logo.png" alt="uce-logo">
 
-          <span class="navbar-title">Staff Dashboard</span>
-
-          {% if not user %}
+{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
+            {% if not user %}
               <div class="access-buttons-section">
                   <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
                   <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
@@ -32,20 +41,22 @@
 
               </div>
               <div style="visibility: hidden" class="profile-dropdown">
-                  <ul>
-                      <li id="profile-selection">Profile</li>
-                      <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
-                      {% if user.staff %}
-                          <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
-                          <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
-                      {% endif %}
-                      {% if user.admin %}
-                          <script>document.querySelector(".profile-dropdown").style.marginTop = "500px";</script>
-                          <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
-                      {% endif %}
-                      <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
-                  </ul>
-              </div>
+                      <ul>
+                          <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
+                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          {% if user.staff %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
+                          {% endif %}
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "300px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+
           {% endif %}
 
 

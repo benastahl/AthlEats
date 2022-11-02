@@ -161,7 +161,8 @@ def display_reserve_form():
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
         user = UserDB().get_user(auth_token=auth_token)
-        return render_template("reserve_form.html", user=user)
+        if user:
+            return render_template("reserve_form.html", user=user)
 
     return redirect("/", 302)
 
@@ -185,12 +186,21 @@ def display_admin_dashboard():
     if not user or not user.admin:
         return redirect("/", 302)
 
-    return render_template("admin-dashboard.html")
+    return render_template("admin-dashboard.html", user=user)
 
 
 @app.route("/profile", methods=["GET"])
-def profile_dashboard():
-    return render_template("profile.html")
+def display_profile():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UserDB().get_user(auth_token=auth_token)
+        if user:
+            return render_template("profile.html", user=user)
+
+    return redirect("/", 302)
 
 
 @app.route("/logout", methods=["GET"])
@@ -203,4 +213,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=4949)

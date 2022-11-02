@@ -38,7 +38,7 @@ class ordersDB:
             return False
         order = orders[0]
 
-        order =  Order(fname=orders[2], lname=orders[3], food_order=orders[4], restaurant=orders[5], id=orders[6])
+        order = Order(fname=orders[2], lname=orders[3], food_order=orders[4], restaurant=orders[5], id=orders[6])
 
         # Adds option in args to not close the database connection for underlying function using get_user
         if "close_conn" in kwargs and not kwargs.get("close_conn"):

@@ -12,6 +12,15 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UCE Home </title>
    </head>
+      <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GZ107HT565');
+    </script>
 
   <body>
     <section class="home-section">
@@ -56,16 +65,16 @@
       <div class="home-content">
           <div class="home-content-buttons">
               {% if user %}
-              <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
-              <form method="get" action="/reserve-calendar">
-                  <button class="reserve-pickup-button">
-                      <span class="front">
-                        bark bark bark
-                      </span>
-                  </button>
-              </form>
+                  <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
+                  <form method="get" action="/reserve-calendar">
+                      <button class="reserve-pickup-button">
+                          <span class="front">
+                            reserve pickup
+                          </span>
+                      </button>
+                  </form>
               {% else %}
-              <span style="margin-top: 60px;" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
+                  <span style="margin-top: 60px;" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
               {% endif %}
           </div>
 
