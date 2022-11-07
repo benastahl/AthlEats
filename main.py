@@ -134,6 +134,7 @@ def display_reserve_calendar():
 
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
+    print(weekends)
     return render_template("reserve_calendar.html",
                            user=user,
 

@@ -53,6 +53,9 @@
   color: white;
   transform: translateY(-6px);
 }
+.mobile .reserve-pickup-button .front {
+  font-size: 30px;
+}
 .reserve-pickup-button:active .front {
   transform: translateY(-2px);
 }
@@ -111,97 +114,33 @@
     font-weight: 200;
     font-size: 15px;
 }
- /* mobile hpr */
-.popular-restaurants.mobile {
+
+
+/* mobile hpr */
+.mobile .popular-restaurants {
   width: 350px;
 }
-.popular-restaurants.mobile .restaurant-list {
+.mobile .popular-restaurants .restaurant-list {
   flex-direction: column;
 }
-.popular-restaurants.mobile img {
+.mobile .popular-restaurants img {
   /* 16:12 ratio (width:height) */
   /*width: calc(16px * 19);*/
   /*height: calc(12px * 19);*/
   height: auto;
 }
-.popular-restaurants.mobile .restaurant-visual {
+.mobile .popular-restaurants .restaurant-visual {
   width: 310px;
 }
-.popular-restaurants.mobile .restaurant-list {
+.mobile .popular-restaurants .restaurant-list {
   flex-direction: column;
 }
 
-/* HOME PROCESS VISUAL */
-/*.process-visual {
-  display: flex;
-  position: absolute;
-  justify-content: space-between;
-  margin-top: 150px;
-  padding: 30px;
-  flex-direction: column;
-  align-items: center;
-
-
-}
-.process-visual i, img {
-  z-index: 0;
-  font-size: 100px;
-  padding: 20px;
-  background: #CDEAFF;
-  color: #000200;
-  height: 140px;
-  width: 140px;
-  border-radius: 40px;
-  margin-bottom: 150px;
-  *//* hsl(360, 89%, 61%); *//*
-}
-.process-visual img {
-  height: 140px;
-  width: 140px;
-
-}
-.process-visual .arrow {
-  background: none;
-}
-.process-visual .process-info-section {
-
-}
-.process-visual .process-info-section .process-info {
-  display: inline-block;
-  background: #e9e9e9;
-  border-radius: 16px;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  position: absolute;
-  left: 130px;
-  margin-top: 100px;
-  width: 250px;
-}*/
-
-/* mobile visual adapt */
-.process-visual.mobile {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-.process-visual.mobile i, .process-visual.mobile img {
-  font-size: 120px;
-  width: 160px;
-  height: 160px;
-}
-.process-visual.mobile img {
-  height: 160px;
-  width: 160px;
-}
-.process-visual.mobile .arrow {
-  margin-top: 0
-}
 
 .form-header h3 {
   text-align: center;
   margin: 5px 0 15px 0;
+  padding-left: 25px;
 }
 
 

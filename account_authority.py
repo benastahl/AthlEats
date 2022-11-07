@@ -7,6 +7,7 @@ class User:
         self.email = email
         self.hashed_password = hashed_password
         self.grade = grade
+        self.year_name = {9: "Freshman", 10: "Sophomore", 11: "Junior", 12: "Senior"}.get(self.grade)
         self.auth_token = auth_token
         self.creation_date = creation_date
 

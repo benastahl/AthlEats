@@ -5,7 +5,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/defaults.css">
     <link rel="stylesheet" href="../static/nav_bar.css">
-      <link rel="stylesheet" href="../static/admins.css">
       <link rel="stylesheet" href="../static/admin-dashboard.css">
     <link rel="stylesheet" href="../static/user_profile.css">
       <link rel="icon" href="../static/uce-logo.png">
@@ -51,27 +50,21 @@
       </nav>
 
       <div class="home-content">
-          <div class="acc-data-information">
-              <h5 class="acc-data-name-title">Account Info</h5>
-              <h3 class="acc-data-title">
-                  Name
-              </h3>
-              <span class="acc-data-info">
-                  lolololololololololololo00000000lolololol
-              </span>
-              <h3 class="acc-data-title">
-                  email
-              </h3>
-              <span class="acc-data-info">
-                  lolololololololololololololololol
-              </span>
-              <h3 class="acc-data-title">
-                  total orders
-              </h3>
-              <span class="acc-data-info">
-                  lolololololololololololololololol
-              </span>
+
+          <!-- Profile Card -->
+          <div class="acc-data-container">
+              <div class="acc-data-information">
+                  <div class="profile-card-main-info">
+                      <i class='bx bx-user-circle'></i>
+                      <span class="profile-card-name">{{ user.first_name | capitalize }} {{ user.last_name | capitalize }}</span>
+                      <span class="profile-card-year">{{ user.year_name }}</span>
+                  </div>
+                  <div class="">
+
+                  </div>
+              </div>
           </div>
+
 
           <div class="acc-order-data-container">
               <h3 class="acc-data-header"> Order History </h3>

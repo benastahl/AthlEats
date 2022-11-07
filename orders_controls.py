@@ -5,7 +5,8 @@ import bcrypt
 
 from account_authority import Order, PickupRequest
 
-class ordersDB:
+
+class OrdersDB:
     def __init__(self):
         self.connection = sqlite3.connect("orders.db")
         self.cursor = self.connection.cursor()
