@@ -214,3 +214,6 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True, port=4949)
+
+# ADMIN USER: UserDB().edit_user(email="wesley_tse@student.waylandps.org", password="wps200423", admin=1)
+# STAFF USER: UserDB().edit_user(email="wesley_tse@student.waylandps.org", password="wps200423", staff=1)
