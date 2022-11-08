@@ -14,7 +14,7 @@ class OrdersDB:
     def create_orders_table(self) -> bool:
         # Create user table. should only be used once and never again. Only really for resetting.
         self.cursor.execute(
-            'CREATE TABLE orders (student_first_name TEXT, student_last_name TEXT, food_order TEXT, order_time INT, restaurant TEXT, order_id INT')
+            '''CREATE TABLE orders(student_first_name TEXT, student_last_name TEXT, food_order TEXT, order_time INT, restaurant TEXT, order_id INT)''')
         self.connection.commit()
         self.connection.close()
         return True
@@ -23,7 +23,7 @@ class OrdersDB:
                     str, order_id: int) -> bool:
         # Creates a row in our database table for a user
         self.cursor.execute(
-            f"INSERT INTO students VALUES ('{student_first_name}', '{student_last_name}', '{food_order}', {order_time}, '{restaurant}', '{order_id}'")
+            f"INSERT INTO orders VALUES ('{student_first_name}', '{student_last_name}', '{food_order}', {order_time}, '{restaurant}', '{order_id}')")
         self.connection.commit()
         self.connection.close()
         return True
@@ -48,3 +48,15 @@ class OrdersDB:
         self.connection.close()
         # Returns user object
         return order
+
+    def return_all_orders(self):
+
+        orders = self.cursor.execute(
+            f"SELECT * FROM orders").fetchall()
+
+        all_orders = list()
+
+        for order in orders:
+            all_orders.append(Order(order[0], order[1], order[2], order[3], order[4], order[5]))
+        self.connection.close()
+        return all_orders
