@@ -93,3 +93,19 @@ class UserDB:
         self.connection.commit()
         self.connection.close()
         return True
+
+    def return_all_users(self):
+
+        users = self.cursor.execute(
+            f"SELECT * FROM users").fetchall()
+
+        all_users = list()
+
+        for user in users:
+            all_users.append(User(user[2], user[3], user[4], user[5], user[6], user[7], user[8]))
+
+        self.connection.close()
+        print(all_users)
+
+        return all_users
+
