@@ -6,4 +6,18 @@
   margin: 0px auto 0px auto;
 }
 
+.form-section {
+    text-align: left;
+}
+
+.fee-output {
+  margin: 10px 40px 10px 40px;
+}
+
+.access-form button {
+  margin: 10px 30px 0px 60px;
+  width: 80%;
+}
+
+
 

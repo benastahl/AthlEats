@@ -70,27 +70,30 @@
                 <div class="form-header">
                     <h3>Reserve Pickup Form</h3>
                 </div>
-                <form class="input-form">
-                    <label for="reserve-name">Name:</label><br>
-                    <input type="text" id="reserve-name" name="reserve-name" maxlength="30"><br>
-                </form>
 
-                <form class="input-form">
+                <form class="input-form" name="order-form" method="post">
+                    <label for="reserve-first-name">First Name:</label><br>
+                    <input type="text" id="reserve-first-name" name="reserve-first-name" maxlength="30"><br>
+
+                    <label for="reserve-last-name">Last Name:</label><br>
+                    <input type="text" id="reserve-last-name" name="reserve-last-name" maxlength="30"><br>
+
                     <label for="input-dollar">Price:</label><br>
-                    <input type="number" id="input-dollar" name="input-dollar" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"><br>
-                </form>
+                    <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
 
-
-                <form action="/" class="input-form">
                     <label for="receipt-upload">Upload receipt:</label><br>
-                    <input type="file" id="receipt-upload" name="filename"><br>
-                </form>
+                    <input type="file" id="receipt-upload" name="receipt"><br>
 
-                <form class="input-form">
+                    <label for="phone-number">Phone Number:</label><br>
+                    <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
+
                     <label for="pickup">Select Pickup Time:</label><br>
                     <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
                 </form>
-
+                <div class="fee-output">
+                    Delivery Fee: meow XD
+                </div>
+                <button id="submit-form-button" type="submit" value="order-form" >submit</button>
 
               <form name="reserve" method="post">
 
@@ -135,7 +138,11 @@
                   <!-- Confirm Account Deletion Form -->
                   <div style="display: none;" id="account-deletion-form" class="access-form">
                     You are about to delete your account.
-                  </div>
+                  </div>function calculate_fees(price) {
+        fee = price * 1.30;
+        return fee;
+
+        }
                   <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
 
 
@@ -145,6 +152,22 @@
 
       </div>
     </section>
+
+    <!-- Fee Calculator -->
+    <script>
+        function calculate_fees(price) {
+            fee = price * .30;
+
+            return fee;
+        }
+
+        function set_price_calc() {
+                console.log("Setting price...");
+                let total_price = calculate_fees(document.querySelector("#input-dollar").value);
+                document.querySelector(".fee-output").innerHTML = "Delivery fee: $" + total_price;
+
+        }
+    </script>
 
     <!-- Mobile Adapting -->
     <script>

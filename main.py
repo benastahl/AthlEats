@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from controls import UserDB
+from orders_controls import OrdersDB
 import calendar
 from datetime import datetime
 
@@ -166,6 +167,17 @@ def display_reserve_form():
             return render_template("reserve_form.html", user=user)
 
     return redirect("/", 302)
+
+
+def process_order(_request):
+    first_name = _request.form['reserve-first-name']
+    last_name = _request.form['reserve-last-name']
+    price = _request.form['input-dollar']
+    receipt = _request.form.files['receipt']
+    pickup_time = _request.form.time['pickup']
+    fee = price * .3
+
+    OrdersDB().add_orders()
 
 
 @app.route("/staff-dashboard", methods=["GET"])
