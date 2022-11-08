@@ -74,7 +74,7 @@
                       </button>
                   </form>
               {% else %}
-                  <span style="margin-top: 60px;" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
+                  <span id="guest-welcome-message" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
               {% endif %}
           </div>
 
@@ -89,10 +89,10 @@
               </div>
                 <form name="signup" method="post">
                     <label>
-                        <input type="text" name="email" placeholder="email">
+                        <input required type="text" name="email" placeholder="email">
                     </label>
                     <label>
-                        <input type="password" name="pass" placeholder="password">
+                        <input required type="password" name="pass" placeholder="password">
                     </label>
                     <label for="grade"></label><select required class="form-selection" name="grade" id="grade">
                             <option class="form-selection-placeholder" value="" disabled selected>grade</option>
@@ -129,10 +129,10 @@
 
               <form name="login" method="post">
                   <label>
-                      <input type="text" name="email" placeholder="email">
+                      <input required type="text" name="email" placeholder="email">
                   </label>
                   <label>
-                      <input type="password" name="pass" placeholder="password">
+                      <input required type="password" name="pass" placeholder="password">
                   </label>
 
 
@@ -287,55 +287,6 @@
 
       </div>
     </section>
-
-    <!-- Mobile Adapting -->
-    <script>
-      function adaptive_home_visual() {
-          if (document.querySelector(".process-visual").className.includes("mobile")) {
-              return false;
-          }
-          document.querySelector(".process-visual").classList.toggle("mobile")
-
-      }
-      function default_home_visual() {
-          if (!document.querySelector(".process-visual").className.includes("mobile")) {
-              return false;
-          }
-
-          document.querySelector(".navbar-title").innerHTML = "UnderclassmenEats";
-          document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
-          document.querySelector(".process-visual").classList.remove("mobile")
-
-      }
-
-      function adapt_mobile() {
-          document.querySelector(".popular-restaurants").classList.toggle("mobile")
-          document.querySelector(".popular-restaurants.mobile").style.width = window.outerWidth - 40 + "px";
-          document.querySelector(".popular-restaurants.mobile .restaurant-visual").style.width = window.outerWidth - 40 - 40 + "px";
-
-          let popular_website_images = document.querySelectorAll(".popular-restaurants.mobile img")
-          for (let i = 0; i < popular_website_images.length; i++) {
-              popular_website_images[i].style.width = window.outerWidth - 40 - 40 + "px";
-
-          }
-          document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
-      }
-
-      window.addEventListener('resize', function() {
-          if (window.outerWidth < 650) {
-              adapt_mobile()
-          } else if (window.outerWidth >= 650) {
-            default_home_visual()
-          }
-      })
-
-
-      if (window.outerWidth < 650) {
-          adapt_mobile()
-      } else if (window.outerWidth >= 650) {
-          default_home_visual()
-      }
-  </script>
 
     <!-- Show Login, Signup, Settings Forms -->
     <script>

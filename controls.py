@@ -3,7 +3,7 @@ import secrets
 
 import bcrypt
 
-from account_authority import User, PickupRequest
+from account_authority import User, Staff, Admin
 
 
 class UserDB:
@@ -38,9 +38,13 @@ class UserDB:
             # No user found
             return False
         user = users[0]
+        staff = user[7]
+        admin = user[8]
 
-        user = User(email=user[2], grade=user[3],
-                    hashed_password=user[4], auth_token=user[5], creation_date=user[6], staff=user[7], admin=user[8])
+        if admin:
+            user = Admin(email=user[2], grade=user[3], hashed_password=user[4], auth_token=user[5], creation_date=user[6])
+        elif staff:
+            user = Staff(email=user[2], grade=user[3], hashed_password=user[4], auth_token=user[5], creation_date=user[6])
 
         # Adds option in args to not close the database connection for underlying function using get_user
         if "close_conn" in kwargs and not kwargs.get("close_conn"):
@@ -76,7 +80,6 @@ class UserDB:
 
         # Update the user's details
         conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
-        print(conditions)
         self.cursor.execute(f'''
                 UPDATE users
                 SET {conditions}
@@ -94,14 +97,19 @@ class UserDB:
         self.connection.close()
         return True
 
+
     def return_all_users(self):
 
-        users = self.cursor.execute(
-            f"SELECT * FROM users").fetchall()
+        users = self.cursor.execute(f"SELECT * FROM users").fetchall()
+
+        # all_users = [ for user in users]
 
         all_users = list()
 
         for user in users:
+            staff = user[7]
+            admin = user[8]
+
             all_users.append(User(user[2], user[3], user[4], user[5], user[6], user[7], user[8]))
 
         self.connection.close()

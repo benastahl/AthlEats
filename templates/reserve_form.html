@@ -71,7 +71,7 @@
                     <h3>Reserve Pickup Form</h3>
                 </div>
 
-                <form class="input-form" name="order-form" method="post">
+                <form enctype="multipart/form-data" class="input-form" name="order-form" method="post">
                     <label for="reserve-first-name">First Name:</label><br>
                     <input type="text" id="reserve-first-name" name="reserve-first-name" maxlength="30"><br>
 
@@ -89,11 +89,12 @@
 
                     <label for="pickup">Select Pickup Time:</label><br>
                     <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
+                                                <button id="submit-form-button" type="submit" value="order-form" >submit</button>
+
                 </form>
                 <div class="fee-output">
                     Delivery Fee: meow XD
                 </div>
-                <button id="submit-form-button" type="submit" value="order-form" >submit</button>
 
               <form name="reserve" method="post">
 

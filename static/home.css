@@ -53,9 +53,6 @@
   color: white;
   transform: translateY(-6px);
 }
-.mobile .reserve-pickup-button .front {
-  font-size: 30px;
-}
 .reserve-pickup-button:active .front {
   transform: translateY(-2px);
 }
@@ -71,6 +68,9 @@
   border-radius: 25px;
   margin: 10px 50px 10px 50px;
   text-align: center;
+}
+#guest-welcome-message {
+  margin-top: 60px;
 }
 
 /* HOME POPULAR RESTAURANTS */
@@ -114,33 +114,41 @@
     font-weight: 200;
     font-size: 15px;
 }
-
-
-/* mobile hpr */
-.mobile .popular-restaurants {
-  width: 350px;
-}
-.mobile .popular-restaurants .restaurant-list {
-  flex-direction: column;
-}
-.mobile .popular-restaurants img {
-  /* 16:12 ratio (width:height) */
-  /*width: calc(16px * 19);*/
-  /*height: calc(12px * 19);*/
-  height: auto;
-}
-.mobile .popular-restaurants .restaurant-visual {
-  width: 310px;
-}
-.mobile .popular-restaurants .restaurant-list {
-  flex-direction: column;
-}
-
-
 .form-header h3 {
   text-align: center;
   margin: 5px 0 15px 0;
   padding-left: 25px;
+}
+
+@media screen and (max-width: 650px) {
+  .welcome-message {
+    margin-top: 20px;
+    font-size: 30px;
+  }
+  #guest-welcome-message {
+    margin-top: 30px;
+    font-size: 25px;
+  }
+
+  .popular-restaurants {
+    width: 350px;
+  }
+  .reserve-pickup-button .front {
+    font-size: 30px;
+  }
+  .popular-restaurants .restaurant-list {
+    flex-direction: column;
+  }
+  .popular-restaurants img {
+    width: auto;
+    height: auto;
+  }
+  .popular-restaurants .restaurant-visual {
+    width: 310px;
+  }
+  .popular-restaurants .restaurant-list {
+    flex-direction: column;
+  }
 }
 
 

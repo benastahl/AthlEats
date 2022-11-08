@@ -1,20 +1,20 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, url_for, request, redirect
+from werkzeug.utils import secure_filename
 from controls import UserDB
 from orders_controls import OrdersDB
 import calendar
 from datetime import datetime
+import os
 
 import bcrypt
 import secrets
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = r'./receipts'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
           "december"]
-
-
-# TODO: Make new logo
-# TODO: make info for process visual
 
 
 @app.route("/", methods=["GET"])
@@ -136,6 +136,11 @@ def display_reserve_calendar():
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
     print(weekends)
+
+    available_time_format = {
+
+    }
+
     return render_template("reserve_calendar.html",
                            user=user,
 
@@ -169,15 +174,18 @@ def display_reserve_form():
     return redirect("/", 302)
 
 
-def process_order(_request):
-    first_name = _request.form['reserve-first-name']
-    last_name = _request.form['reserve-last-name']
-    price = _request.form['input-dollar']
-    receipt = _request.form.files['receipt']
-    pickup_time = _request.form.time['pickup']
-    fee = price * .3
+@app.route("/reserve-form", methods=["POST"])
+def process_reserve_form():
+    first_name = request.form['reserve-first-name']
+    last_name = request.form['reserve-last-name']
+    price = request.form['input-dollar']
+    receipt = request.files['receipt']
+    pickup_time = request.form['pickup']
+    fee = int(price) * .3
 
-    OrdersDB().add_orders()
+    filename = secure_filename(receipt.filename)
+    receipt.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return redirect(url_for('download_file', name=filename))
 
 
 @app.route("/staff-dashboard", methods=["GET"])
@@ -185,7 +193,7 @@ def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UserDB().get_user(auth_token=auth_token)
 
-    if not user or not user.staff:
+    if not user or not user.__repr__() in ["Staff", "Admin"]:
         return redirect("/", 302)
 
     return render_template("staff-dashboard.html", user=user)
@@ -196,7 +204,7 @@ def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UserDB().get_user(auth_token=auth_token)
 
-    if not user or not user.admin:
+    if not user or not user.__repr__() in ["Admin"]:
         return redirect("/", 302)
 
     return render_template("admin-dashboard.html", user=user)

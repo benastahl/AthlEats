@@ -13,6 +13,9 @@ html {
   flex-wrap: nowrap;
   /*justify-content: center;*/
 }
+.calendar-container {
+  margin: auto;
+}
 .home-section.mobile .calendar-list {
   flex-wrap: wrap;
 }
@@ -24,7 +27,7 @@ html {
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
-  min-height: 359px;
+  min-height: 340px;
   max-width: 1200px;
   /*min-width: 350px;*/
   width: 0; /*350px; */

@@ -7,8 +7,8 @@
   font-family: 'Poppins', sans-serif;
 }
 body {
-
-  background-image: url("https://lh4.googleusercontent.com/-dw5Jyrhdpa0/AAAAAAAAAAI/AAAAAAAAAEw/90wzb8ji_jA/photo.jpg");
+  background: #f4f4f4;
+  /*background-image: url("https://lh4.googleusercontent.com/-dw5Jyrhdpa0/AAAAAAAAAAI/AAAAAAAAAEw/90wzb8ji_jA/photo.jpg");*/
 }
 html {
   height: 2000px;

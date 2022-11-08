@@ -1,9 +1,7 @@
 class User:
-    def __init__(self, email, grade, hashed_password, auth_token, creation_date, staff, admin):
+    def __init__(self, email, grade, hashed_password, auth_token, creation_date):
         self.first_name = email.split('@')[0].split('_')[0]
         self.last_name = email.split('@')[0].split('_')[1]
-        self.staff = staff
-        self.admin = admin
         self.email = email
         self.hashed_password = hashed_password
         self.grade = grade
@@ -11,10 +9,33 @@ class User:
         self.auth_token = auth_token
         self.creation_date = creation_date
 
+    def __repr__(self):
+        return "User"
+
     def update_email(self, email):
         self.email = email
         self.first_name = email.split('@')[0].split('_')[0]
         self.last_name = email.split('@')[0].split('_')[1]
+
+
+class Staff(User):
+    def __init__(self, email, grade, hashed_password, auth_token, creation_date, availability):
+        super().__init__(email, grade, hashed_password, auth_token, creation_date)
+
+        self.availability = [
+
+        ]
+
+    def __repr__(self):
+        return "Staff"
+
+
+class Admin(Staff):
+    def __init__(self, email, grade, hashed_password, auth_token, creation_date):
+        super().__init__(email, grade, hashed_password, auth_token, creation_date)
+
+    def __repr__(self):
+        return "Admin"
 
 
 class PickupRequest:
