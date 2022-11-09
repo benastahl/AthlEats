@@ -3,7 +3,7 @@ import secrets
 
 import bcrypt
 
-from account_authority import Order, PickupRequest
+from account_authority import Order
 
 
 class OrdersDB:
@@ -19,8 +19,7 @@ class OrdersDB:
         self.connection.close()
         return True
 
-    def add_orders(self, student_first_name: str, student_last_name: str, food_order: str, order_time: int, restaurant:
-                    str, order_id: int) -> bool:
+    def add_orders(self, student_first_name: str, student_last_name: str, food_order: str, order_time: int, restaurant: str, order_id: int) -> bool:
         # Creates a row in our database table for a user
         self.cursor.execute(
             f"INSERT INTO orders VALUES ('{student_first_name}', '{student_last_name}', '{food_order}', {order_time}, '{restaurant}', '{order_id}')")

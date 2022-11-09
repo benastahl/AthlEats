@@ -204,7 +204,7 @@ def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UserDB().get_user(auth_token=auth_token)
 
-    if not user or not user.__repr__() in ["Admin"]:
+    if not user or not user.is_admin():
         return redirect("/", 302)
 
     return render_template("admin-dashboard.html", user=user)
@@ -235,6 +235,3 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True, port=4949)
-
-# ADMIN USER: UserDB().edit_user(email="wesley_tse@student.waylandps.org", password="wps200423", admin=1)
-# STAFF USER: UserDB().edit_user(email="wesley_tse@student.waylandps.org", password="wps200423", staff=1)
