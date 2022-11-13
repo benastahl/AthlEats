@@ -1,7 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 from werkzeug.utils import secure_filename
-from controls import UserDB
-from orders_controls import OrdersDB
+from controls import UsersCloud
 import calendar
 from datetime import datetime
 import os
@@ -24,7 +23,7 @@ def home():
 
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
-        user = UserDB().get_user(auth_token=auth_token)
+        user = UsersCloud().get_entry(auth_token=auth_token)
         return render_template("home.html", user=user)
 
     # Redirects back to log in if no auth token found
@@ -36,7 +35,7 @@ def process_login(_request):
     password = _request.form["pass"]  # plain text password
 
     # login_user returns auth_token of user if email and password correct
-    auth_token = UserDB().login_user(email, password)
+    auth_token = UsersCloud().login_user(email, password)
     if not auth_token:
         return render_template("home.html", message_type="login", message="Password or email incorrect not found")
 
@@ -57,7 +56,7 @@ def process_signup(_request):
     hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
     # Check if email is already in use (get_student returns list of users with that email).
-    if UserDB().get_user(email=email):
+    if UsersCloud().get_entry(email=email):
         return render_template("home.html", message_type="signup", message="Email is already in use.")
 
     # Check if email is valid student email
@@ -88,16 +87,14 @@ def process_signup(_request):
     creation_date = int(datetime.timestamp(datetime.now()))
 
     # Add user to database
-    UserDB().add_user(
-        first_name=first_name,
-        last_name=last_name,
+    UsersCloud().create_entry(
         email=email,
         grade=grade,
         hashed_password=hashed_password,
         auth_token=auth_token,
         creation_date=creation_date,
-        staff=0,
-        admin=0
+        staff=1,
+        admin=1
     )
 
     return response
@@ -119,7 +116,7 @@ def display_reserve_calendar():
     if not auth_token:
         return redirect("/", 302)
     # Checks to see if there's a corresponding user with auth token.
-    user = UserDB().get_user(auth_token=auth_token)
+    user = UsersCloud().get_entry(auth_token=auth_token)
 
     now = datetime.now()
 
@@ -167,7 +164,7 @@ def display_reserve_form():
 
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
-        user = UserDB().get_user(auth_token=auth_token)
+        user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
             return render_template("reserve_form.html", user=user)
 
@@ -191,7 +188,7 @@ def process_reserve_form():
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
-    user = UserDB().get_user(auth_token=auth_token)
+    user = UsersCloud().get_entry(auth_token=auth_token)
 
     if not user or not user.__repr__() in ["Staff", "Admin"]:
         return redirect("/", 302)
@@ -202,7 +199,7 @@ def display_staff_dashboard():
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
-    user = UserDB().get_user(auth_token=auth_token)
+    user = UsersCloud().get_entry(auth_token=auth_token)
 
     if not user or not user.is_admin():
         return redirect("/", 302)
@@ -217,7 +214,7 @@ def display_profile():
 
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
-        user = UserDB().get_user(auth_token=auth_token)
+        user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
             return render_template("profile.html", user=user)
 
