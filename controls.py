@@ -105,10 +105,11 @@ class AthlEatsCloud:
         entry = entries[0]
         return self.Instance(**entry)
 
-    def get_entry(self, **kwargs):
+    def get_entry(self, close_conn=True, **kwargs):
         conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
         entries = self.connection.execute(f"SELECT * FROM users WHERE {conditions}").fetchall()
-        self.connection.close()
+        if close_conn:
+            self.connection.close()
         if not entries:
             return False
         entry = entries[0]
@@ -134,7 +135,7 @@ class UsersCloud(AthlEatsCloud):
     def login_user(self, email, password, new_auth=True):
 
         # Authenticates user email and password
-        user = self.get_entry(email=email)
+        user = self.get_entry(close_conn=False, email=email)
         if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
         if new_auth:

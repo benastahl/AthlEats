@@ -3,4 +3,4 @@ import time
 
 if __name__ == '__main__':
     user_db = UsersCloud()
-    time.sleep(200)
+    user_db.create_table(name="users")
