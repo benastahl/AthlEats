@@ -15,6 +15,14 @@ week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
 months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
           "december"]
 
+@app.before_request
+def before_request():
+    if "127" not in str(request.url):
+        if not request.is_secure:
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -201,7 +209,7 @@ def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
 
-    if not user or not user.is_admin():
+    if not user or not user.admin:
         return redirect("/", 302)
 
     return render_template("admin-dashboard.html", user=user)

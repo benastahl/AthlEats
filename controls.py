@@ -22,10 +22,10 @@ class AthlEatsCloud:
 
         self.__sql_username = "b74577def82ecb"
         self.__sql_password = "75ca9aed"
-        self.__sql_host = "us-cdbr-east-06.cleardb.net/heroku_455007dcaac34a6"
+        self.__sql_host = "us-cdbr-east-06.cleardb.net/"
         self.log("Connecting to database...", "p")
         self.connection = sqlalchemy.create_engine(
-            f"mysql+pymysql://{self.__sql_username}:{self.__sql_password}@{self.__sql_host}").connect()
+            f"mysql+pymysql://{self.__sql_username}:{self.__sql_password}@{self.__sql_host}/{self.database_name}").connect()
         self.log(f"Successfully connected to database '{self.database_name}'.", "s")
 
     def log(self, text: str, status: str) -> None:
