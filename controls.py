@@ -93,8 +93,8 @@ class AthlEatsCloud:
     def edit_entry(self, identifier, **kwargs):
         conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs if kwarg != identifier])
         self.connection.execute(
-                f"UPDATE {self.table_name}"
-                f"SET {conditions}"
+                f"UPDATE {self.table_name} "
+                f"SET {conditions} "
                 f"WHERE {identifier} = '{kwargs[identifier]}'"
                 )
 
