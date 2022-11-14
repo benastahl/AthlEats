@@ -6,7 +6,6 @@ import sqlite3
 from datetime import datetime
 from termcolor import colored
 from account_authority import User
-online_database = False
 
 sql_datatypes = {int: "INT", str: "TEXT"}
 sql_username = "b74577def82ecb"
@@ -23,12 +22,8 @@ class AthlEatsCloud:
         self.database_name = "heroku_455007dcaac34a6"
 
         self.log("Connecting to database...", "p")
-        if online_database:
-            self.connection = sqlalchemy.create_engine(
-                f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{self.database_name}").connect()
-        else:
-            self.database_name = "athleats LOCAL DB"
-            self.connection = sqlite3.connect("athleats.db")
+        self.connection = sqlalchemy.create_engine(
+            f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{self.database_name}").connect()
         self.log(f"Successfully connected to database '{self.database_name}'.", "s")
 
     def log(self, text: str, status: str) -> None:
