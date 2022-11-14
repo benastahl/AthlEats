@@ -1,14 +1,17 @@
 import secrets
 import sqlalchemy
 import bcrypt
+import sqlite3
 
 from datetime import datetime
 from termcolor import colored
 from account_authority import User
+online_database = False
 
-
-# athleats
-# zoccoceo4ever
+sql_datatypes = {int: "INT", str: "TEXT"}
+sql_username = "b74577def82ecb"
+sql_password = "75ca9aed"
+sql_host = "us-cdbr-east-06.cleardb.net"
 # dialect+driver://username:password@host:port/database
 
 
@@ -18,14 +21,14 @@ class AthlEatsCloud:
         self.table_attributes = table_attributes
         self.table_name = table_name
         self.database_name = "heroku_455007dcaac34a6"
-        self.sql_datatypes = {int: "INT", str: "TEXT"}
 
-        self.__sql_username = "b74577def82ecb"
-        self.__sql_password = "75ca9aed"
-        self.__sql_host = "us-cdbr-east-06.cleardb.net/"
         self.log("Connecting to database...", "p")
-        self.connection = sqlalchemy.create_engine(
-            f"mysql+pymysql://{self.__sql_username}:{self.__sql_password}@{self.__sql_host}/{self.database_name}").connect()
+        if online_database:
+            self.connection = sqlalchemy.create_engine(
+                f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{self.database_name}").connect()
+        else:
+            self.database_name = "athleats LOCAL DB"
+            self.connection = sqlite3.connect("athleats.db")
         self.log(f"Successfully connected to database '{self.database_name}'.", "s")
 
     def log(self, text: str, status: str) -> None:
@@ -44,7 +47,7 @@ class AthlEatsCloud:
         print(
             colored(
                 f"[{datetime.now().strftime('%m-%d-%Y %H:%M:%S')}] - "
-                f"[ATHLEATS DATABASE CLOUD: {self.__sql_username}] - "
+                f"[ATHLEATS DATABASE CLOUD: {sql_username}] - "
                 f"[TABLE: {self.table_name.upper()}] - "
                 f"{text}",
                 color_schemes.get(status)

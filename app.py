@@ -14,6 +14,29 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
           "december"]
+error_handles = {
+    500: {
+        "name": "Internal Server Error",
+        "message": "Something wrong happened on our end. The error has been logged and will be reviewed."
+    },
+    404: {
+        "name": "Page not Found",
+        "message": "This page was not found."
+    }
+}
+
+for handle in error_handles.items():
+    # Sets redirect for custom error pages.
+    status_code = handle[0]
+    app.register_error_handler(
+        status_code,
+        lambda: render_template(
+            "error-page.html",
+            error_name=handle[1]["name"],
+            error_msg=handle[1]["message"]
+        )
+    )
+
 
 @app.before_request
 def before_request():
