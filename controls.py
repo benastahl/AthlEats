@@ -1,7 +1,6 @@
 import secrets
 import sqlalchemy
 import bcrypt
-import sqlite3
 
 from datetime import datetime
 from termcolor import colored
@@ -49,32 +48,34 @@ class AthlEatsCloud:
             )
         )
 
-    def create_table(self, name: str, reset=False) -> str:
+    @staticmethod
+    def sql_conv(value):
+        if type(value) == int:
+            return f"{value}"
+        else:
+            return f"'{value}'"
+
+    def create_table(self, reset=False) -> bool:
         """
         Creates a new table based on table_attributes. Should only be used once.
-        :param name: Name for table. (ex: users, admins, foods, etc.).
         :param reset: Deletes table in entirety before creating new one (if set to 'True').
-        :return: Message if table is created successfully.
+        :return: True bool if successful.
         """
         if reset:
+            self.log(f"Resetting table (dropping) '{self.table_name}'.", "d")
             self.connection.execute(f"DROP TABLE {self.table_name}")
         attributes = ", ".join([f"{attr.split(':')[0]} {attr.split(':')[1]}" for attr in self.table_attributes])
-        self.connection.execute(f'CREATE TABLE {name} ({attributes})')
+        self.connection.execute(f'CREATE TABLE {self.table_name} ({attributes})')
         self.connection.close()
-        return f"Successfully created table: '{name}'"
+        self.log(f"Successfully created table '{self.table_name}'", "s")
+        return True
 
     def create_entry(self, **kwargs):
-        # Create SQL query string
-        attributes = []
-        for kwarg in kwargs.values():
-            if type(kwarg) == str:
-                attributes.append(f"'{kwarg}'")
-                continue
-            attributes.append(f"{kwarg}")
-        attributes = ", ".join(attributes)
-
         # Creates a row in our database table for a user
-        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
+
+        # Create SQL query strings
+        attributes = ", ".join([self.sql_conv(kwarg) for kwarg in kwargs.values()])
+        conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
 
         self.connection.execute(
             f"INSERT INTO {self.table_name} "
@@ -83,34 +84,34 @@ class AthlEatsCloud:
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
         self.connection.close()
 
-        if not entries:
-            return False
+        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
         entry = entries[0]
+        self.log(f"Successfully created entry '{kwargs.get('entry_id')}'.", "s")
         return self.Instance(**entry)
 
-    def edit_entry(self, identifier, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs if kwarg != identifier])
+    def edit_entry(self, entry_id, **kwargs):
+        conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
         self.connection.execute(
                 f"UPDATE {self.table_name} "
                 f"SET {conditions} "
-                f"WHERE {identifier} = '{kwargs[identifier]}'"
+                f"WHERE entry_id = '{entry_id}'"
                 )
 
-        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {identifier} = '{kwargs[identifier]}'").fetchall()
+        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE entry_id = '{entry_id}'").fetchall()
         self.connection.close()
-        if not entries:
-            return False
+        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
         entry = entries[0]
         return self.Instance(**entry)
 
-    def get_entry(self, close_conn=True, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = '{kwargs[kwarg]}'" for kwarg in kwargs])
-        entries = self.connection.execute(f"SELECT * FROM users WHERE {conditions}").fetchall()
+    def get_entry(self, close_conn=True, **kwargs) -> User:
+        conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
+        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
         if close_conn:
             self.connection.close()
-        if not entries:
-            return False
+        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+
         entry = entries[0]
+        self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
 
@@ -119,6 +120,7 @@ class UsersCloud(AthlEatsCloud):
         self.table_name = "users"
         # FORMAT: "attribute name":"sql datatype name"
         self.table_attributes = [
+            "entry_id:TEXT",
             "email:TEXT",
             "grade:INT",
             "hashed_password:TEXT",
@@ -140,11 +142,18 @@ class UsersCloud(AthlEatsCloud):
             # Creates new random auth token string
             auth_token = secrets.token_hex()
             # Sets new auth token to user database row
-            authenticated_user = self.edit_entry(identifier="email", email=user.email, auth_token=auth_token)
-            if not authenticated_user:
-                return False
+            authenticated_user = self.edit_entry(entry_id=user.entry_id, auth_token=auth_token)
+
             # Returns new auth token of authenticated user
             return authenticated_user.auth_token
 
         # Returns current auth token of user
         return user.auth_token
+
+    def set_permission(self, email: str, admin_key: str, admin: bool, staff: bool) -> User:
+        access_granted = bcrypt.checkpw(admin_key.encode("utf8"), b'$2b$12$ata6ZfmFeS8HSSM1El8u.uEM477m.x9TTiJi42sAhuzgwAPBw3TFG')
+        assert access_granted, "Incorrect Admin Key."
+
+        user = self.get_entry(close_conn=False, email=email)
+
+        return self.edit_entry(entry_id=user.entry_id, admin=int(admin), staff=int(staff))

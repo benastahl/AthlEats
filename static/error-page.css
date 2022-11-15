@@ -1,1 +1,21 @@
-/*
+.error-container {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-content: center;
+}
+
+.error-header, .error-body {
+    text-align: center;
+    width: 700px;
+    margin: auto;
+    padding: 20px;
+    background: #FFFFFF;
+    border-radius: 40px;
+}
+
+.error-header {
+    font-size: 60px;
+    font-weight: 500;
+}
+

@@ -1,3 +1,4 @@
+import uuid
 from flask import Flask, render_template, url_for, request, redirect
 from werkzeug.utils import secure_filename
 from controls import UsersCloud
@@ -30,7 +31,7 @@ for handle in error_handles.items():
     status_code = handle[0]
     app.register_error_handler(
         status_code,
-        lambda: render_template(
+        lambda x: render_template(
             "error-page.html",
             error_name=handle[1]["name"],
             error_msg=handle[1]["message"]
@@ -87,12 +88,15 @@ def process_signup(_request):
     hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
     # Check if email is already in use (get_student returns list of users with that email).
-    if UsersCloud().get_entry(email=email):
+    try:
+        UsersCloud().get_entry(email=email)
         return render_template("home.html", message_type="signup", message="Email is already in use.")
+    except AssertionError:
+        pass
 
     # Check if email is valid student email
-    if "@student.waylandps.org" not in email:
-        return render_template("home.html", message_type="signup", message="Not a valid WHS student email.")
+    if "waylandps.org" not in email:
+        return render_template("home.html", message_type="signup", message="Not a valid WHS email.")
 
     # Checks if email is a real valid email address
     # if not validate_email(email, verify=True):
@@ -110,22 +114,19 @@ def process_signup(_request):
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # Parse first and last name from email address.
-    first_name = email.split("_")[0].capitalize()
-    last_name = email.split("_")[1].split("@")[0].capitalize()
-
     # Create timestamp of the creation date of the account
     creation_date = int(datetime.timestamp(datetime.now()))
 
     # Add user to database
     UsersCloud().create_entry(
+        entry_id=uuid.uuid4(),
         email=email,
         grade=grade,
         hashed_password=hashed_password,
         auth_token=auth_token,
         creation_date=creation_date,
-        staff=1,
-        admin=1
+        staff=0,
+        admin=0
     )
 
     return response

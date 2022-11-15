@@ -1,5 +1,7 @@
 class User:
-    def __init__(self, email, grade, hashed_password, auth_token, creation_date, staff, admin):
+    def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin):
+        self.entry_id = entry_id
+
         self.first_name = email.split('@')[0].split('_')[0]
         self.last_name = email.split('@')[0].split('_')[1]
         self.email = email
