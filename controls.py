@@ -103,12 +103,14 @@ class AthlEatsCloud:
         entry = entries[0]
         return self.Instance(**entry)
 
-    def get_entry(self, close_conn=True, **kwargs) -> User:
+    def get_entry(self, close_conn=True, **kwargs):
         conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
         if close_conn:
             self.connection.close()
-        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+        if not entries:
+            return False
+        # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
 
         entry = entries[0]
         self.log(f"Successfully collected entry '{entry[0]}'", "s")

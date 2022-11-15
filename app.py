@@ -17,11 +17,11 @@ months = ["january", "february", "march", "april", "may", "june", "july", "augus
           "december"]
 error_handles = {
     500: {
-        "name": "Internal Server Error",
+        "name": "Internal Server Error (500)",
         "message": "Something wrong happened on our end. The error has been logged and will be reviewed."
     },
     404: {
-        "name": "Page not Found",
+        "name": "Page not Found (404)",
         "message": "This page was not found."
     }
 }
@@ -88,11 +88,8 @@ def process_signup(_request):
     hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
     # Check if email is already in use (get_student returns list of users with that email).
-    try:
-        UsersCloud().get_entry(email=email)
+    if UsersCloud().get_entry(email=email):
         return render_template("home.html", message_type="signup", message="Email is already in use.")
-    except AssertionError:
-        pass
 
     # Check if email is valid student email
     if "waylandps.org" not in email:
