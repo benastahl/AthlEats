@@ -4,7 +4,7 @@ import bcrypt
 
 from datetime import datetime
 from termcolor import colored
-from account_authority import User
+from account_authority import User, Order
 
 sql_datatypes = {int: "INT", str: "TEXT"}
 sql_username = "b74577def82ecb"
@@ -116,7 +116,6 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
-
 class UsersCloud(AthlEatsCloud):
     def __init__(self):
         self.table_name = "users"
@@ -159,3 +158,18 @@ class UsersCloud(AthlEatsCloud):
         user = self.get_entry(close_conn=False, email=email)
 
         return self.edit_entry(entry_id=user.entry_id, admin=int(admin), staff=int(staff))
+
+
+class OrdersCloud(AthlEatsCloud):
+    def __init__(self):
+        self.table_name = "orders"
+        # FORMAT: "attribute name":"sql datatype name"
+        self.table_attributes = [
+            "email:TEXT",
+            "location:TEXT",
+            "order_id:INT",
+            "order_date:INT",
+            "amount_in_order:INT",
+            "payed:INT"
+        ]
+        super().__init__(self.table_name, self.table_attributes, Instance=User)
