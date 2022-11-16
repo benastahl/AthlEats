@@ -1,7 +1,9 @@
 import uuid
 from flask import Flask, render_template, url_for, request, redirect
 from werkzeug.utils import secure_filename
-from controls import UsersCloud
+from controls import UsersCloud, OrdersCloud
+
+from account_authority import Order
 import calendar
 from datetime import datetime
 import os
@@ -202,16 +204,39 @@ def display_reserve_form():
 
 @app.route("/reserve-form", methods=["POST"])
 def process_reserve_form():
-    first_name = request.form['reserve-first-name']
-    last_name = request.form['reserve-last-name']
+    email = str(request.form['user_email'])
+    location = request.form['pickup-location']
     price = request.form['input-dollar']
     receipt = request.files['receipt']
-    pickup_time = request.form['pickup']
-    fee = int(price) * .3
+    pickup_time = str(request.form['pickup'])
+    phone_number = request.form['phone-number']
+    date = int(datetime.timestamp(datetime.now()))
+    OrdersCloud().create_entry(
+        email=email,
+        location=location,
+        entry_id=str(uuid.uuid4()),
+        order_date=date,
+        phone_number=phone_number,
+        pickup_time=pickup_time,
+        payed=price
 
-    filename = secure_filename(receipt.filename)
-    receipt.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return redirect(url_for('download_file', name=filename))
+    )
+
+    return render_template("order-complete.html")
+
+
+@app.route("/order-reserved", methods=["GET"])
+def display_complete_form():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UsersCloud().get_entry(auth_token=auth_token)
+        if user:
+            return render_template("order-complete.html", user=user)
+
+    return redirect("/", 302)
 
 
 @app.route("/staff-dashboard", methods=["GET"])

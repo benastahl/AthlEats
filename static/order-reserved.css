@@ -1,0 +1,25 @@
+
+/* Reserve Form */
+#reserve-form .reserve-form {
+  max-width: 700px;
+  height: 500px;
+  margin: 0px auto 0px auto;
+}
+
+.reserve-data-box {
+  text-align: left;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.reserve-data-header {
+  margin: 10px 0px 30px 0px;
+}
+
+
+
+
+
+

@@ -116,6 +116,8 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
+
+# EACH CHILD CLASS REPRESENTS A TABLE
 class UsersCloud(AthlEatsCloud):
     def __init__(self):
         self.table_name = "users"
@@ -167,9 +169,10 @@ class OrdersCloud(AthlEatsCloud):
         self.table_attributes = [
             "email:TEXT",
             "location:TEXT",
-            "order_id:INT",
+            "entry_id:TEXT",
             "order_date:INT",
-            "amount_in_order:INT",
-            "payed:INT"
+            "phone_number:TEXT",
+            "pickup_time:TEXT",
+            "payed:TEXT"
         ]
-        super().__init__(self.table_name, self.table_attributes, Instance=User)
+        super().__init__(self.table_name, self.table_attributes, Instance=Order)

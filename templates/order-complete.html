@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/defaults.css">
     <link rel="stylesheet" href="../static/nav_bar.css">
     <link rel="stylesheet" href="../static/access_forms.css">
-    <link rel="stylesheet" href="../static/reserve_pickup.css">    <link rel="icon" href="../static/uce-logo.png">
+    <link rel="stylesheet" href="../static/order-reserved.css">    <link rel="icon" href="../static/uce-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UCE Reserve Form </title>
@@ -68,33 +68,37 @@
           <div id="reserve-form" class="access-form">
             <div class="reserve-form form-section">
                 <div class="form-header">
-                    <h3>Reserve Pickup Form</h3>
+                    <h3>Order Reserved</h3>
+                </div>
+                <div class="reserve-data-box">
+                    <span class="reserve-data-header">
+                        price paid:
+                    </span>
+                    <span class="reserve-data">
+
+                    </span>
+                    <span class="reserve-data-header">
+                        pickup location:
+                    </span>
+                    <span class="reserve-data">
+
+                    </span>
+                    <span class="reserve-data-header">
+                        pickup time:
+                    </span>
+                    <span class="reserve-data">
+
+                    </span>
+                    <span class="reserve-data-header">
+                        deliverer:
+                    </span>
+                    <span class="reserve-data">
+
+                    </span>
                 </div>
 
-                <form enctype="multipart/form-data" class="input-form" name="order-form" method="post">
 
-                    <input style="display: none" id="user_email" name="user_email" value="{{user.email}}">
 
-                    <label for="input-dollar">Price:</label><br>
-                    <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
-
-                    <label for="receipt-upload">Upload receipt:</label><br>
-                    <input type="file" id="receipt-upload" name="receipt"><br>
-
-                    <label for="pickup-location">pickup location:</label><br>
-                    <input type="text" id="pickup-location" name="pickup-location"><br>
-
-                    <label for="phone-number">Phone Number:</label><br>
-                    <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
-
-                    <label for="pickup">Select Pickup Time:</label><br>
-                    <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
-                    <div class="fee-output">
-                    Delivery Fee: meow XD
-                    </div>
-                                                <button id="submit-form-button" type="submit" value="order-form" >submit</button>
-
-                </form>
 
 
               <form name="reserve" method="post">

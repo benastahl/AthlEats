@@ -90,36 +90,16 @@
                                     <th>Creation Date</th>
                                     <th></th>
                                   </tr>
+                                {% for user_inst in user_list %}
                                   <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
+                                      <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
+                                      <td>{{user_inst.email | capitalize}}</td>
+                                      <td>{{user_inst.creation_date}}</td>
                                       <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
                                   </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Jake Zocco</td>
-                                    <td>jake_zocco@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
+                                {% endfor %}
+
+
                                 </tbody>
                               </table>
                           </div>
@@ -146,30 +126,16 @@
                                     <th>Creation Date</th>
                                     <th></th>
                                   </tr>
-                                  <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
+                                  {% for user_inst in user_list %}
+                                      {% if user_inst.admin %}
+                                          <tr>
+                                              <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
+                                              <td>{{user_inst.email | capitalize}}</td>
+                                              <td>{{user_inst.creation_date}}</td>
+                                              <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
+                                          </tr>
+                                        {% endif %}
+                                  {% endfor %}
                                 </tbody>
                               </table>
                           </div>
