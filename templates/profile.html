@@ -69,339 +69,43 @@
           <div class="acc-order-data-container">
               <h3 class="acc-data-header"> Order History </h3>
               <div class="acc-order-data-list">
-                  <div class="acc-data receipt">
-                  <div class="acc-data-header">
-                      <h5>[3/18/23]</h5>
-                  </div>
-                  <div class="acc-data-box">
-                      <span class="acc-data-title">
-                          price:
-                      </span>
-                      <span class="acc-data-info">
-                          $14.72
-                      </span>
-                  </div>
-                  <div class="acc-data-box">
-                      <span class="acc-data-title">
-                          fee
-                      </span>
-                      <span class="acc-data-info">
-                          $1 dolla
-                      </span>
-                  </div>
-                  <div class="acc-data-box">
-                      <span class="acc-data-title">
-                          retaurant:
-                      </span>
-                      <span class="acc-data-info">
-                          mcdonald
-                      </span>
-                  </div>
-                  <div class="acc-data-box">
-                      <span class="acc-data-title">
-                          delivered by:
-                      </span>
-                      <span class="acc-data-info">
-                          yo momma
-                      </span>
-                  </div>
-              </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
+                  {% for orders in user_order_list%}
+                      <div class="acc-data receipt">
+                        <div class="acc-data-header">
+                            <h5>{{orders.order_date}}</h5>
+                        </div>
+                        <div class="acc-data-box">
+                            <span class="acc-data-title">
                               price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
+                            </span>
+                             <span class="acc-data-info">
+                              {{orders.payed}}
+                            </span>
+                        </div>
+                        <div class="acc-data-box">
+                            <span class="acc-data-title">
+                              pickup time:
+                            </span>
+                            <span class="acc-data-info">
+                              {{orders.pickup_time}}
+                            </span>
+                        </div>
+                        <div class="acc-data-box">
+                            <span class="acc-data-title">
+                              pickup location:
+                            </span>
+                            <span class="acc-data-info">
+                              {{orders.location}}
+                            </span>
+                        </div>
                       </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
-                  <div class="acc-data receipt">
-                      <div class="acc-data-header">
-                          <h5>[date]</h5>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              price:
-                          </span>
-                          <span class="acc-data-info">
-                              $14.72
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              fee
-                          </span>
-                          <span class="acc-data-info">
-                              $1 dolla
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              retaurant:
-                          </span>
-                          <span class="acc-data-info">
-                              mcdonald
-                          </span>
-                      </div>
-                      <div class="acc-data-box">
-                          <span class="acc-data-title">
-                              delivered by:
-                          </span>
-                          <span class="acc-data-info">
-                              yo momma
-                          </span>
-                      </div>
-                  </div>
+                  {% endfor %}
+
+
+
+
+
+
               </div>
 
 

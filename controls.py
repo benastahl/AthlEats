@@ -116,6 +116,17 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
+    def get_all_entries(self):
+        print(self.table_name)
+        entries = self.connection.execute(f"SELECT * FROM {self.table_name}").fetchall()
+        if not entries:
+            return False
+        # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+        self.log(f"Successfully collected entries from table '{self.table_name}'", "s")
+
+        return [self.Instance(**entry) for entry in entries]
+
+
 
 # EACH CHILD CLASS REPRESENTS A TABLE
 class UsersCloud(AthlEatsCloud):
@@ -170,7 +181,7 @@ class OrdersCloud(AthlEatsCloud):
             "email:TEXT",
             "location:TEXT",
             "entry_id:TEXT",
-            "order_date:INT",
+            "order_date:TEXT",
             "phone_number:TEXT",
             "pickup_time:TEXT",
             "payed:TEXT"

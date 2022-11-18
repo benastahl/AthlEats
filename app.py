@@ -5,7 +5,7 @@ from controls import UsersCloud, OrdersCloud
 
 from account_authority import Order
 import calendar
-from datetime import datetime
+from datetime import datetime, date
 import os
 
 import bcrypt
@@ -210,12 +210,14 @@ def process_reserve_form():
     receipt = request.files['receipt']
     pickup_time = str(request.form['pickup'])
     phone_number = request.form['phone-number']
-    date = int(datetime.timestamp(datetime.now()))
+    order_int = str(int(datetime.timestamp(datetime.now())))
+    order_date = datetime.strptime(order_int, "%d%m%y%H%M%S")
+    order_date = order_date.date() # yo ben fix this thanks
     OrdersCloud().create_entry(
         email=email,
         location=location,
         entry_id=str(uuid.uuid4()),
-        order_date=date,
+        order_date=order_date,
         phone_number=phone_number,
         pickup_time=pickup_time,
         payed=price
@@ -270,9 +272,22 @@ def display_profile():
         # Checks to see if there's a corresponding user with auth token.
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-            return render_template("profile.html", user=user)
+            orders_list = OrdersCloud().get_all_entries()
+            user_orders_list = []
+            for order in orders_list:
+                if order.email == user.email:
+                    user_orders_list.append(order)
+
+            return render_template("profile.html", user=user, user_order_list=user_orders_list)
 
     return redirect("/", 302)
+
+
+@app.route("/orders-dashboard", methods=["GET"])
+def orders_dashboard():
+    matthew_watkins = "22220"
+    meow = matthew_watkins
+    return meow
 
 
 @app.route("/logout", methods=["GET"])
