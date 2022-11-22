@@ -17,11 +17,13 @@ class User:
 
 
 class Order:
-    def __init__(self, email, location, entry_id, order_date, phone_number, pickup_time, payed):
+    def __init__(self, entry_id, email, restaurant, order_date, phone_number, restaurant_pickup_time, pickup_time, price, pickup_location):
         self.email = email
-        self.location = location
+        self.restaurant = restaurant
         self.entry_id = entry_id
         self.order_date = order_date
         self.phone_number = phone_number
         self.pickup_time = pickup_time
-        self.payed = payed
+        self.price = price
+        self.pickup_location = pickup_location
+        self.restaurant_pickup_time = restaurant_pickup_time

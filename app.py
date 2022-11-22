@@ -205,26 +205,39 @@ def display_reserve_form():
 @app.route("/reserve-form", methods=["POST"])
 def process_reserve_form():
     email = str(request.form['user_email'])
-    location = request.form['pickup-location']
-    price = request.form['input-dollar']
-    receipt = request.files['receipt']
-    pickup_time = str(request.form['pickup'])
+    price = str(request.form['input-dollar'])
+    receipt = request.files['receipt-upload']
+    restaurant = request.form['restaurant']
     phone_number = request.form['phone-number']
-    order_int = str(int(datetime.timestamp(datetime.now())))
-    order_date = datetime.strptime(order_int, "%d%m%y%H%M%S")
-    order_date = order_date.date() # yo ben fix this thanks
+    restaurant_pickup_time = str(request.form['restaurant-pickup-time'])
+    pickup_time = str(request.form['pickup'])
+    pickup_location = request.form['pickup-location']
+    order_date = datetime.now().strftime("%D %H:%M:%S")
+    fee = float(price)*0.3
+
     OrdersCloud().create_entry(
-        email=email,
-        location=location,
         entry_id=str(uuid.uuid4()),
+        email=email,
+        restaurant=restaurant,
         order_date=order_date,
         phone_number=phone_number,
+        restaurant_pickup_time=restaurant_pickup_time,
         pickup_time=pickup_time,
-        payed=price
+        price=price,
+        pickup_location=pickup_location
 
     )
 
-    return render_template("order-complete.html")
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        user = UsersCloud().get_entry(auth_token=auth_token)
+        if user:
+            total = float(price) + fee
+
+            return render_template("order-complete.html", user=user, pickup_time=pickup_time,pickup_location=pickup_location,total=total)
+
+    return redirect("/", 302)
 
 
 @app.route("/order-reserved", methods=["GET"])
@@ -236,6 +249,7 @@ def display_complete_form():
         # Checks to see if there's a corresponding user with auth token.
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
+
             return render_template("order-complete.html", user=user)
 
     return redirect("/", 302)

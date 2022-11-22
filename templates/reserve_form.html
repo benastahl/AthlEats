@@ -79,20 +79,27 @@
                     <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
 
                     <label for="receipt-upload">Upload receipt:</label><br>
-                    <input type="file" id="receipt-upload" name="receipt"><br>
+                    <input type="file" id="receipt-upload" name="receipt-upload"><br>
 
-                    <label for="pickup-location">pickup location:</label><br>
-                    <input type="text" id="pickup-location" name="pickup-location"><br>
+                    <label for="restaurant">Restaurant:</label><br>
+                    <input type="text" id="restaurant" name="restaurant"><br>
 
                     <label for="phone-number">Phone Number:</label><br>
                     <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
 
+                    <label for="restaurant-pickup-time">Select Restaurant Pickup Time:</label><br>
+                    <input type="time" id="restaurant-pickup-time" name="restaurant-pickup-time" min="09:00" max="18:00" required><br>
+
                     <label for="pickup">Select Pickup Time:</label><br>
                     <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
+
+                    <label for="pickup-location">Select Pickup Location</label><br>
+                    <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
+
                     <div class="fee-output">
                     Delivery Fee: meow XD
                     </div>
-                                                <button id="submit-form-button" type="submit" value="order-form" >submit</button>
+                    <button id="submit-form-button" type="submit" value="order-form" >submit</button>
 
                 </form>
 
