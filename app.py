@@ -213,7 +213,7 @@ def process_reserve_form():
     pickup_time = str(request.form['pickup'])
     pickup_location = request.form['pickup-location']
     order_date = datetime.now().strftime("%D %H:%M:%S")
-    fee = float(price)*0.3
+    fee = round(float(price) * 0.3, 2)
 
     OrdersCloud().create_entry(
         entry_id=str(uuid.uuid4()),
@@ -233,9 +233,8 @@ def process_reserve_form():
     if auth_token:
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-            total = float(price) + fee
-
-            return render_template("order-complete.html", user=user, pickup_time=pickup_time,pickup_location=pickup_location,total=total)
+            return render_template("order-complete.html", user=user, pickup_time=pickup_time,
+                                   pickup_location=pickup_location, fee=fee)
 
     return redirect("/", 302)
 
@@ -249,7 +248,6 @@ def display_complete_form():
         # Checks to see if there's a corresponding user with auth token.
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-
             return render_template("order-complete.html", user=user)
 
     return redirect("/", 302)
