@@ -217,6 +217,7 @@ def process_reserve_form():
 
     OrdersCloud().create_entry(
         entry_id=str(uuid.uuid4()),
+        is_complete=0,
         email=email,
         restaurant=restaurant,
         order_date=order_date,
