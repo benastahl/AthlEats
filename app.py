@@ -269,11 +269,31 @@ def display_staff_dashboard():
 def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
+    orders_list = OrdersCloud().get_all_entries()
+    incomplete_orders = []
+    completed_orders = []
+    for order in orders_list:
+        if order.is_complete == 0:
+            incomplete_orders.append(order)
+        else:
+            completed_orders.append(order)
 
     if not user or not user.admin:
         return redirect("/", 302)
 
-    return render_template("admin-dashboard.html", user=user)
+    return render_template("admin-dashboard.html", user=user, incomplete_orders=incomplete_orders,
+                           completed_orders=completed_orders)
+
+
+@app.route("/admin-dashboard", methods=["POST"])
+def process_complete_order():
+    if request.form.get('complete-order') == 'complete-order-value':
+        entry_id = request.form.get("index")
+        order_db = OrdersCloud()
+        order_db.edit_entry(enrty_id=entry_id, is_complete=1)
+
+
+    return redirect("/admin-dashboard", 302)
 
 
 @app.route("/profile", methods=["GET"])
@@ -294,13 +314,6 @@ def display_profile():
             return render_template("profile.html", user=user, user_order_list=user_orders_list)
 
     return redirect("/", 302)
-
-
-@app.route("/orders-dashboard", methods=["GET"])
-def orders_dashboard():
-    matthew_watkins = "22220"
-    meow = matthew_watkins
-    return meow
 
 
 @app.route("/logout", methods=["GET"])

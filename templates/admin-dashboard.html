@@ -158,35 +158,39 @@
                               <table id="myTable">
                                 <tbody>
                                   <tr class="header">
-                                    <th>Full Name</th>
                                     <th>Email</th>
-                                    <th>Creation Date</th>
+                                    <th>Order Date</th>
+                                    <th>Phone Number</th>
+                                    <th>Restaurant</th>
+                                    <th>Restaurant Pickup Time</th>
+                                    <th>Pickup Time</th>
+                                    <th>Order Date</th>
+                                    <th>Price</th>
+                                    <th>Pickup Location</th>
                                     <th></th>
                                   </tr>
+                                  {% for order in incomplete_orders %}
                                   <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
+                                      <td>{{order.email}}</td>
+                                      <td>{{order.order_date}}</td>
+                                      <td>{{order.phone_number}}</td>
+                                      <td>{{order.restaurant}}</td>
+                                      <td>{{order.restaurant_pickup_time}}</td>
+                                      <td>{{order.pickup_time}}</td>
+                                      <td>{{order.order_date}}</td>
+                                      <td>${{order.price}}</td>
+                                      <td>{{order.pickup_location}}</td>
+                                      <td class="complete-order-button">
+                                          <form name="complete-order-form" method="post">
+                                              <input type="hidden" id="index" name="index" value={{order.entry_id}}>
+                                              <button name="complete-order" value="complete-order-value" type="submit">
+                                                  <i class="bx bx-check-square" ></i>
+                                              </button>
+                                          </form>
+                                      </td>
                                   </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
+                                  {% endfor %}
+
                                 </tbody>
                               </table>
                           </div>
@@ -197,7 +201,7 @@
                       <div class="admin-data form-section">
                           <div class="form-header">
                               <i class='bx bx-receipt' ></i>
-                              <h3>Past Orders</h3>
+                              <h3>Completed Orders</h3>
                               <div class="search-box">
                                 <label>
                                     <input onkeyup="filterAdminTable('past-orders-data')" type="text" placeholder="Search...">
@@ -209,35 +213,32 @@
                               <table id="myTable">
                                 <tbody>
                                   <tr class="header">
-                                    <th>Full Name</th>
                                     <th>Email</th>
-                                    <th>Creation Date</th>
+                                    <th>Order Date</th>
+                                    <th>Phone Number</th>
+                                    <th>Restaurant</th>
+                                    <th>Restaurant Pickup Time</th>
+                                    <th>Pickup Time</th>
+                                    <th>Order Date</th>
+                                    <th>Price</th>
+                                    <th>Pickup Location</th>
                                     <th></th>
                                   </tr>
+                                  {% for order in completed_orders %}
                                   <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
+                                      <td>{{order.email}}</td>
+                                      <td>{{order.order_date}}</td>
+                                      <td>{{order.phone_number}}</td>
+                                      <td>{{order.restaurant}}</td>
+                                      <td>{{order.restaurant_pickup_time}}</td>
+                                      <td>{{order.pickup_time}}</td>
+                                      <td>{{order.order_date}}</td>
+                                      <td>${{order.price}}</td>
+                                      <td>{{order.pickup_location}}</td>
                                       <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
                                   </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
+                                  {% endfor %}
+
                                 </tbody>
                               </table>
                           </div>

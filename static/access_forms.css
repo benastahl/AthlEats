@@ -42,6 +42,9 @@
   font-size: 14px;
 }
 
+
+
+
 .access-form select {
   font-family: "Roboto", sans-serif;
   outline: 0;
@@ -54,6 +57,9 @@
   border-radius: 10px;
   font-size: 14px;
 }
+
+
+
 .access-form button {
   pointer-events: auto;
   font-family: "Roboto", sans-serif;
@@ -72,6 +78,15 @@
   transition: all 0.3 ease;
   cursor: pointer;
 }
+
+.complete-order-button button {
+  width: 35px;
+  padding: 0;
+  margin: 0px 0px 0px 0px;
+  border-radius: 0px;
+}
+
+
 .access-form .delete-account-button {
   background-color: red;
   min-width: 150px;
