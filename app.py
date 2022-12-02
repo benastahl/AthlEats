@@ -270,19 +270,25 @@ def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
     orders_list = OrdersCloud().get_all_entries()
+    user_list = UsersCloud().get_all_entries()
     incomplete_orders = []
     completed_orders = []
+    staff_list = []
     for order in orders_list:
         if order.is_complete == 0:
             incomplete_orders.append(order)
         else:
             completed_orders.append(order)
 
+    for user1 in user_list:
+        if user1.staff == 1:
+            staff_list.append(user1)
+
     if not user or not user.admin:
         return redirect("/", 302)
 
     return render_template("admin-dashboard.html", user=user, incomplete_orders=incomplete_orders,
-                           completed_orders=completed_orders)
+                           completed_orders=completed_orders, user_list=user_list, staff_list=staff_list)
 
 
 @app.route("/admin-dashboard", methods=["POST"])
@@ -290,7 +296,7 @@ def process_complete_order():
     if request.form.get('complete-order') == 'complete-order-value':
         entry_id = request.form.get("index")
         order_db = OrdersCloud()
-        order_db.edit_entry(enrty_id=entry_id, is_complete=1)
+        order_db.edit_entry(entry_id=entry_id, is_complete=1)
 
 
     return redirect("/admin-dashboard", 302)

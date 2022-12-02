@@ -69,79 +69,6 @@
           <div class="admin-data-container">
               <h3 class="admin-data-title">Admin Data</h3>
               <div class="admin-data-list">
-                  <div id="users-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bx-user-circle'></i>
-                              <h3>Users</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable('users-data')" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                {% for user_inst in user_list %}
-                                  <tr>
-                                      <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
-                                      <td>{{user_inst.email | capitalize}}</td>
-                                      <td>{{user_inst.creation_date}}</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                {% endfor %}
-
-
-                                </tbody>
-                              </table>
-                          </div>
-                      </div>
-                    </div>
-                  <div id="staff-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bxs-user-badge'></i>
-                              <h3>Staff Members</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable('staff-data')" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                  {% for user_inst in user_list %}
-                                      {% if user_inst.admin %}
-                                          <tr>
-                                              <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
-                                              <td>{{user_inst.email | capitalize}}</td>
-                                              <td>{{user_inst.creation_date}}</td>
-                                              <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                          </tr>
-                                        {% endif %}
-                                  {% endfor %}
-                                </tbody>
-                              </table>
-                          </div>
-
-                      </div>
-                    </div>
                   <div id="current-orders-data" class="access-form">
                       <div class="admin-data form-section">
                           <div class="form-header">
@@ -164,7 +91,6 @@
                                     <th>Restaurant</th>
                                     <th>Restaurant Pickup Time</th>
                                     <th>Pickup Time</th>
-                                    <th>Order Date</th>
                                     <th>Price</th>
                                     <th>Pickup Location</th>
                                     <th></th>
@@ -177,7 +103,6 @@
                                       <td>{{order.restaurant}}</td>
                                       <td>{{order.restaurant_pickup_time}}</td>
                                       <td>{{order.pickup_time}}</td>
-                                      <td>{{order.order_date}}</td>
                                       <td>${{order.price}}</td>
                                       <td>{{order.pickup_location}}</td>
                                       <td class="complete-order-button">
@@ -245,6 +170,80 @@
 
                       </div>
                     </div>
+                  <div id="users-data" class="access-form">
+                      <div class="admin-data form-section">
+                          <div class="form-header">
+                              <i class='bx bx-user-circle'></i>
+                              <h3>Users</h3>
+                              <div class="search-box">
+                                <label>
+                                    <input onkeyup="filterAdminTable('users-data')" type="text" placeholder="Search...">
+                                </label>
+                                <i class='bx bx-filter-alt' ></i>
+                            </div>
+                        </div>
+                          <div class="admin-table-container">
+                              <table id="myTable">
+                                <tbody>
+                                  <tr class="header">
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Creation Date</th>
+                                    <th></th>
+                                  </tr>
+                                {% for user_inst in user_list %}
+                                  <tr>
+                                      <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
+                                      <td>{{user_inst.email | capitalize}}</td>
+                                      <td>{{user_inst.creation_date}}</td>
+                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
+                                  </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                              </table>
+                          </div>
+                      </div>
+                    </div>
+                  <div id="staff-data" class="access-form">
+                      <div class="admin-data form-section">
+                          <div class="form-header">
+                              <i class='bx bxs-user-badge'></i>
+                              <h3>Staff Members</h3>
+                              <div class="search-box">
+                                <label>
+                                    <input onkeyup="filterAdminTable('staff-data')" type="text" placeholder="Search...">
+                                </label>
+                                <i class='bx bx-filter-alt' ></i>
+                            </div>
+                        </div>
+                          <div class="admin-table-container">
+                              <table id="myTable">
+                                <tbody>
+                                  <tr class="header">
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Grade</th>
+                                    <th>Creation Date</th>
+                                    <th></th>
+                                  </tr>
+                                  {% for user in staff_list %}
+                                          <tr>
+                                              <td>{{user.first_name + " " + user.last_name}}</td>
+                                              <td>{{user.email}}</td>
+                                              <td>{{user.grade}}</td>
+                                              <td>{{user.creation_date}}</td>
+                                              <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
+                                          </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                          </div>
+
+                      </div>
+                    </div>
+
               </div>
           </div>
 

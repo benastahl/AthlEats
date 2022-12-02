@@ -5,6 +5,7 @@ import uuid
 if __name__ == '__main__':
     order_db = OrdersCloud()
     order_db.edit_entry("27f22326-d2e3-465d-b1db-1555735d82f3",is_complete=1)
+
     # order_db.create_table(reset=True)
     # [print(order.email) for order in order_db.get_all_entries()]
     # OrdersCloud().create_entry(
