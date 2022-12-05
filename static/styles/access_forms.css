@@ -1,6 +1,6 @@
 /* FORMS */
 .access-form {
-  padding: 8% 0 0;
+  padding: 6% 0 0;
   margin: auto;
 }
 .form-section {
@@ -14,10 +14,10 @@
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .form-section .bx-x  {
-  display: flex;
-  float: right;
+  position: absolute;
   font-size: 30px;
   cursor: pointer;
+  margin-left: 130px;
 }
 .form-header {
   padding-bottom: 15px;
@@ -42,9 +42,6 @@
   font-size: 14px;
 }
 
-
-
-
 .access-form select {
   font-family: "Roboto", sans-serif;
   outline: 0;
@@ -57,8 +54,6 @@
   border-radius: 10px;
   font-size: 14px;
 }
-
-
 
 .access-form button {
   pointer-events: auto;

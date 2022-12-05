@@ -102,6 +102,14 @@ class AthlEatsCloud:
         entry = entries[0]
         return self.Instance(**entry)
 
+    def delete_entry(self, entry_id):
+        self.connection.execute(
+            f"DELETE FROM {self.table_name} "
+            f"WHERE entry_id = '{entry_id}'"
+        )
+        self.connection.close()
+        self.log(f"Deleted account: {entry_id}.", "p")
+
     def get_entry(self, close_conn=True, **filters):
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
@@ -136,8 +144,6 @@ class AthlEatsCloud:
         entry = entries[0]
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
-
-
 
 
 # EACH CHILD CLASS REPRESENTS A TABLE

@@ -17,7 +17,6 @@
       <nav>
           <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
-{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
             {% if not user %}
               <div class="access-buttons-section">
                   <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
@@ -33,7 +32,7 @@
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
                           <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
-                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          <li onclick="document.location.href = document.location.origin + '/settings'" id="settings-selection">Settings</li>
                           {% if user.staff %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
@@ -110,31 +109,32 @@
           </div>
           <!-- Login Form -->
           <div style="display: none;" id="login-form" class="access-form">
-            <div class="login-form form-section">
-                <i onclick="hide_form('login-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>AthlEats LOGIN</h3>
-                <p>Please enter credentials to login.</p>
+
+              <div class="login-form form-section">
+                  <i onclick="hide_form('login-form')" class='bx bx-x'></i>
+                  <div class="form-header">
+                    <h3>AthlEats LOGIN</h3>
+                    <p>Please enter credentials to login.</p>
+                </div>
+
+                  <form name="login" method="post">
+                      <label>
+                          <input required type="text" name="email" placeholder="email">
+                      </label>
+                      <label>
+                          <input required type="password" name="pass" placeholder="password">
+                      </label>
+
+
+                      <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ message }}</p>
+
+                      <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
+                      <p class="message">Not registered?
+                        <a href="/login">Create an account</a>
+                      </p>
+
+                  </form>
               </div>
-
-              <form name="login" method="post">
-                  <label>
-                      <input required type="text" name="email" placeholder="email">
-                  </label>
-                  <label>
-                      <input required type="password" name="pass" placeholder="password">
-                  </label>
-
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ message }}</p>
-
-                  <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
-                  <p class="message">Not registered?
-                    <a href="/login">Create an account</a>
-                  </p>
-
-              </form>
-            </div>
           </div>
 
           <div class="popular-restaurants">
@@ -233,10 +233,48 @@
 
           </div>
 
-
       </div>
     </section>
   </body>
+
+  <!-- Popup Forms -->
+  <script>
+          let hide_form = function (id_name) {
+              document.getElementById(id_name).style.display = "none"
+              document.querySelector(".home-content-buttons").style.display = "flex"
+          }
+          let show_form = function (id_name) {
+              // BLUR
+              let form = document.getElementById(id_name);
+              document.querySelector("body").classList.toggle("blurred")
+              form.style.filter = "none"
+
+              console.log("Showing form: " + id_name)
+              document.querySelector(".home-content-buttons").style.display = "none"
+              // Hide all other forms besides id_name form
+              let all_form_elements = document.querySelectorAll(".access-form")
+              for (let i = 0; i < all_form_elements.length; i++) {
+                  let form = all_form_elements[i];
+                  if (form.id !== id_name) {
+                      form.style.display = "none"
+                      continue;
+                  }
+                  if (form.id === "settings-form")
+                      hide_profile_dropdown()
+                  form.style.display = "flex";
+              }
+          }
+
+          // If message return in render_template (flask)
+          let message = null;
+          if ("{{message_type}}") {
+              message = document.querySelector("#{{ message_type }}-form .error-occurrence")
+              message.style.display = "block";
+              message.innerHTML =  "{{ message }}"
+              show_form("{{message_type}}-form")
+          }
+
+      </script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

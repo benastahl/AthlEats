@@ -338,6 +338,38 @@ def display_profile():
     return redirect("/", 302)
 
 
+@app.route("/settings", methods=["GET"])
+def display_settings():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UsersCloud().get_entry(auth_token=auth_token)
+        if user:
+            return render_template("settings.html", user=user)
+
+    return redirect("/", 302)
+
+
+@app.route("/settings", methods=["POST"])
+def process_settings():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UsersCloud().get_entry(auth_token=auth_token)
+        if user:
+            if "delete-account" in request.form.keys():
+                UsersCloud().delete_entry(entry_id=user.entry_id)
+                return redirect("/", 302)
+
+            return render_template("settings.html", user=user)
+
+    return redirect("/", 302)
+
+
 @app.route("/logout", methods=["GET"])
 def logout():
     # Remove auth token cookie

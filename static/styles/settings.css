@@ -1,0 +1,34 @@
+.settings-form-container {
+    padding: 150px 400px;
+    text-align: center;
+}
+
+.settings-form {
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+.settings-form-header {
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+}
+.settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.settings button {
+    border-radius: 30px;
+    background: cornflowerblue;
+    border: none;
+    padding: 15px;
+    color: black;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    font-weight: bold;
+}
