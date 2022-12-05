@@ -183,6 +183,10 @@
                                     <th>Full Name</th>
                                     <th>Email</th>
                                     <th>Creation Date</th>
+                                    <th>Year</th>
+                                    <th>Admin</th>
+                                    <th>Staff</th>
+                                    <th>Entry ID</th>
                                     <th></th>
                                   </tr>
                                 {% for user_inst in user_list %}
@@ -190,6 +194,10 @@
                                       <td>{{user_inst.first_name | capitalize}} {{user_inst.last_name | capitalize}}</td>
                                       <td>{{user_inst.email | capitalize}}</td>
                                       <td>{{user_inst.creation_date}}</td>
+                                      <td>{{user_inst.year_name}}</td>
+                                      <td>{{user_inst.admin}}</td>
+                                      <td>{{user_inst.staff}}</td>
+                                      <td>{{user_inst.entry_id}}</td>
                                       <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
                                   </tr>
                                 {% endfor %}
