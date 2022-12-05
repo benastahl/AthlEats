@@ -3,20 +3,19 @@
   <head>
     <meta charset="UTF-8">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../static/defaults.css">
-    <link rel="stylesheet" href="../static/nav_bar.css">
-      <link rel="stylesheet" href="../static/admin-dashboard.css">
-    <link rel="stylesheet" href="../static/user_profile.css">
-      <link rel="icon" href="../static/athleats-logo.png">
-    <!-- Boxicons CDN Link -->
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/defaults.css">
+    <link rel="stylesheet" href="../static/styles/nav_bar.css">
+      <link rel="stylesheet" href="../static/styles/admin-dashboard.css">
+    <link rel="stylesheet" href="../static/styles/user_profile.css">
+      <link rel="icon" href="../static/images/athleats-logo.png">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> AthlEats User Profile </title>
    </head>
 
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
             {% if not user %}
               <div class="access-buttons-section">
@@ -111,194 +110,12 @@
 
           </div>
 
-          <!-- Settings Form -->
-          <div style="display: none;" id="settings-form" class="access-form">
-            <div class="settings-form form-section">
-                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>AthlEats SETTINGS</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-
-                  </div>
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
-
-              </form>
-              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
-
-
-            </div>
-          </div>
-          <!-- Delete Account Form -->
-          <div style="display: none;" id="delete-account-form" class="access-form">
-            <div class="delete-account-form form-section">
-                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>CONFIRM ACCOUNT DELETION</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-                    You are about to delete your account.
-                  </div>
-                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
-
-
-              </form>
-            </div>
-          </div>
-
       </div>
     </section>
 
-    <!-- Mobile Adapting -->
-    <script>
-      function adaptive_home_visual() {
-          if (document.querySelector(".process-visual").className.includes("mobile")) {
-              return false;
-          }
-          document.querySelector(".process-visual").classList.toggle("mobile")
-
-      }
-      function default_home_visual() {
-          if (!document.querySelector(".process-visual").className.includes("mobile")) {
-              return false;
-          }
-
-          document.querySelector(".process-visual").classList.remove("mobile")
-
-      }
-
-      function adapt_mobile() {
-
-          document.querySelector(".navbar-title").style.display = "none";
-          document.querySelector(".reserve-pickup-button .front").style.fontSize = "30px"
-      }
-
-      window.addEventListener('resize', function() {
-          if (window.outerWidth < 650) {
-              adapt_mobile()
-          } else if (!document.fullscreenElement){
-              {#adaptive_home_visual()#}
-          } else if (window.outerWidth >= 1440) {
-              {#default_home_visual()#}
-          }
-
-          if (window.outerWidth >= 650) {
-              document.querySelector(".navbar-title").style.display = "";
-              document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
-          }
-      })
-
-
-      if (window.outerWidth < 650) {
-          adapt_mobile()
-      } else if (!document.fullscreenElement){
-          {#adaptive_home_visual()#}
-      } else if (window.outerWidth >= 1440) {
-          {#default_home_visual()#}
-      }
-
-      if (window.outerWidth >= 650) {
-          document.querySelector(".navbar-title").style.display = "";
-          document.querySelector(".reserve-pickup-button .front").style.fontSize = "40px"
-      }
-  </script>
-
-    <!-- Show Login, Signup, Settings Forms -->
-    <script>
-          let hide_form = function (id_name) {
-              document.getElementById(id_name).style.display = "none"
-              document.querySelector(".home-content-buttons").style.display = "flex"
-          }
-          let show_form = function (id_name) {
-              // BLUR
-              let form = document.getElementById(id_name);
-              document.querySelector("body").classList.toggle("blurred")
-              form.style.filter = "none"
-
-              console.log("Showing form: " + id_name)
-              document.querySelector(".home-content-buttons").style.display = "none"
-              // Hide all other forms besides id_name form
-              let all_form_elements = document.querySelectorAll(".access-form")
-              for (let i = 0; i < all_form_elements.length; i++) {
-                  let form = all_form_elements[i];
-                  if (form.id !== id_name) {
-                      form.style.display = "none"
-                      continue;
-                  }
-                  if (form.id === "settings-form")
-                      hide_profile_dropdown()
-                  form.style.display = "flex";
-              }
-          }
-
-          // If message return in render_template (flask)
-          let message = null;
-          if ("{{message_type}}") {
-              message = document.querySelector("#{{ message_type }}-form .error-occurrence")
-              message.style.display = "block";
-              message.innerHTML =  "{{ message }}"
-              show_form("{{message_type}}-form")
-          }
-
-      </script>
-
-    <!-- Profile Drop-Down -->
-    {% if user %}
-    <script>
-      let profile_button = document.querySelector(".profile-details")
-      let profile_dropdown = document.querySelector(".profile-dropdown")
-      let profile_chevron = document.querySelector(".profile-details .arrow")
-      let profile_dropdown_activated = false;
-      let profile_dropdown_options = document.querySelectorAll(".home-section nav .profile-dropdown ul li")
-
-      window.addEventListener('load', function() {
-          for (let i = 0; i < profile_dropdown_options.length; i++) {
-              console.log("Set size of options.")
-              profile_dropdown_options[i].style.width = profile_button.getBoundingClientRect().width + "px";
-          }
-      })
-
-
-      let hide_profile_dropdown = function () {
-          profile_button.style.borderRadius = "25px";
-          profile_button.style.border = "2px solid black"
-          profile_dropdown.style.visibility = "hidden"
-          profile_chevron.className = "arrow bx bx-chevron-down"
-          profile_dropdown_activated = false;
-
-          document.querySelector(".home-content").removeEventListener('click', hide_profile_dropdown)
-
-      }
-
-      let show_profile_dropdown = function () {
-          profile_button.style.borderRadius = "25px 25px 0px 0px";
-          profile_button.style.borderBottom = "0px"
-          profile_dropdown.style.visibility = "visible"
-          profile_chevron.className = "arrow bx bx-chevron-up"
-          profile_dropdown_activated = true;
-
-          document.querySelector(".home-content").addEventListener('click', hide_profile_dropdown)
-
-      }
-
-      profile_button.onclick = function () {
-          if (!profile_dropdown_activated) {
-                show_profile_dropdown()
-          } else {
-              hide_profile_dropdown()
-          }
-      }
-
-
-  </script>
-    {% endif %}
+  {% if user %}
+    <script src="../static/scripts/profile_dropdown.js"></script>
+  {% endif %}
 
   </body>
 

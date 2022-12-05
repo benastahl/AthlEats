@@ -53,6 +53,7 @@ table td, table th {
   text-align: center;
   padding: 5px;
   max-width: 50px;
+  white-space: nowrap;
   overflow: auto;
   border-bottom: 1px solid lightgray;
 }
@@ -68,16 +69,16 @@ table th:nth-child(even), table td:nth-child(even) {
   display: flex;
   border-bottom: 1px solid lightgray;
   padding: 10px;
-  align-items: center;
+  justify-content: space-between;
 }
 .form-header .bx, table .bx {
+  font-size: 25px;
   height: 40px;
-  width: 90px;
+  width: 40px;
   border-radius: 20px;
   line-height: 40px;
   text-align: center;
   color: #fff;
-  font-size: 30px;
 }
 .view-profile-button {
   width: 34px;
@@ -95,10 +96,13 @@ table .bx {
   line-height: 36px;
   cursor: pointer;
 }
+.form-header .form-header-name-container {
+  display: flex;
+  align-items: center;
+}
 .form-header h3 {
   border-bottom: none;
   margin: 0 15px 0 15px;
-  width: 520px;
   padding: 0;
 }
 .search-box{
@@ -117,7 +121,7 @@ table .bx {
   border-radius: 6px;
   font-size: 18px;
   padding: 0 15px;
-  margin-bottom: 0;
+  margin: 0;
 }
 .search-box .bx-filter-alt{
   position: absolute;

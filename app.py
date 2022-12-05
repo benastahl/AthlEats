@@ -28,17 +28,17 @@ error_handles = {
     }
 }
 
-for handle in error_handles.items():
-    # Sets redirect for custom error pages.
-    status_code = handle[0]
-    app.register_error_handler(
-        status_code,
-        lambda x: render_template(
-            "error-page.html",
-            error_name=handle[1]["name"],
-            error_msg=handle[1]["message"]
-        )
-    )
+# for handle in error_handles.items():
+#     # Sets redirect for custom error pages.
+#     status_code = handle[0]
+#     app.register_error_handler(
+#         status_code,
+#         lambda x: render_template(
+#             "error-page.html",
+#             error_name=handle[1]["name"],
+#             error_msg=handle[1]["message"]
+#         )
+#     )
 
 
 # @app.before_request
@@ -314,7 +314,6 @@ def process_complete_order():
         entry_id = request.form.get("index")
         order_db = OrdersCloud()
         order_db.edit_entry(entry_id=entry_id, is_complete=1)
-
 
     return redirect("/admin-dashboard", 302)
 
