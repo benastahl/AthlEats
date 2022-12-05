@@ -15,8 +15,8 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = r'./receipts'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
-          "december"]
+months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER",
+          "DECEMBER"]
 error_handles = {
     500: {
         "name": "Internal Server Error (500)",
@@ -41,13 +41,13 @@ for handle in error_handles.items():
     )
 
 
-@app.before_request
-def before_request():
-    if "127" not in str(request.url):
-        if not request.is_secure:
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
+# @app.before_request
+# def before_request():
+#     if "127" not in str(request.url) or "localhost" not in str(request.url):
+#         if not request.is_secure:
+#             url = request.url.replace('http://', 'https://', 1)
+#             code = 301
+#             return redirect(url, code=code)
 
 
 @app.route("/", methods=["GET"])
@@ -143,30 +143,44 @@ def process_homepage():
 def display_reserve_calendar():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    month_name = request.args.get("month")
 
     if not auth_token:
         return redirect("/", 302)
+
     # Checks to see if there's a corresponding user with auth token.
     user = UsersCloud().get_entry(auth_token=auth_token)
 
     now = datetime.now()
+    if not month_name:
+        month_name = months[now.month - 1].upper()
 
-    month_name = months[now.month - 1].upper()
-    month = months.index(month_name.lower()) + 1
+    month = months.index(month_name.upper()) + 1
     year = now.year
 
     day = now.day
 
     first_weekday, past_month_days = calendar.monthrange(year, month - 1)
     first_weekday, num_days_in_month = calendar.monthrange(year, month)
-    next_month_weekday, next_month_days = calendar.monthrange(year, month + 1)
+    next_month_weekday, next_month_days = calendar.monthrange(year, 1)
+    if month + 1 != 13:
+        next_month_weekday, next_month_days = calendar.monthrange(year, month + 1)
 
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
     print(weekends)
+    month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
 
-    available_time_format = {
+    available_days = {
+        10: {
+            "runner_entry_id": "",
+        },
+        15: {
 
+        },
+        20: {
+
+        }
     }
 
     return render_template("reserve_calendar.html",
@@ -184,7 +198,7 @@ def display_reserve_calendar():
                            next_month_weekday=next_month_weekday,
                            first_weekday=first_weekday,
 
-                           available_days=["1", "9", "20"]
+                           available_days=available_days
                            )
 
 
@@ -192,6 +206,9 @@ def display_reserve_calendar():
 def display_reserve_form():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    reserve_date = request.args.get("reserve_date")
+    if not date:
+        return redirect("/reserve-calendar", 302)
 
     if auth_token:
         # Checks to see if there's a corresponding user with auth token.
@@ -259,7 +276,7 @@ def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
 
-    if not user or not user.__repr__() in ["Staff", "Admin"]:
+    if not user.staff or not user.admin:
         return redirect("/", 302)
 
     return render_template("staff-dashboard.html", user=user)

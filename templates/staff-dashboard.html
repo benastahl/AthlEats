@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="../static/nav_bar.css">
     <link rel="stylesheet" href="../static/access_forms.css">
     <link rel="stylesheet" href="../static/admin-dashboard.css">
-      <link rel="icon" href="../static/uce-logo.png">
+      <link rel="icon" href="../static/athleats-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UCE Staff Dashboard </title>
+    <title> AthlEats Staff Dashboard </title>
    </head>
 
   <!-- Google tag (gtag.js) -->
@@ -26,7 +26,7 @@
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/athleats-logo.png" alt="athleats-logo">
 
 {#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
             {% if not user %}
@@ -273,48 +273,6 @@
                       </div>
                     </div>
               </div>
-          </div>
-
-          <!-- Settings Form -->
-          <div style="display: none;" id="settings-form" class="access-form">
-            <div class="settings-form form-section">
-                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>UCE SETTINGS</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-
-                  </div>
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
-
-              </form>
-              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
-
-
-            </div>
-          </div>
-          <!-- Delete Account Form -->
-          <div style="display: none;" id="delete-account-form" class="access-form">
-            <div class="delete-account-form form-section">
-                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>CONFIRM ACCOUNT DELETION</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-                    You are about to delete your account.
-                  </div>
-                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
-
-
-              </form>
-            </div>
           </div>
 
       </div>

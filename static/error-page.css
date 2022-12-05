@@ -1,7 +1,12 @@
+body {
+    background-image: url("https://lh4.googleusercontent.com/-dw5Jyrhdpa0/AAAAAAAAAAI/AAAAAAAAAEw/90wzb8ji_jA/photo.jpg");
+
+}
+
 .error-container {
     display: flex;
     padding: 10px;
-    flex-direction: column;
+    flex-directionuce: column;
     align-content: center;
 }
 

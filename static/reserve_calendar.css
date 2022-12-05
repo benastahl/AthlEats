@@ -11,32 +11,40 @@ html {
 .calendar-list {
   display: flex;
   flex-wrap: nowrap;
-  /*justify-content: center;*/
+  justify-content: center;
 }
 .calendar-container {
   margin: auto;
-}
-.home-section.mobile .calendar-list {
-  flex-wrap: wrap;
+  max-height: 340px;
 }
 .calendar-day-container {
-  visibility: hidden;
   display: flex;
-  border: 1px solid black;
+  border: none;
   border-radius: 10px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
-  min-height: 340px;
+  flex-direction: column;
+  height: 345px;
   max-width: 1200px;
-  /*min-width: 350px;*/
-  width: 0; /*350px; */
+  overflow: hidden;
+  width: 0;
   transition: width 2s;
 }
-.calendar-day-container.active {
-  visibility: visible;
-  width: 350px;
+.day-details-header {
+
 }
+
+.calendar-day-container.active {
+  border: 1px solid black;
+  width: 400px;
+}
+@media screen and (max-width: 650px) {
+  .calendar-list {
+    flex-wrap: wrap;
+  }
+}
+
 .calendar-day-container span {
   display: flex;
 }
@@ -45,6 +53,7 @@ html {
   padding: 30px;
   width: min-content;
   max-width: none;
+  justify-content: space-between;
 }
 .form-header h3 {
   text-align: center;
@@ -62,3 +71,29 @@ html {
 .home-section.mobile .calendar-container {
 }
 
+.calendar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.calendar-header i {
+  color: black;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.calendar-header .right {
+  margin-left: 5px;
+}
+.calendar-header .left {
+  margin-right: 5px;
+}
+
+.day--available {
+  cursor: pointer;
+  background: #4caf50a3;
+}
+.day {
+  text-align: center;
+}

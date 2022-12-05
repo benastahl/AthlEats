@@ -8,26 +8,16 @@
     <link rel="stylesheet" href="../static/access_forms.css">
     <link rel="stylesheet" href="../static/calendar.css">
     <link rel="stylesheet" href="../static/reserve_calendar.css">
-    <link rel="icon" href="../static/uce-logo.png">
+    <link rel="icon" href="../static/athleats-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UCE Reserve Calendar </title>
+    <title> AthlEats Reserve Calendar </title>
    </head>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
-  <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-GZ107HT565');
-    </script>
 
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/athleats-logo.png" alt="athleats-logo">
 
 {#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
             {% if not user %}
@@ -76,90 +66,65 @@
                 <div class="calendar-list">
                     <div class="calendar-container">
                       <div class="calendar-header">
-                        <h1>
-                          {{month_name}}
-                          <button onclick="dropdownFunc()" class="dropbtn">▾</button>
-                          <div id="month-dropdown" class="month-dropdown">
-                              <a href="/?month=january">January</a>
-                              <a href="/?month=february">February</a>
-                              <a href="/?month=march">March</a>
-                              <a href="/?month=april">April</a>
-                              <a href="/?month=may">May</a>
-                              <a href="/?month=june">June</a>
-                              <a href="/?month=july">July</a>
-                              <a href="/?month=august">August</a>
-                              <a href="/?month=september">September</a>
-                              <a href="/?month=october">October</a>
-                              <a href="/?month=november">November</a>
-                              <a href="/?month=december">December</a>
+                          <a href="/reserve-calendar?month="><i class='bx bx-chevron-left left' ></i></a>
+                          <div class="date-header">
+                            <h1>
+                              {{month_name}}
+                            </h1>
+                            <p>{{year}}</p>
                           </div>
-                        </h1>
-                        <p>{{year}}</p>
+                          <i class='bx bx-chevron-right right'></i>
                       </div>
                       <div class="calendar">
-                          <span class="day-name">Mon</span><span class="day-name">Tue</span><span class="day-name">Wed</span><span class="day-name">Thu</span><span class="day-name">Fri</span>
-                            <div class="day">31</div>
+                          <span class="day-name">Mon</span><span class="day-name">Tue</span><span class="day-name">Wed</span><span class="day-name">Thu</span><span class="day-name">Fri</span><span class="day-name">Sat</span><span class="day-name">Sun</span>
+
+                          <!-- DISABLED DAYS (BEGINNING OF MONTH)-->
+                          {% for _day in range(first_weekday) %}
+                              <div class="day day--disabled">{{past_month_days - (first_weekday - _day - 1)}}</div>
+                          {% endfor %}
+
                           <!-- REGULAR DAYS -->
                           {% for _day in range(num_days_in_month) %}
-                              {% if _day + 1 not in weekends %}
-                                  <div class="day" style="cursor: pointer">
-                                      {{ _day + 1 }}
-                                  </div>
+
+                              <!-- Available for pickup days -->
+                              {% if _day + 1 not in weekends and _day + 1 in available_days %}
+                                  <div onclick="document.location.href = document.location.origin + '/reserve-form?reserve_date={{ month }}/{{ _day + 1 }}/{{ year }}'" class="day day--available">{{ _day + 1 }}</div>
+
+                              <!-- Not available days -->
+                              {% elif _day + 1 not in weekends %}
+                                  <div  class="day">{{ _day + 1 }}</div>
+
+                              <!-- Weekends -->
+                              {% else %}
+                                  <div class="day day--disabled">{{_day + 1}}</div>
+
                               {% endif %}
                           {% endfor %}
+
+                          <!-- DISABLED DAYS (END OF MONTH) -->
+                          {% if next_month_weekday > 0 %}
+                            {% for _day in range(7 - next_month_weekday) %}
+                              <div class="day day--disabled">{{_day + 1}}</div>
+                            {% endfor %}
+                          {% endif %}
 
                       </div>
                     </div>
                     {% for available_day in available_days %}
                         <div id="day-details-{{ available_day }}" class="calendar-day-container">
-                            Available day: {{ available_day }}
-
+                            <div class="day-details-header">
+                                12/{{ available_day }}/22
+                            </div>
+                            <ul>
+                                <li>9:00</li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
                         </div>
                     {% endfor %}
                 </div>
 
-            </div>
-          </div>
-
-          <!-- Settings Form -->
-          <div style="display: none;" id="settings-form" class="access-form">
-            <div class="settings-form form-section">
-                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>UCE SETTINGS</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-
-                  </div>
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
-
-              </form>
-              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
-
-
-            </div>
-          </div>
-          <!-- Delete Account Form -->
-          <div style="display: none;" id="delete-account-form" class="access-form">
-            <div class="delete-account-form form-section">
-                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>CONFIRM ACCOUNT DELETION</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-                    You are about to delete your account.
-                  </div>
-                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
-
-
-              </form>
             </div>
           </div>
 
@@ -179,13 +144,14 @@
             }
         }
 
-        let calendar_days = document.querySelectorAll(".calendar-container .day");
-        for (let i = 0; i < calendar_days.length; i++) {
-            let calendar_day = calendar_days[i];
-            calendar_day.onclick = function () {
-                show_day_details(calendar_day.innerHTML)
-            }
-        }
+        {#let calendar_days = document.querySelectorAll(".calendar-container .day");#}
+        {#for (let i = 0; i < calendar_days.length; i++) {#}
+        {#    let calendar_day = calendar_days[i];#}
+        {#    calendar_day.onclick = function () {#}
+        {#        document.location.href = "http://127.0.0.1:4949/reserve-form?date={{ month }}/{{ day }}/{{ year }}"#}
+        {#        show_day_details(calendar_day.innerHTML)#}
+        {#    }#}
+        {#}#}
     </script>
 
     <!-- Calendar Dropdown -->

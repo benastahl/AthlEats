@@ -6,7 +6,6 @@ from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order
 
-sql_datatypes = {int: "INT", str: "TEXT"}
 sql_username = "b74577def82ecb"
 sql_password = "75ca9aed"
 sql_host = "us-cdbr-east-06.cleardb.net"
@@ -103,15 +102,13 @@ class AthlEatsCloud:
         entry = entries[0]
         return self.Instance(**entry)
 
-    def get_entry(self, close_conn=True, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
+    def get_entry(self, close_conn=True, **filters):
+        conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
         if close_conn:
             self.connection.close()
         if not entries:
             return False
-        # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
-
         entry = entries[0]
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
@@ -125,6 +122,21 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entries from table '{self.table_name}'", "s")
 
         return [self.Instance(**entry) for entry in entries]
+
+    def get_entries(self, close_conn=True, **filters):
+        sql_string = f"SELECT * FROM {self.table_name}"
+        if filters:
+            conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
+            sql_string += f" WHERE {conditions}"
+        entries = self.connection.execute(sql_string).fetchall()
+        if close_conn:
+            self.connection.close()
+        if not entries:
+            return False
+        entry = entries[0]
+        self.log(f"Successfully collected entry '{entry[0]}'", "s")
+        return self.Instance(**entry)
+
 
 
 
@@ -163,14 +175,6 @@ class UsersCloud(AthlEatsCloud):
 
         # Returns current auth token of user
         return user.auth_token
-
-    def set_permission(self, email: str, admin_key: str, admin: bool, staff: bool) -> User:
-        access_granted = bcrypt.checkpw(admin_key.encode("utf8"), b'$2b$12$ata6ZfmFeS8HSSM1El8u.uEM477m.x9TTiJi42sAhuzgwAPBw3TFG')
-        assert access_granted, "Incorrect Admin Key."
-
-        user = self.get_entry(close_conn=False, email=email)
-
-        return self.edit_entry(entry_id=user.entry_id, admin=int(admin), staff=int(staff))
 
 
 class OrdersCloud(AthlEatsCloud):

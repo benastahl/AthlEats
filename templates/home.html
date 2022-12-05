@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="../static/nav_bar.css">
     <link rel="stylesheet" href="../static/access_forms.css">
     <link rel="stylesheet" href="../static/home.css">
-    <link rel="icon" href="../static/uce-logo.png">
+    <link rel="icon" href="../static/athleats-logo.png">
     <!-- Boxicons CDN Link -->
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UCE Home </title>
+    <title> AthlEats Home </title>
    </head>
       <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-GZ107HT565');
-    </script>
+{#    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GZ107HT565"></script>#}
+{#    <script>#}
+{#      window.dataLayer = window.dataLayer || [];#}
+{#      function gtag(){dataLayer.push(arguments);}#}
+{#      gtag('js', new Date());#}
+{##}
+{#      gtag('config', 'G-GZ107HT565');#}
+{#    </script>#}
 
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="uce-logo" src="../static/uce-logo.png" alt="uce-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/athleats-logo.png" alt="athleats-logo">
 
 {#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
             {% if not user %}
@@ -66,7 +66,7 @@
           <div class="home-content-buttons">
               {% if user %}
                   <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
-                  <form method="get" action="/reserve-calendar">
+                  <form method="get" action="/reserve-calendar?month=">
                       <button class="reserve-pickup-button">
                           <span class="front">
                             reserve pickup
@@ -84,7 +84,7 @@
             <div class="signup-form form-section">
                 <i onclick="hide_form('signup-form')" class='bx bx-x'></i>
                 <div class="form-header">
-                <h3>UCE SIGNUP</h3>
+                <h3>AthlEats SIGNUP</h3>
                 <p>Please enter details to signup.</p>
               </div>
                 <form name="signup" method="post">
@@ -123,7 +123,7 @@
             <div class="login-form form-section">
                 <i onclick="hide_form('login-form')" class='bx bx-x'></i>
                 <div class="form-header">
-                <h3>UCE LOGIN</h3>
+                <h3>AthlEats LOGIN</h3>
                 <p>Please enter credentials to login.</p>
               </div>
 
@@ -151,7 +151,7 @@
             <div class="settings-form form-section">
                 <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
                 <div class="form-header">
-                <h3>UCE SETTINGS</h3>
+                <h3>AthlEats SETTINGS</h3>
               </div>
 
               <form name="settings" method="post">
