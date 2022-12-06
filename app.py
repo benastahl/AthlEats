@@ -11,6 +11,9 @@ import os
 import bcrypt
 import secrets
 
+import json
+from pathlib import Path
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = r'./receipts'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
