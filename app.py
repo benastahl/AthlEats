@@ -31,6 +31,7 @@ error_handles = {
     }
 }
 
+
 # for handle in error_handles.items():
 #     # Sets redirect for custom error pages.
 #     status_code = handle[0]
@@ -162,6 +163,8 @@ def display_reserve_calendar():
 
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
+    print(weekends)
+    month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
 
     available_days = {
         10: {
@@ -267,11 +270,38 @@ def display_complete_form():
 def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
+    orders_list = OrdersCloud().get_all_entries()
+    user_list = UsersCloud().get_all_entries()
+    incomplete_orders = []
+    completed_orders = []
+    for order in orders_list:
+        if order.is_complete == 0:
+            incomplete_orders.append(order)
+        elif order.is_complete == 1:
+            incomplete_orders.append(order)
+        elif order.is_complete == 2:
+            completed_orders.append(order)
 
     if not user.staff:
         return redirect("/", 302)
 
-    return render_template("staff-dashboard.html", user=user)
+    return render_template("staff-dashboard.html",
+                           user=user,
+                           incomplete_orders=incomplete_orders,
+                           completed_orders=completed_orders,
+                           user_list=user_list)
+
+
+@app.route("/staff-dashboard", methods=["POST"])
+def process_update_order():
+    if request.form.get('update-order') == 'complete-order':
+        entry_id = request.form.get("index")
+        OrdersCloud().edit_entry(entry_id=entry_id, is_complete=2)
+    elif request.form.get('update-order') == 'update-order':
+        entry_id = request.form.get("index")
+        OrdersCloud().edit_entry(entry_id=entry_id, is_complete=1)
+
+    return redirect("/staff-dashboard", 302)
 
 
 @app.route("/admin-dashboard", methods=["GET"])
@@ -286,16 +316,20 @@ def display_admin_dashboard():
     if not user or not user.admin:
         return redirect("/", 302)
 
-    return render_template("admin-dashboard.html", user=user, incomplete_orders=incomplete_orders,
-                           completed_orders=completed_orders, user_list=user_list, staff_list=staff_list)
+    return render_template("admin-dashboard.html",
+                           user=user,
+                           incomplete_orders=incomplete_orders,
+                           completed_orders=completed_orders,
+                           user_list=user_list,
+                           staff_list=staff_list)
 
 
 @app.route("/admin-dashboard", methods=["POST"])
 def process_complete_order():
-    if request.form.get('complete-order') == 'complete-order-value':
+    if request.form.get('update-order') == 'update-order-value':
         entry_id = request.form.get("index")
         order_db = OrdersCloud()
-        order_db.edit_entry(entry_id=entry_id, is_complete=1)
+        order_db.edit_entry(entry_id=entry_id, is_complete=2)
 
     return redirect("/admin-dashboard", 302)
 
@@ -311,6 +345,19 @@ def display_profile():
         if user:
             orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
             return render_template("profile.html", user=user, user_order_list=orders_list)
+            orders_list = OrdersCloud().get_all_entries()
+            user_orders_list = []
+            user_current_orders = []
+            for order in orders_list:
+                if order.email == user.email:
+                    user_orders_list.append(order)
+                    if order.is_complete == 0 or order.is_complete == 1:
+                        user_current_orders.append(order)
+
+            return render_template("profile.html",
+                                   user=user,
+                                   user_order_list=user_orders_list,
+                                   user_current_orders=user_current_orders)
 
     return redirect("/", 302)
 
