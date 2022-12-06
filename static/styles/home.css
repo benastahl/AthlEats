@@ -16,7 +16,6 @@
 .access-button, .reserve-pickup-button {
   margin: 10px;
   pointer-events: auto;
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
   border: 0;
@@ -118,6 +117,76 @@
   text-align: center;
   margin: 5px 0 15px 0;
 }
+
+
+.process-visual-container {
+  top: 1100px;
+  left: 50px;
+  position: absolute;
+}
+.process-visual {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-top: 150px;
+  padding: 30px;
+}
+.process-visual i, .process-visual img {
+  font-size: 100px;
+  padding: 20px;
+  background: #CDEAFF;
+  color: #000200;
+  height: 140px;
+  width: 140px;
+  border-radius: 40px;
+  margin-bottom: 150px;
+  /*hsl(360, 89%, 61%);*/
+}
+.process-visual img {
+  height: 140px;
+  width: 140px;
+}
+.process-visual .arrow {
+  background: none;
+}
+.process-step .process-info {
+  display: inline-block;
+  background: #e9e9e9;
+  border-radius: 16px;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;
+  left: 130px;
+  margin-top: 100px;
+  width: 250px;
+}
+
+.athleats-photos-container {
+  position: absolute;
+  top: 1300px;
+  left: 800px;
+}
+.athleats-photos-container .photo {
+
+}
+.photo .photo-caption {
+  display: inline-block;
+  background: #e9e9e9;
+  border-radius: 16px;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  bottom: 30px;
+  left: 100px;
+
+}
+.athleats-photos-container img {
+  border-radius: 10px;
+  /*filter: contrast(2000%);*/
+}
+
 
 @media screen and (max-width: 650px) {
   .welcome-message {
