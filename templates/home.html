@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../static/styles/home.css">
       <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> AthlEats Home </title>
+    <title> Home - AthlEats </title>
    </head>
 
   <body>
@@ -238,43 +238,7 @@
   </body>
 
   <!-- Popup Forms -->
-  <script>
-          let hide_form = function (id_name) {
-              document.getElementById(id_name).style.display = "none"
-              document.querySelector(".home-content-buttons").style.display = "flex"
-          }
-          let show_form = function (id_name) {
-              // BLUR
-              let form = document.getElementById(id_name);
-              document.querySelector("body").classList.toggle("blurred")
-              form.style.filter = "none"
-
-              console.log("Showing form: " + id_name)
-              document.querySelector(".home-content-buttons").style.display = "none"
-              // Hide all other forms besides id_name form
-              let all_form_elements = document.querySelectorAll(".access-form")
-              for (let i = 0; i < all_form_elements.length; i++) {
-                  let form = all_form_elements[i];
-                  if (form.id !== id_name) {
-                      form.style.display = "none"
-                      continue;
-                  }
-                  if (form.id === "settings-form")
-                      hide_profile_dropdown()
-                  form.style.display = "flex";
-              }
-          }
-
-          // If message return in render_template (flask)
-          let message = null;
-          if ("{{message_type}}") {
-              message = document.querySelector("#{{ message_type }}-form .error-occurrence")
-              message.style.display = "block";
-              message.innerHTML =  "{{ message }}"
-              show_form("{{message_type}}-form")
-          }
-
-      </script>
+  <script src="../static/scripts/access-forms.js"></script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

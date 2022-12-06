@@ -8,7 +8,7 @@
   padding: 20px;
   border: 1px solid lightgray;
   width: 400px;
-  height: 500px;
+  height: 460px;
   margin: auto;
 }
 
@@ -32,6 +32,35 @@
 }
 .profile-card-year {
   font-weight: 400;
+}
+
+
+.profile-card-info-container {
+  padding: 10px;
+}
+.profile-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-info {
+  display: flex;
+  flex-direction: row;
+  width: 340px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.profile-info .profile-info-title {
+  font-weight: bold;
+}
+.profile-info .profile-info-value {
+  border-radius: 10px;
+  background: #f4f4f4;
+  padding: 5px 10px 5px 10px;
+  max-width: 180px;
+  overflow: auto;
 }
 
 /* Order History */
@@ -78,7 +107,7 @@
 
 }
 .acc-order-data-container {
-  background: #f4f4f4;
+  background: rgba(255,255,255,0.9);
   border: 1px solid lightgray;
   margin-top: 50px;
 }
@@ -94,5 +123,16 @@
   height: 400px;
   min-width: 300px;
   padding: 20px;
+}
+.no-orders-container {
+  display: flex;
+  position: relative;
+  bottom: 250px;
+  margin: auto;
+  max-width: 270px
+}
+.no-orders-message {
+  font-weight: bold;
+  font-size: 30px;
 }
 

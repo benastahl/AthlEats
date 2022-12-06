@@ -32,7 +32,7 @@
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
                           <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
-                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          <li onclick="document.location.href = document.location.origin + '/settings'" id="settings-selection">Settings</li>
                           {% if user.staff %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
@@ -62,41 +62,39 @@
 
                 <form enctype="multipart/form-data" class="input-form" name="order-form" method="post">
 
-                    <input style="display: none" id="user_email" name="user_email" value="{{user.email}}">
+                    <div class="form-input-container">
+                        <input style="display: none" id="user_email" name="user_email" value="{{user.email}}">
 
-                    <label for="input-dollar">Price:</label><br>
-                    <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
+                        <label for="input-dollar">Price:</label><br>
+                        <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
 
-                    <label for="receipt-upload">Upload receipt:</label><br>
-                    <input type="file" id="receipt-upload" name="receipt-upload"><br>
+                        <label for="receipt-upload">Upload receipt:</label><br>
+                        <input type="file" id="receipt-upload" name="receipt-upload"><br>
 
-                    <label for="restaurant">Choose A Restaurant:</label><br>
-                    <select id="restaurant" name="restaurant">
-                        <option value="Chipotle">Chipotle</option>
-                        <option value="Panera">Panera</option>
-                        <option value="mcdickies">McDicks</option>
-                        <option value="Five-Guys">Five Guys</option>
-                        <option value="Chick-Fil-A">Chick-Fil-a</option>
-                        <option value="Dunkin">Dunkin Donuts</option>
-                    </select>
-                    <br>
+                        <label for="restaurant">Choose A Restaurant:</label><br>
+                        <select id="restaurant" name="restaurant">
+                            <option value="Chipotle">Chipotle</option>
+                            <option value="Panera">Panera</option>
+                            <option value="mcdickies">McDicks</option>
+                            <option value="Five-Guys">Five Guys</option>
+                            <option value="Chick-Fil-A">Chick-Fil-a</option>
+                            <option value="Dunkin">Dunkin Donuts</option>
+                        </select>
+                        <label for="phone-number">Phone Number:</label>
+                        <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
 
-                    <label for="phone-number">Phone Number:</label><br>
-                    <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
+                        <label for="restaurant-pickup-time">Select Restaurant Pickup Time:</label><br>
+                        <input type="time" id="restaurant-pickup-time" name="restaurant-pickup-time" min="09:00" max="18:00" required><br>
 
-                    <label for="restaurant-pickup-time">Select Restaurant Pickup Time:</label><br>
-                    <input type="time" id="restaurant-pickup-time" name="restaurant-pickup-time" min="09:00" max="18:00" required><br>
+                        <label for="pickup">Select Pickup Time:</label><br>
+                        <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
 
-                    <label for="pickup">Select Pickup Time:</label><br>
-                    <input type="time" id="pickup" name="pickup" min="09:00" max="18:00" required><br>
-
-                    <label for="pickup-location">Select Pickup Location</label><br>
-                    <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
-
-                    <div class="fee-output">
-                    Delivery Fee: meow XD
+                        <label for="pickup-location">Select Pickup Location</label><br>
+                        <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
                     </div>
-                    <button id="submit-form-button" type="submit" value="order-form" >submit</button>
+
+                    <div class="fee-output">Delivery Fee: meow XD</div>
+                     <button id="submit-form-button" type="submit" value="order-form" >submit</button>
 
                 </form>
 

@@ -2,23 +2,22 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
     <link rel="stylesheet" href="../static/styles/access_forms.css">
-    <link rel="stylesheet" href="../static/styles/admin-dashboard.css">
-      <link rel="icon" href="../static/images/athleats-logo.png">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> AthlEats Staff Dashboard </title>
+    <link rel="stylesheet" href="../static/styles/staff-dashboard.css">
+    <link rel="icon" href="../static/images/athleats-logo.png">
+    <title> Staff Dashboard - AthlEats </title>
    </head>
 
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="AthlEats Logo">
 
-{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
-            {% if not user %}
+          {% if not user %}
               <div class="access-buttons-section">
                   <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
                   <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
@@ -53,215 +52,43 @@
       </nav>
 
       <div class="home-content">
+          <div class="staff-dashboard-container">
 
-          <!-- Admin Data Details -->
-          <div class="admin-data-container">
-              <h3 class="admin-data-title">Admin Data</h3>
-              <div class="admin-data-list">
-                  <div id="users-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bx-user-circle'></i>
-                              <h3>Users</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                  <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-                      </div>
+              <div class="staff-section running">
+                  <div class="staff-container staff-availability-container">
+                    <div class="staff-container-header">
+                        Your availability
                     </div>
-                  <div id="staff-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bxs-user-badge'></i>
-                              <h3>Staff Members</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                  <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-
-                      </div>
-                    </div>
-                  <div id="current-orders-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bx-receipt' ></i>
-                              <h3>Current Orders</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                  <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-
+                      <div class="staff-data">
+                          <ul>
+                              <li>12/08/22 - 13:00 until 15:00</li>
+                          </ul>
                       </div>
                   </div>
-                  <div id="past-orders-data" class="access-form">
-                      <div class="admin-data form-section">
-                          <div class="form-header">
-                              <i class='bx bx-receipt' ></i>
-                              <h3>Past Orders</h3>
-                              <div class="search-box">
-                                <label>
-                                    <input onkeyup="filterAdminTable()" type="text" placeholder="Search...">
-                                </label>
-                                <i class='bx bx-filter-alt' ></i>
-                            </div>
-                        </div>
-                          <div class="admin-table-container">
-                              <table id="myTable">
-                                <tbody>
-                                  <tr class="header">
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Creation Date</th>
-                                    <th></th>
-                                  </tr>
-                                  <tr>
-                                      <td>Benjamin Stahl</td>
-                                      <td>benjamin_stahl@student.waylandps.org</td>
-                                      <td>10/15/22</td>
-                                      <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Theodore Harding</td>
-                                    <td>theodore_harding@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Wesley Tse</td>
-                                    <td>wesley_tse@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Matthew Watkins</td>
-                                    <td>matthew_watkins@student.waylandps.org</td>
-                                    <td>10/15/22</td>
-                                    <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </div>
-
+                  <div class="staff-container staff-schedule-container">
+                      <div class="staff-container-header">
+                        Your schedule
                       </div>
-                    </div>
+                  </div>
               </div>
+
+              <div class="staff-section analytics">
+                  <div class="staff-container staff-analytics-container">
+                      <div class="staff-container-header">
+                          Your analytics
+                      </div>
+                  </div>
+                  <div class="staff-container staff-leaderboard-container">
+                      <div class="staff-container-header">
+                          Runner leaderboard
+                      </div>
+                  </div>
+              </div>
+
+
+          </div>
+
+          <div class="staff-availability-container">
           </div>
 
       </div>
@@ -269,30 +96,31 @@
 
   </body>
 
-      <!-- Search/Filter Bar -->
-    <script>
-        function filterAdminTable() {
-          // Declare variables
-          var input, filter, table, tr, td, i, txtValue;
-          input = document.querySelector(".search-box input");
-          filter = input.value.toUpperCase();
-          table = document.getElementById("myTable");
-          tr = table.getElementsByTagName("tr");
+  <!-- Search/Filter Bar -->
+  <script>
+    function filterAdminTable(data_id) {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      console.log("#" + data_id + " .search-box input")
+      input = document.querySelector("#" + data_id + " .search-box input");
+      filter = input.value.toUpperCase();
+      table = document.querySelector("#" + data_id + " #myTable");
+      tr = table.getElementsByTagName("tr");
 
-          // Loop through all table rows, and hide those who don't match the search query
-          for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-              txtValue = td.textContent || td.innerText;
-              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-              } else {
-                tr[i].style.display = "none";
-              }
-            }
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
           }
         }
-    </script>
+      }
+    }
+</script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

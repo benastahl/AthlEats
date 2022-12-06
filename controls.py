@@ -121,11 +121,14 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
-    def get_all_entries(self):
-        print(self.table_name)
-        entries = self.connection.execute(f"SELECT * FROM {self.table_name}").fetchall()
+    def get_all_entries(self, **filters):
+        conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
+        entries = self.connection.execute(
+            f"SELECT * "
+            f"FROM {self.table_name} "
+        ).fetchall()
         if not entries:
-            return False
+            return []
         # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
         self.log(f"Successfully collected entries from table '{self.table_name}'", "s")
 

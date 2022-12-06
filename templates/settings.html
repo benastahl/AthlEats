@@ -5,6 +5,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
+    <link rel="stylesheet" href="../static/styles/access_forms.css">
     <link rel="stylesheet" href="../static/styles/settings.css">
       <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,22 +53,39 @@
 
       <div class="home-content">
 
-          <div class="settings-form-container">
-              <div class="settings-form">
-                <div class="settings-form-header">
-                  User Settings
-                </div>
-                  <form method="post" class="settings">
-                      <button name="delete-account">Delete account</button>
-                  </form>
-              </div>
+        <div class="settings-form-container">
+          <div class="settings-form">
+            <div class="settings-form-header">
+              User Settings
+            </div>
+              <form method="post" class="settings">
+                <button type="button" onclick="show_form('deletion-form')" name="delete-account">Delete account</button>
+              </form>
           </div>
+      </div>
+
+        <div style="display: none;" id="deletion-form" class="access-form">
+            <div class="deletion-form form-section">
+                <i onclick="hide_form('deletion-form')" class='bx bx-x'></i>
+                <div class="form-header">
+                <h3>ACCOUNT DELETION</h3>
+                <p>Are you sure you want to delete your account?</p>
+              </div>
+                <form name="delete-account" method="post">
+
+                    <button name="delete-account" id="submit-form-button" type="submit" value="DELETE">DELETE ACCOUNT</button>
+
+                </form>
+            </div>
+        </div>
+
 
       </div>
     </section>
 
   </body>
 
+  <script src="../static/scripts/access-forms.js"></script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

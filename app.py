@@ -41,15 +41,6 @@ error_handles = {
 #     )
 
 
-# @app.before_request
-# def before_request():
-#     if "127" not in str(request.url) or "localhost" not in str(request.url):
-#         if not request.is_secure:
-#             url = request.url.replace('http://', 'https://', 1)
-#             code = 301
-#             return redirect(url, code=code)
-
-
 @app.route("/", methods=["GET"])
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
@@ -168,8 +159,6 @@ def display_reserve_calendar():
 
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
-    print(weekends)
-    month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
 
     available_days = {
         10: {
@@ -276,7 +265,7 @@ def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
 
-    if not user.staff or not user.admin:
+    if not user.staff:
         return redirect("/", 302)
 
     return render_template("staff-dashboard.html", user=user)
@@ -327,13 +316,8 @@ def display_profile():
         # Checks to see if there's a corresponding user with auth token.
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-            orders_list = OrdersCloud().get_all_entries()
-            user_orders_list = []
-            for order in orders_list:
-                if order.email == user.email:
-                    user_orders_list.append(order)
-
-            return render_template("profile.html", user=user, user_order_list=user_orders_list)
+            orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
+            return render_template("profile.html", user=user, user_order_list=orders_list)
 
     return redirect("/", 302)
 

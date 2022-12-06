@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class User:
     def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin):
         self.entry_id = entry_id
@@ -9,11 +11,11 @@ class User:
         self.grade = grade
         self.year_name = {9: "Freshman", 10: "Sophomore", 11: "Junior", 12: "Senior"}.get(self.grade)
         self.auth_token = auth_token
-        self.creation_date = creation_date
+        self.creation_date = datetime.fromtimestamp(creation_date)
 
         # Special Roles
-        self.staff = staff
-        self.admin = admin
+        self.staff = bool(staff)
+        self.admin = bool(admin)
 
 
 class Order:

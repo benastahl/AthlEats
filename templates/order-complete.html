@@ -31,7 +31,7 @@
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
                           <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
-                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          <li onclick="document.location.href = document.location.origin + '/settings'" id="settings-selection">Settings</li>
                           {% if user.staff %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>

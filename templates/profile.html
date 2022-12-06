@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../static/styles/user_profile.css">
       <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> AthlEats User Profile </title>
+    <title> Profile - AthlEats </title>
    </head>
 
   <body>
@@ -32,7 +32,7 @@
               <div style="visibility: hidden" class="profile-dropdown">
                       <ul>
                           <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
-                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          <li onclick="document.location.href = document.location.origin + '/settings'" id="settings-selection">Settings</li>
                           {% if user.staff %}
                               <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
                               <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
@@ -58,17 +58,37 @@
                       <span class="profile-card-name">{{ user.first_name | capitalize }} {{ user.last_name | capitalize }}</span>
                       <span class="profile-card-year">{{ user.year_name }}</span>
                   </div>
-                  <div class="">
-
+                  <div class="profile-card-info-container">
+                    <div class="profile-card-info">
+                        <div class="profile-info order-count">
+                            <span class="profile-info-title">Account creation</span>
+                            <span class="profile-info-value">{{ user.creation_date}}</span>
+                        </div>
+                        <div class="profile-info order-count">
+                            <span class="profile-info-title">Order count</span>
+                            <span class="profile-info-value">{{ user_order_list | length }}</span>
+                        </div>
+                        <div class="profile-info order-count">
+                            <span class="profile-info-title">Email</span>
+                            <span class="profile-info-value">{{ user.email }}</span>
+                        </div>
+                        <div class="profile-info order-count">
+                            <span class="profile-info-title">Staff Member</span>
+                            <span class="profile-info-value">{{ user.staff }}</span>
+                        </div>
+                        <div class="profile-info order-count">
+                            <span class="profile-info-title">Administrator</span>
+                            <span class="profile-info-value">{{ user.admin }}</span>
+                        </div>
+                    </div>
                   </div>
               </div>
           </div>
 
-
           <div class="acc-order-data-container">
               <h3 class="acc-data-header"> Order History </h3>
               <div class="acc-order-data-list">
-                  {% for orders in user_order_list%}
+                  {% for orders in user_order_list %}
                       <div class="acc-data receipt">
                         <div class="acc-data-header">
                             <h5>{{orders.order_date}}</h5>
@@ -106,7 +126,11 @@
 
 
               </div>
-
+              {% if not user_order_list %}
+                  <div class="no-orders-container">
+                      <span class="no-orders-message">No orders placed</span>
+                  </div>
+              {% endif %}
 
           </div>
 
