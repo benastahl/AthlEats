@@ -275,20 +275,10 @@ def display_staff_dashboard():
 def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
     user = UsersCloud().get_entry(auth_token=auth_token)
-    orders_list = OrdersCloud().get_all_entries()
     user_list = UsersCloud().get_all_entries()
-    incomplete_orders = []
-    completed_orders = []
-    staff_list = []
-    for order in orders_list:
-        if order.is_complete == 0:
-            incomplete_orders.append(order)
-        else:
-            completed_orders.append(order)
-
-    for user1 in user_list:
-        if user1.staff == 1:
-            staff_list.append(user1)
+    completed_orders = OrdersCloud().get_all_entries(is_complete=1)
+    incomplete_orders = OrdersCloud().get_all_entries(is_complete=0)
+    staff_list = UsersCloud().get_all_entries(staff=1)
 
     if not user or not user.admin:
         return redirect("/", 302)

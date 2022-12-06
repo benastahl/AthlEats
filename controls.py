@@ -123,10 +123,14 @@ class AthlEatsCloud:
 
     def get_all_entries(self, **filters):
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
-        entries = self.connection.execute(
-            f"SELECT * "
+        query_string = \
+            f"SELECT * " \
             f"FROM {self.table_name} "
-        ).fetchall()
+
+        if filters:
+            query_string += f"WHERE {conditions}"
+
+        entries = self.connection.execute(query_string).fetchall()
         if not entries:
             return []
         # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
