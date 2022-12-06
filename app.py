@@ -27,6 +27,14 @@ error_handles = {
         "message": "This page was not found."
     }
 }
+sport_teams = [
+    "Boys Varsity Baseball",
+    "Boys JV Baseball",
+    "Boys Freshman Baseball",
+]
+
+# TODO: ZOCCO TYPE IN TEAM NAMES from https://arbiterlive.com/Teams?entityId=24991#
+
 
 # for handle in error_handles.items():
 #     # Sets redirect for custom error pages.
@@ -203,7 +211,7 @@ def display_reserve_form():
         # Checks to see if there's a corresponding user with auth token.
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-            return render_template("reserve_form.html", user=user)
+            return render_template("reserve_form.html", user=user, sports_teams=sport_teams)
 
     return redirect("/", 302)
 
@@ -219,6 +227,7 @@ def process_reserve_form():
     pickup_time = str(request.form['pickup'])
     pickup_location = request.form['pickup-location']
     order_date = datetime.now().strftime("%D %H:%M:%S")
+    sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
     fee = round(float(price) * 0.3, 2)
 
     OrdersCloud().create_entry(

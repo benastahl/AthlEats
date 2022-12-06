@@ -72,7 +72,8 @@
                         <input type="file" id="receipt-upload" name="receipt-upload"><br>
 
                         <label for="restaurant">Choose A Restaurant:</label><br>
-                        <select id="restaurant" name="restaurant">
+                        <select id="restaurant" name="restaurant" required>
+                            <option disabled selected value=""></option>
                             <option value="Chipotle">Chipotle</option>
                             <option value="Panera">Panera</option>
                             <option value="mcdickies">McDicks</option>
@@ -91,6 +92,14 @@
 
                         <label for="pickup-location">Select Pickup Location</label><br>
                         <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
+
+                        <label for="sports-team">Select your sports team</label>
+                        <select name="sports-team" id="sports-team" required>
+                            <option value="" disabled selected></option>
+                            {% for team in sports_teams %}
+                                <option value="{{ team }}">{{ team }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="fee-output">Delivery Fee: meow XD</div>
