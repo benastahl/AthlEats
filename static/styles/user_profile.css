@@ -1,6 +1,7 @@
 /* account info */
 .acc-data-container {
   padding-top: 100px;
+  display: flex;
 }
 .acc-data-information {
   background: #FFFFFF;

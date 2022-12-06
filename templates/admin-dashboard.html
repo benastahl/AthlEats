@@ -83,6 +83,7 @@
                                     <th>Pickup Time</th>
                                     <th>Price</th>
                                     <th>Pickup Location</th>
+                                    <th>Order Status</th>
                                     <th></th>
                                   </tr>
                                   {% for order in incomplete_orders %}
@@ -95,12 +96,18 @@
                                       <td>{{order.pickup_time}}</td>
                                       <td>${{order.price}}</td>
                                       <td>{{order.pickup_location}}</td>
-                                      <td class="complete-order-button">
-                                          <form name="complete-order-form" method="post">
+                                      <td></td>
+                                      <td class="update-order-button">
+                                          <form name="update-order-form" method="post">
                                               <input type="hidden" id="index" name="index" value={{order.entry_id}}>
-                                              <button name="complete-order" value="complete-order-value" type="submit">
+                                              {% if order.is_complete == 0 %}
+                                                <button class="update-order-button"> Update Order </button>
+
+                                              {% else %}
+                                                <button class="complete-order-button" name="update-order" value="update-order-value" type="submit">
                                                   <i class="bx bx-check-square" ></i>
-                                              </button>
+                                                </button>
+                                              {% endif %}
                                           </form>
                                       </td>
                                   </tr>

@@ -65,6 +65,22 @@ table th:nth-child(even), table td:nth-child(even) {
   border-left: 1px solid lightgray;
 }
 
+.complete-order-button button {
+  background-color: #00f2fe;
+  width: 100%;
+  font-size: 13px;
+  margin-bottom: 0px;
+}
+
+.update-order-button button {
+  width: 100%;
+  background-color: #00cc00;
+  font-size: 13px;
+  margin-bottom: 0px;
+}
+
+
+
 .form-header {
   display: flex;
   border-bottom: 1px solid lightgray;
