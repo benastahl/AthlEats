@@ -1,22 +1,5 @@
 <!DOCTYPE html>
 
-<script type="text/javascript">
-
-    // play video on button press
-    function vidplay() {
-
-       var video = document.getElementById("Video1");
-       var button = document.getElementById("button");
-
-       if (video.paused) {
-          video.play();
-          button.style.visibility = "hidden";
-          video.style.display = "inline";
-       }
-
-    }
-</script>
-
 </head>
 <body>
     <center>
@@ -53,4 +36,20 @@
     </div>
 
     </center>
+<script type="text/javascript">
+
+    // play video on button press
+    function vidplay() {
+
+       var video = document.getElementById("Video1");
+       var button = document.getElementById("button");
+
+       if (video.paused) {
+          video.play();
+          button.style.visibility = "hidden";
+          video.style.display = "inline";
+       }
+
+    }
+</script>
 </body>
