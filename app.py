@@ -52,9 +52,9 @@ for handle in error_handles.items():
     )
 
 
-@app.before_request
-def coconut_malld():
-    return render_template("coconut.html")
+# @app.before_request
+# def coconut_malld():
+#     return render_template("coconut.html")
 
 
 @app.route("/", methods=["GET"])
@@ -209,6 +209,8 @@ def display_reserve_calendar():
                            )
 
 
+
+
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
@@ -250,7 +252,8 @@ def process_reserve_form():
         restaurant_pickup_time=restaurant_pickup_time,
         pickup_time=pickup_time,
         price=price,
-        pickup_location=pickup_location
+        pickup_location=pickup_location,
+        runner=""
 
     )
 
@@ -307,12 +310,10 @@ def display_staff_dashboard():
 
 @app.route("/staff-dashboard", methods=["POST"])
 def process_update_order():
-    if request.form.get('update-order') == 'complete-order':
-        entry_id = request.form.get("index")
-        OrdersCloud().edit_entry(entry_id=entry_id, is_complete=2)
-    elif request.form.get('update-order') == 'update-order':
+    if request.form.get('update-order') == 'update-order':
         entry_id = request.form.get("index")
         OrdersCloud().edit_entry(entry_id=entry_id, is_complete=1)
+
 
     return redirect("/staff-dashboard", 302)
 

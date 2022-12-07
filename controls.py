@@ -204,7 +204,8 @@ class OrdersCloud(AthlEatsCloud):
             "restaurant_pickup_time:TEXT",
             "pickup_time:TEXT",
             "price:TEXT",
-            "pickup_location:TEXT"
+            "pickup_location:TEXT",
+            "runner:TEXT"
 
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=Order)
