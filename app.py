@@ -53,7 +53,7 @@ for handle in error_handles.items():
 
 @app.before_request
 def coconut_malld():
-    return redirect("https://youjustgotcoconutmalld.com/", 302)
+    return render_template("coconut.html")
 
 
 @app.route("/", methods=["GET"])

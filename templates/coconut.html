@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<script type="text/javascript">
+
+    // play video on button press
+    function vidplay() {
+
+       var video = document.getElementById("Video1");
+       var button = document.getElementById("button");
+
+       if (video.paused) {
+          video.play();
+          button.style.visibility = "hidden";
+          video.style.display = "inline";
+       }
+
+    }
+</script>
+
+</head>
+<body>
+    <center>
+
+    <video id="Video1" loop>
+        <source src="https://raw.githubusercontent.com/Matthew-A-Watkins/youjustgotcoconutmalld/main/movie.mp4" type="video/mp4"/>
+    </video>
+
+    <div id="buttonbar">
+
+        <button id="button" onclick=vidplay()>click</button>
+
+        <style>
+            body {
+                background-image: url("https://raw.githubusercontent.com/Matthew-A-Watkins/youjustgotcoconutmalld/main/coconut.jpeg");
+                background-repeat: repeat;
+            }
+
+            #button {
+                width: 150px;
+                height: 150px;
+                background-image: url("https://raw.githubusercontent.com/Matthew-A-Watkins/youjustgotcoconutmalld/main/coconutmall.png");
+                background-size: cover;
+                background-color: #eee;
+            }
+            #Video1 {
+                width: 1080px;
+                height: 720px;
+                display: none;
+            }
+
+        </style>
+
+    </div>
+
+    </center>
+</body>
