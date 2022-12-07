@@ -26,7 +26,7 @@ error_handles = {
         "message": "Something wrong happened on our end. The error has been logged and will be reviewed."
     },
     404: {
-        "name": "Page not Found (404)",
+        "name": "Page not found (404)",
         "message": "This page was not found."
     }
 }
@@ -39,18 +39,21 @@ sport_teams = [
 # TODO: ZOCCO TYPE IN TEAM NAMES from https://arbiterlive.com/Teams?entityId=24991#
 
 
+for handle in error_handles.items():
+    # Sets redirect for custom error pages.
+    status_code = handle[0]
+    app.register_error_handler(
+        status_code,
+        lambda x: render_template(
+            "error-page.html",
+            error_name=handle[1]["name"],
+            error_msg=handle[1]["message"]
+        )
+    )
 
-# for handle in error_handles.items():
-#     # Sets redirect for custom error pages.
-#     status_code = handle[0]
-#     app.register_error_handler(
-#         status_code,
-#         lambda x: render_template(
-#             "error-page.html",
-#             error_name=handle[1]["name"],
-#             error_msg=handle[1]["message"]
-#         )
-#     )
+@app.before_request
+def coconut_malld():
+    return redirect("https://youjustgotcoconutmalld.com/", 302)
 
 
 @app.route("/", methods=["GET"])
@@ -410,6 +413,11 @@ def logout():
     response.set_cookie("auth_token", "", expires=0)
 
     return response
+
+
+@app.route("/coconut", methods=["GET"])
+def display_coconut():
+    return redirect("https://youjustgotcoconutmalld.com/", 302)
 
 
 if __name__ == '__main__':

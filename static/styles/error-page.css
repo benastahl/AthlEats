@@ -5,22 +5,31 @@ body {
 
 .error-container {
     display: flex;
-    padding: 10px;
-    flex-directionuce: column;
+    flex-direction: column;
     align-content: center;
+    padding-top: 280px;
 }
 
 .error-header, .error-body {
     text-align: center;
-    width: 700px;
     margin: auto;
-    padding: 20px;
-    background: #FFFFFF;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 40px;
 }
-
+a {
+    font-size: 65px;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    background: #CDEAFF;
+    margin: 10px auto auto auto;
+    border-radius: 50%;
+    border: 3px rgba(255, 255, 255, 0.8) solid;
+}
 .error-header {
     font-size: 60px;
-    font-weight: 500;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
