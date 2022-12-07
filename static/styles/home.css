@@ -190,16 +190,16 @@
   left: 250px;
 }
 .photo-name.matthew-watkins {
-  left: -420px;
-  bottom: 80px;
-}
-.photo-name.eli-sodickson {
-  bottom: 400px;
   left: 400px;
+  bottom: 550px;
+}
+.photo-name.jake-zocco {
+  bottom: 550px;
+  right: 250px;
 }
 .photo-name.ben-stahl {
-  bottom: 400px;
-  left: -250px;
+  bottom: 100px;
+  left: -380px;
 }
 .photo i {
   position: relative;
@@ -263,7 +263,7 @@
     padding: 10px;
     font-size: 15px;
   }
-  .photo-name.eli-sodickson {
+  .photo-name.jake-zocco {
     left: 45px;
     bottom: 220px;
   }
