@@ -52,9 +52,9 @@ for handle in error_handles.items():
     )
 
 
-@app.before_request
-def coconut_malld():
-    return render_template("coconut.html")
+# @app.before_request
+# def coconut_malld():
+#     return render_template("coconut.html")
 
 
 @app.route("/", methods=["GET"])
