@@ -24,10 +24,13 @@
   width: 60%;
 }
 
-.restaurant-link {
-  font-size: 100px;
-  text-decoration-color: #0a5eff;
+.restaurant-box {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100px;
 }
+
 
 .input-form {
   margin: 0;

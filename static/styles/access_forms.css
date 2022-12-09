@@ -75,8 +75,6 @@
 }
 
 
-
-
 .access-form .delete-account-button {
   background-color: red;
   min-width: 150px;
@@ -125,7 +123,26 @@ select {
   margin: 10px 40px 10px 40px;
 }
 
+.restaurant-link {
+  font-size: 15px;
+  margin: auto;
+  max-width: 100px;
+}
 
+.restaurant-selection {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.restaurant-selection.first {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  margin: 0px 80px 0px 80px;
+  justify-content: space-between;
+}
 
 
 

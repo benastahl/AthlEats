@@ -98,16 +98,10 @@
                                       <td>{{order.pickup_location}}</td>
                                       <td></td>
                                       <td class="update-order-button">
-                                          <form name="update-order-form" method="post">
+                                          <form name="update-order" method="post">
                                               <input type="hidden" id="index" name="index" value={{order.entry_id}}>
-                                              {% if order.is_complete == 0 %}
-                                                <button class="update-order-button"> Update Order </button>
-
-                                              {% else %}
-                                                <button class="complete-order-button" name="update-order" value="update-order-value" type="submit">
-                                                  <i class="bx bx-check-square" ></i>
-                                                </button>
-                                              {% endif %}
+                                              <button class="update-order-button" name="update-order" value="update-order" type="submit">
+                                                  Update Order </button>
                                           </form>
                                       </td>
                                   </tr>
