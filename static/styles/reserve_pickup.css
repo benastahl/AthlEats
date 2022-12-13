@@ -24,12 +24,63 @@
   width: 60%;
 }
 
-.restaurant-box {
+
+
+.restaurant-dropdown {
+    position: relative;
+    top: 0px;
+    left: 0;
+    width: 520px;
+    margin: 0;
+    background: #393939;
+    transition: 3s max-height ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+  max-height: 0;
+}
+.restaurant-dropdown.active {
+  max-height: 300px;
+}
+
+.restaurant-link {
+  font-size: 15px;
+  max-width: 100px;
   margin: 10px;
+}
+
+.restaurant-logo  {
+  width: 40px;
+  height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.restaurant-header {
+      display: flex;
+  flex-direction: row;
+}
+
+.restaurant-button {
+  margin: 10px;
+  background: #f4f4f4;
+  border-radius: 10px;
+  width: 520px;
+  max-height: 40px;
+    transition: 0.5s max-height ease-in-out;
+    overflow: hidden;
+}
+.restaurant-button.active {
+    max-height: 500px;
+}
+
+.restaurant-selection {
   display: flex;
   flex-direction: column;
-  width: 100px;
+  padding: 20px;
+  justify-content: space-between;
 }
+
+
 
 
 .input-form {
