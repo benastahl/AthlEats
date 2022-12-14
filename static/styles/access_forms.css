@@ -75,8 +75,6 @@
 }
 
 
-
-
 .access-form .delete-account-button {
   background-color: red;
   min-width: 150px;
@@ -124,6 +122,8 @@ select {
 .input-form {
   margin: 10px 40px 10px 40px;
 }
+
+
 
 
 
