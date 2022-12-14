@@ -314,7 +314,6 @@ def process_update_order():
         entry_id = request.form.get("index")
         OrdersCloud().edit_entry(entry_id=entry_id, is_complete=1)
 
-
     return redirect("/staff-dashboard", 302)
 
 
@@ -340,10 +339,10 @@ def display_admin_dashboard():
 
 @app.route("/admin-dashboard", methods=["POST"])
 def process_complete_order():
-    if request.form.get('update-order') == 'update-order-value':
+    if request.form.get('update-order') == 'update-order':
         entry_id = request.form.get("index")
         order_db = OrdersCloud()
-        order_db.edit_entry(entry_id=entry_id, is_complete=2)
+        order_db.edit_entry(entry_id=entry_id, is_complete=1)
 
     return redirect("/admin-dashboard", 302)
 

@@ -6,14 +6,20 @@
 
 /* Reserve Form */
 #reserve-form .reserve-form {
-  max-width: 700px;
+  max-width: 750px;
   height: 1075px;
+  height: 100%;
   margin: 0px auto 0px auto;
   padding: 40px;
 }
 
 .form-section {
     text-align: left;
+}
+
+.left-section {
+    width: 900px;
+    max-width: 900px;
 }
 
 .fee-output {
@@ -30,7 +36,7 @@
     position: relative;
     top: 0px;
     left: 0;
-    width: 520px;
+    width: 600px;
     margin: 0;
     background: #393939;
     transition: 3s max-height ease-in-out;
@@ -39,12 +45,17 @@
   max-height: 0;
 }
 .restaurant-dropdown.active {
-  max-height: 300px;
+  max-height: 800px;
+}
+
+.dropdown-content {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .restaurant-link {
   font-size: 15px;
-  max-width: 100px;
+  max-width: 200px;
   margin: 10px;
 }
 
@@ -64,22 +75,36 @@
   margin: 10px;
   background: #f4f4f4;
   border-radius: 10px;
-  width: 520px;
+  width: 600px;
   max-height: 40px;
     transition: 0.5s max-height ease-in-out;
     overflow: hidden;
 }
 .restaurant-button.active {
-    max-height: 500px;
+    max-height: 800px;
 }
 
 .restaurant-selection {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  width: 100%;
   justify-content: space-between;
+
 }
 
+.bold {
+    font-weight: bold;
+}
+
+.dropdown-images {
+    display: flex;
+    flex-direction: row;
+    margin: 0px 20px 0px 20px;
+    justify-content: space-between;
+
+
+}
 
 
 
