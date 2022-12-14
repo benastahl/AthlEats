@@ -9,9 +9,9 @@ from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-sql_username = loads(Path("SECRET_TOKEN.json").read_text())["sql_username"]
-sql_password = loads(Path("SECRET_TOKEN.json").read_text())["sql_password"]
-sql_host = loads(Path("SECRET_TOKEN.json").read_text())["sql_host"]
+sql_username = "b74577def82ecb"
+sql_password = "75ca9aed"
+sql_host = "us-cdbr-east-06.cleardb.net"
 
 # dialect+driver://username:password@host:port/database
 
