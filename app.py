@@ -1,7 +1,7 @@
 import uuid
 from flask import Flask, render_template, url_for, request, redirect
 from werkzeug.utils import secure_filename
-from controls import UsersCloud, OrdersCloud
+from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
 
 from account_authority import Order
 import calendar
@@ -175,20 +175,13 @@ def display_reserve_calendar():
 
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
-    print(weekends)
-    month_names = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
 
-    available_days = {
-        10: {
-            "runner_entry_id": "",
-        },
-        15: {
+    # TODO: get all runner availability. Format in dict.
 
-        },
-        20: {
+    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries()
 
-        }
-    }
+    available_days = [availability.date.day for availability in runner_availabilities]
+    available_days = [9, 10]
 
     return render_template("reserve_calendar.html",
                            user=user,
@@ -207,8 +200,6 @@ def display_reserve_calendar():
 
                            available_days=available_days
                            )
-
-
 
 
 @app.route("/reserve-form", methods=["GET"])
@@ -420,6 +411,15 @@ def logout():
 @app.route("/coconut", methods=["GET"])
 def display_coconut():
     return redirect("https://youjustgotcoconutmalld.com/", 302)
+
+
+@app.route("/about-us", methods=["GET"])
+def display_about():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+    user = UsersCloud().get_entry(auth_token=auth_token)
+
+    return render_template("about.html", user=user)
 
 
 if __name__ == '__main__':

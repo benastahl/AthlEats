@@ -53,42 +53,101 @@
 
       <div class="home-content">
           <div class="staff-dashboard-container">
+              <div class="welcome-container">
+                  <h1>Welcome to your runner dashboard, {{ user.first_name | capitalize }}. Thanks for being apart of the team!</h1>
+                  <div>
 
-              <div class="staff-section running">
-                  <div class="staff-container staff-availability-container">
-                    <div class="staff-container-header">
-                        Your availability
-                    </div>
-                      <div class="staff-data">
-                          <ul>
-                              <li>12/08/22 - 13:00 until 15:00</li>
-                          </ul>
-                      </div>
-                  </div>
-                  <div class="staff-container staff-schedule-container">
-                      <div class="staff-container-header">
-                        Your schedule
-                      </div>
                   </div>
               </div>
+              <div class="staff-containers">
+                  <div class="staff-container" id="availability">
+                        <div class="staff-container-header">
+                            Your availability
+                            <i class='bx bxs-plus-circle' ></i>
+                        </div>
+                        <div class="table-container">
+                            <table class="time-slots-table">
+                                <tbody>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                    {% for num in range(10) %}
+                                    <tr>
+                                        <td>12/22/22</td>
+                                        <td>12:30</td>
+                                        <td>5:30</td>
+                                        <td>Available</td>
+                                        <td onclick="" class="bx bx-edit"></td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for availability in availabilities %}
+                                    <tr>
+                                        <td>{{ availability.start_time }}</td>
+                                        <td>{{ availability.end_time }}</td>
+                                        <td>{{ availability.runner }}</td>
+                                        <td onclick="" class="bx bx-edit"></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
 
-              <div class="staff-section analytics">
-                  <div class="staff-container staff-analytics-container">
+                          </table>
+                        </div>
+                  </div>
+                  <div class="staff-container" id="run-schedule">
                       <div class="staff-container-header">
-                          Your analytics
+                        Your run schedule
+                      </div>
+                      <div class="table-container">
+                        <table class="time-slots-table">
+                            <tbody>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                                {% for num in range(10) %}
+                                <tr>
+                                    <td>12/22/22</td>
+                                    <td>12:30</td>
+                                    <td>5:30</td>
+                                    <td>Available</td>
+                                    <td onclick="" class="bx bx-edit"></td>
+                                </tr>
+                                {% endfor %}
+                                {% for availability in availabilities %}
+                                <tr>
+                                    <td>{{ availability.start_time }}</td>
+                                    <td>{{ availability.end_time }}</td>
+                                    <td>{{ availability.runner }}</td>
+                                    <td onclick="" class="bx bx-edit"></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                      </table>
                       </div>
                   </div>
-                  <div class="staff-container staff-leaderboard-container">
-                      <div class="staff-container-header">
-                          Runner leaderboard
-                      </div>
+                  <div class="staff-container" id="analytics">
+                          <div class="staff-container-header">
+                              Your analytics
+                          </div>
+                      Idk coming soon maybe
                   </div>
+                  <div class="staff-container" id="leaderboard">
+                          <div class="staff-container-header">
+                              Runner leaderboard
+                          </div>
+                      </div>
               </div>
 
 
-          </div>
 
-          <div class="staff-availability-container">
           </div>
 
       </div>

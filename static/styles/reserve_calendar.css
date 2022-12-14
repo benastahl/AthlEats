@@ -1,74 +1,87 @@
-html {
-  height: 800px;
+.reserve-calendar-container {
+  padding-top: 120px;
 }
-
-/* Reserve Form (Calendar) */
-.reserve-calendar-form {
-  justify-content: space-between;
-  margin: 50px auto;
+.reserve-calendar-header h3 {
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 10px;
 }
 
 .calendar-list {
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: column;
   justify-content: center;
+  margin: auto;
 }
 .calendar-container {
   margin: auto;
-  max-height: 340px;
+
+  max-height: 370px;
 }
 .calendar-day-container {
   display: flex;
-  border: none;
   border-radius: 10px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 345px;
-  max-width: 290px;
+  background: #fff;
+  max-height: 0;
+  width: 400px;
   overflow: hidden;
-  width: 0;
-  transition: width 2s;
-}
-.day-details-header {
-
+  padding: 0;
+  transition: all 0.5s ease-in-out;
+  margin: auto;
 }
 
 .calendar-day-container.active {
+  transition-delay: 0s;
+  padding: 30px;
   border: 1px solid black;
-  width: 400px;
+  max-height: 700px;
 }
-@media screen and (max-width: 650px) {
-  .calendar-list {
-    flex-wrap: wrap;
-  }
-}
-
 .calendar-day-container span {
   display: flex;
 }
-
-.form-section {
-  padding: 30px;
-  width: min-content;
-  max-width: none;
+table {
+  border-spacing: 0;
+  width: 300px;
   justify-content: space-between;
+  border: 1px solid lightgray;
+  border-bottom: none;
 }
-.form-header h3 {
+.header th {
+  position: sticky;
+  top: 0;
+}
+table td, table th {
   text-align: center;
-  font-size: 25px;
-  margin: 0;
+  padding: 5px;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: auto;
+  border-bottom: 1px solid lightgray;
 }
-
-/* mobile */
-.home-section.mobile .form-header h3 {
-    font-size: 25px;
+table tr:nth-child(odd) {
+  background-color: #f4f4f4;
 }
-.home-section.mobile .reserve-calendar-form {
-  margin: 65px auto;
+table th:nth-child(even), table td:nth-child(even) {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
 }
-.home-section.mobile .calendar-container {
+.date-header {
+  background: #f4f4f4;
+  font-weight: bold;
+  padding: 10px 20px 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+td.bx {
+  padding: 0;
+  display: table-cell;
+  font-size: 30px;
+  width: 30px;
+  color: #4caf50;
 }
 
 .calendar-header {
@@ -96,4 +109,10 @@ html {
 }
 .day {
   text-align: center;
+}
+
+@media screen and (max-width: 650px) {
+  .calendar-list {
+    flex-wrap: wrap;
+  }
 }

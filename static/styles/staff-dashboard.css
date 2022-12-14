@@ -1,35 +1,111 @@
 .staff-dashboard-container {
-    padding: 150px 100px 0 100px;
+    padding: 130px 100px 0 100px;
     display: flex;
     flex-direction: column;
 }
 
-.staff-section {
+.welcome-container {
+    padding: 20px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    text-align: center;
+}
+.staff-containers {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 100px;
 }
 .staff-container {
     background: rgba(255,255,255,0.9);
     border-radius: 10px;
     padding: 20px;
+    margin-bottom: 120px;
+    overflow: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 .staff-container .staff-container-header {
+    display: flex;
     border-bottom: 1px solid #e9e9e9;
-    width: 400px;
+    width: 520px;
     font-weight: bold;
     font-size: 30px;
     margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
 }
-.staff-data {
+#availability .staff-container-header .bx {
+    color: mediumseagreen;
+    font-size: 35px;
+    cursor: pointer;
+}
+.table-container {
+    max-height: 300px;
+    overflow-y: scroll;
+}
 
+table {
+    border-spacing: 0;
+    width: 530px;
+    justify-content: space-between;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    overflow: auto;
+}
+th {
+    position: sticky;
+    top: 0;
+}
+#availability th {
+    background-color: rgba(38, 151, 255, 0.8);
+}
+#run-schedule th {
+    background-color: rgba(255, 38, 63, 0.8);
 }
 
-.staff-availability-container ul {
-    list-style: none;
+table td, table th {
+  text-align: center;
+  padding: 5px;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: auto;
+  border-bottom: 1px solid lightgray;
 }
-.staff-availability-container li {
-    background: #f4f4f4;
-    padding: 5px;
+table tr:nth-child(odd) {
+  background-color: #f4f4f4;
+}
+table th:nth-child(even), table td:nth-child(even) {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+}
+.date-header {
+  background: #f4f4f4;
+  font-weight: bold;
+  padding: 10px 20px 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+td.bx {
+    padding: 0;
+    display: table-cell;
+    font-size: 30px;
+    width: 30px;
+    color: cornflowerblue;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 650px) {
+    .staff-dashboard-container {
+        padding: 150px 10px;
+        height: 1200px;
+        align-content: space-between;
+    }
+    .staff-container {
+        margin: auto;
+    }
+    .staff-container .staff-container-header {
+        width: 320px;
+
+    }
 }

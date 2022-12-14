@@ -1,0 +1,15 @@
+.about-us-container {
+    padding: 130px 50px;
+}
+.about-us {
+    border-radius: 10px;
+    padding: 20px;
+    background: rgba(255,255,255,0.9);
+}
+.about-us h1 {
+    border-bottom: 1px #e9e9e9 solid;
+    margin-bottom: 10px;
+}
+.creators {
+    padding: 10px;
+}

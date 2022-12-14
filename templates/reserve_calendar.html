@@ -5,7 +5,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
-    <link rel="stylesheet" href="../static/styles/access_forms.css">
     <link rel="stylesheet" href="../static/styles/calendar.css">
     <link rel="stylesheet" href="../static/styles/reserve_calendar.css">
     <link rel="icon" href="../static/images/athleats-logo.png">
@@ -55,14 +54,13 @@
 
       <div class="home-content">
 
-          <!-- Reserve Pickup Details -->
-          <div id="reserve-calendar-form" class="access-form">
-            <div class="reserve-calendar-form form-section">
-                <div class="form-header">
-                    <h3>Reserve Availability</h3>
-                </div>
+          <div class="reserve-calendar-container">
+              <div class="reserve-calendar-header">
+                <h3>Reserve Availability</h3>
+              </div>
 
-                <div class="calendar-list">
+              <div class="calendar-list">
+
                     <div class="calendar-container">
                       <div class="calendar-header">
                           <a href="/reserve-calendar?month="><i class='bx bx-chevron-left left' ></i></a>
@@ -86,8 +84,8 @@
                           {% for _day in range(num_days_in_month) %}
 
                               <!-- Available for pickup days -->
-                              {% if _day + 1 not in weekends and _day + 1 in available_days %}
-                                  <div onclick="document.location.href = document.location.origin + '/reserve-form?reserve_date={{ month }}/{{ _day + 1 }}/{{ year }}'" class="day day--available">{{ _day + 1 }}</div>
+                              {% if _day + 1 in available_days %}
+                                  <div onclick="document.querySelector('#day-details-{{ _day + 1 }}').classList.toggle('active')" class="day day--available">{{ _day + 1 }}</div>
 
                               <!-- Not available days -->
                               {% elif _day + 1 not in weekends %}
@@ -95,7 +93,7 @@
 
                               <!-- Weekends -->
                               {% else %}
-                                  <div class="day day--disabled">{{_day + 1}}</div>
+                                  <div class="day">{{_day + 1}}</div>
 
                               {% endif %}
                           {% endfor %}
@@ -109,22 +107,35 @@
 
                       </div>
                     </div>
+
+                    <!-- Calendar Time Slots Containers -->
                     {% for available_day in available_days %}
                         <div id="day-details-{{ available_day }}" class="calendar-day-container">
-                            <div class="day-details-header">
-                                12/{{ available_day }}/22
-                            </div>
-                            <ul>
-                                <li>9:00</li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                            </ul>
+                            <table class="time-slots-table">
+                                <tbody>
+                                    <span class="date-header">12/{{ available_day }}/22</span>
+                                    <tr>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Runner</th>
+                                        <th></th>
+                                    </tr>
+                                    {% for availability in availabilities %}
+                                    <tr>
+                                        <td>{{ availability.start_time }}</td>
+                                        <td>{{ availability.end_time }}</td>
+                                        <td>{{ availability.runner }}</td>
+                                        <td onclick="location.href = '/reserve-form?slot_id={{ availability.entry_id }}'" class="bx bxs-check-square"></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
                         </div>
                     {% endfor %}
-                </div>
 
-            </div>
+              </div>
+
           </div>
 
       </div>

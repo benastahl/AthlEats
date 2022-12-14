@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class User:
     def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin):
         self.entry_id = entry_id
@@ -31,3 +32,14 @@ class Order:
         self.pickup_location = pickup_location
         self.restaurant_pickup_time = restaurant_pickup_time
         self.runner = runner
+
+
+class RunnerAvailability:
+    def __init__(self, entry_id, runner_entry_id, status, date, start_time, end_time):
+        self.entry_id = entry_id,
+        self.runner_entry_id = runner_entry_id
+        self.status = status
+        self.date_string = datetime.fromtimestamp(date)
+        self.date = datetime.fromtimestamp(date)
+        self.start_time = start_time
+        self.end_time = end_time

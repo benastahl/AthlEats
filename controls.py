@@ -4,11 +4,13 @@ import bcrypt
 
 from datetime import datetime
 from termcolor import colored
-from account_authority import User, Order
+from account_authority import User, Order, RunnerAvailability
 
 sql_username = "b74577def82ecb"
 sql_password = "75ca9aed"
 sql_host = "us-cdbr-east-06.cleardb.net"
+
+
 # dialect+driver://username:password@host:port/database
 
 
@@ -91,10 +93,10 @@ class AthlEatsCloud:
     def edit_entry(self, entry_id, **kwargs):
         conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
         self.connection.execute(
-                f"UPDATE {self.table_name} "
-                f"SET {conditions} "
-                f"WHERE entry_id = '{entry_id}'"
-                )
+            f"UPDATE {self.table_name} "
+            f"SET {conditions} "
+            f"WHERE entry_id = '{entry_id}'"
+        )
 
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE entry_id = '{entry_id}'").fetchall()
         self.connection.close()
@@ -209,3 +211,18 @@ class OrdersCloud(AthlEatsCloud):
 
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=Order)
+
+
+class RunnerAvailabilitiesCloud(AthlEatsCloud):
+    def __init__(self):
+        self.table_name = "runner_availabilities"
+        # FORMAT: "attribute name":"sql datatype name"
+        self.table_attributes = [
+            "entry_id:TEXT",
+            "runner_entry_id:TEXT",
+            "status:TEXT",
+            "date:TEXT",
+            "start_time:TEXT",
+            "end_time:TEXT",
+        ]
+        super().__init__(self.table_name, self.table_attributes, Instance=RunnerAvailability)
