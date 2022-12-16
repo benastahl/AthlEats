@@ -10,4 +10,4 @@ google_username = loads(Path("SECRET_TOKEN.json").read_text())["google_username"
 drive_api_key = loads(Path("SECRET_TOKEN.json").read_text())["drive_api_key"]
 
 
-print(sql_username, sql_password, sql_host, google_username, google_password)
+print(sql_username, sql_password, sql_host, google_username)
