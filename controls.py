@@ -30,12 +30,11 @@ class AthlEatsCloud:
         self.Instance = Instance
         self.table_attributes = table_attributes
         self.table_name = table_name
-        self.database_name = "heroku_455007dcaac34a6"
 
         self.log("Connecting to database...", "p")
         self.connection = sqlalchemy.create_engine(
-            f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{self.database_name}").connect()
-        self.log(f"Successfully connected to database '{self.database_name}'.", "s")
+            f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{sql_database}").connect()
+        self.log(f"Successfully connected to database '{sql_database}'.", "s")
 
     def log(self, text: str, status: str) -> None:
         """
