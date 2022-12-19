@@ -276,27 +276,24 @@ def display_complete_form():
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
-    user = UsersCloud().get_entry(auth_token=auth_token)
-    orders_list = OrdersCloud().get_all_entries()
-    user_list = UsersCloud().get_all_entries()
-    incomplete_orders = []
-    completed_orders = []
-    for order in orders_list:
-        if order.is_complete == 0:
-            incomplete_orders.append(order)
-        elif order.is_complete == 1:
-            incomplete_orders.append(order)
-        elif order.is_complete == 2:
-            completed_orders.append(order)
+    usersDB = UsersCloud()
+    ordersDB = OrdersCloud()
 
-    if not user.staff:
+    user = usersDB.get_entry(auth_token=auth_token, close_conn=False)
+    if not user or not user.staff:
         return redirect("/", 302)
+
+    orders_list = ordersDB.get_all_entries(entry_id=user.entry_id)
+    user_list = usersDB.get_all_entries(entry_id=user.entry_id)
+    incomplete_orders = [order for order in orders_list if order.is_complete == 0 or order.is_complete == 1]
+    completed_orders = [order for order in orders_list if order.is_complete == 2]
 
     return render_template("staff-dashboard.html",
                            user=user,
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
-                           user_list=user_list)
+                           user_list=user_list
+                           )
 
 
 @app.route("/staff-dashboard", methods=["POST"])

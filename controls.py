@@ -1,17 +1,25 @@
+import os
 import secrets
 import sqlalchemy
 import bcrypt
 
-from json import loads
-from pathlib import Path
+from dotenv import load_dotenv
 
 from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-sql_username = "b74577def82ecb"
-sql_password = "75ca9aed"
-sql_host = "us-cdbr-east-06.cleardb.net"
+load_dotenv(".env")
+
+sql_host = os.getenv("SQL_HOST")
+sql_username = os.getenv("SQL_USERNAME")
+sql_password = os.getenv("SQL_PASSWORD")
+sql_database = os.getenv("SQL_DATABASE")
+
+google_username = os.getenv("GOOGLE_USERNAME")
+google_password = os.getenv("GOOGLE_PASSWORD")
+
+drive_api_key = os.getenv("DRIVE_API_KEY")
 
 # dialect+driver://username:password@host:port/database
 
@@ -58,9 +66,10 @@ class AthlEatsCloud:
         else:
             return f"'{value}'"
 
-    def create_table(self, reset=False) -> bool:
+    def create_table(self, reset=False, close_conn=True) -> bool:
         """
         Creates a new table based on table_attributes. Should only be used once.
+        :param close_conn:
         :param reset: Deletes table in entirety before creating new one (if set to 'True').
         :return: True bool if successful.
         """
@@ -69,11 +78,12 @@ class AthlEatsCloud:
             self.connection.execute(f"DROP TABLE {self.table_name}")
         attributes = ", ".join([f"{attr.split(':')[0]} {attr.split(':')[1]}" for attr in self.table_attributes])
         self.connection.execute(f'CREATE TABLE {self.table_name} ({attributes})')
-        self.connection.close()
+        if close_conn:
+            self.connection.close()
         self.log(f"Successfully created table '{self.table_name}'", "s")
         return True
 
-    def create_entry(self, **kwargs):
+    def create_entry(self, close_conn=True, **kwargs):
         # Creates a row in our database table for a user
 
         # Create SQL query strings
@@ -85,14 +95,15 @@ class AthlEatsCloud:
             f"VALUES ({attributes})"
         )
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
-        self.connection.close()
+        if close_conn:
+            self.connection.close()
 
         assert entries, f"Failed to find a user with kwargs given ({kwargs})."
         entry = entries[0]
         self.log(f"Successfully created entry '{kwargs.get('entry_id')}'.", "s")
         return self.Instance(**entry)
 
-    def edit_entry(self, entry_id, **kwargs):
+    def edit_entry(self, entry_id, close_conn=True, **kwargs):
         conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
         self.connection.execute(
             f"UPDATE {self.table_name} "
@@ -101,18 +112,20 @@ class AthlEatsCloud:
         )
 
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE entry_id = '{entry_id}'").fetchall()
-        self.connection.close()
+        if close_conn:
+            self.connection.close()
         assert entries, f"Failed to find a user with kwargs given ({kwargs})."
         entry = entries[0]
         return self.Instance(**entry)
 
-    def delete_entry(self, entry_id):
+    def delete_entry(self, entry_id, close_conn=True):
         self.connection.execute(
             f"DELETE FROM {self.table_name} "
             f"WHERE entry_id = '{entry_id}'"
         )
-        self.connection.close()
         self.log(f"Deleted account: {entry_id}.", "p")
+        if close_conn:
+            self.connection.close()
 
     def get_entry(self, close_conn=True, **filters):
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
@@ -125,7 +138,7 @@ class AthlEatsCloud:
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
-    def get_all_entries(self, **filters):
+    def get_all_entries(self, close_conn=True, **filters):
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
         query_string = \
             f"SELECT * " \
@@ -135,6 +148,8 @@ class AthlEatsCloud:
             query_string += f"WHERE {conditions}"
 
         entries = self.connection.execute(query_string).fetchall()
+        if close_conn:
+            self.connection.close()
         if not entries:
             return []
         # assert entries, f"Failed to find a user with kwargs given ({kwargs})."

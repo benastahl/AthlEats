@@ -52,74 +52,127 @@
       </nav>
 
       <div class="home-content">
-          <div class="staff-dashboard-container">
-              <div class="welcome-container">
-                  <h1>Welcome to your runner dashboard, {{ user.first_name | capitalize }}. Thanks for being apart of the team!</h1>
-                  <div>
+        <!-- Popups -->
+        <div class="new-availability-container">
+            <div class="new-availability" id="new-availability">
+                <i onclick="toggle_popup('new-availability')" class='bx bx-x'></i>
+                <div class="header">
+                    <h3>Schedule Availability</h3>
+                </div>
+                <form method="post">
+                    <label>
+                        Date
+                        <input required type="date" name="date">
+                    </label><br>
+                    <label>
+                        Block
+                        <select required name="block">
+                            <option selected disabled></option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                        </select>
+                    </label>
+                    <button type="submit">Confirm</button>
+                    <!--
+                    <label>
+                        Start availability
+                        <input type="time" id="start-availability">
+                    </label><br>
+                    <label>
+                        End availability
+                        <input disabled type="time" id="end-availability">
+                    </label><br>
+                    <script>
+                        {#document.getElementById("start-availability").addEventListener(#}
+                        {#    'input',#}
+                        {#    function() {#}
+                        {#        document.getElementById("end-availability").setAttribute('min', document.getElementById("start-availability").value)#}
+                        {#        document.getElementById("end-availability").disabled = false#}
+                        {#    }#}
+                        {#)#}
+                    </script>
+                    -->
+                </form>
+            </div>
+        </div>
+        <div class="edit-availability-container">
+            <div class="edit-availability" id="edit-availability">
+                <i onclick="toggle_popup('edit-availability')" class='bx bx-x'></i>
+                <div class="header">
+                    <h3>Edit Availability</h3>
+                </div>
+                <form method="post">
+                    <label>
+                        Date
+                        <input id="date" required type="date" name="date" value="">
+                    </label><br>
+                    <label>
+                        Block
+                        <select required name="block">
+                            <option selected disabled></option>
+                            <option id="4">4</option>
+                            <option id="5">5</option>
+                            <option id="6">6</option>
+                        </select>
+                    </label>
+                    <button type="submit">Confirm</button>
+                    <!--
+                    <label>
+                        Start availability
+                        <input type="time" id="start-availability">
+                    </label><br>
+                    <label>
+                        End availability
+                        <input disabled type="time" id="end-availability">
+                    </label><br>
+                    <script>
+                        document.getElementById("start-availability").addEventListener(
+                            'input',
+                            function() {
+                                document.getElementById("end-availability").setAttribute('min', document.getElementById("start-availability").value)
+                                document.getElementById("end-availability").disabled = false
+                            }
+                        )
+                    </script>
+                    -->
+                </form>
+            </div>
+        </div>
 
-                  </div>
+        <div class="staff-dashboard-container">
+          <div class="welcome-container">
+              <div class="welcome">
+                    <h1>Welcome to your runner dashboard, {{ user.first_name | capitalize }}. Thanks for being apart of the team!</h1>
               </div>
-              <div class="staff-containers">
-                  <div class="staff-container" id="availability">
-                        <div class="staff-container-header">
-                            Your availability
-                            <i class='bx bxs-plus-circle' ></i>
-                        </div>
-                        <div class="table-container">
-                            <table class="time-slots-table">
-                                <tbody>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                        <th>Status</th>
-                                        <th></th>
-                                    </tr>
-                                    {% for num in range(10) %}
-                                    <tr>
-                                        <td>12/22/22</td>
-                                        <td>12:30</td>
-                                        <td>5:30</td>
-                                        <td>Available</td>
-                                        <td onclick="" class="bx bx-edit"></td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% for availability in availabilities %}
-                                    <tr>
-                                        <td>{{ availability.start_time }}</td>
-                                        <td>{{ availability.end_time }}</td>
-                                        <td>{{ availability.runner }}</td>
-                                        <td onclick="" class="bx bx-edit"></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-
-                          </table>
-                        </div>
-                  </div>
-                  <div class="staff-container" id="run-schedule">
-                      <div class="staff-container-header">
-                        Your run schedule
-                      </div>
-                      <div class="table-container">
+          </div>
+          <div class="staff-containers">
+              <div class="staff-container" id="availability">
+                    <div class="staff-container-header">
+                        Your availability
+                        <i onclick="toggle_popup('new-availability')" class='bx bxs-plus-circle' ></i>
+                    </div>
+                    <div class="table-container">
                         <table class="time-slots-table">
                             <tbody>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
+                                    <th>Block</th>
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
-                                {% for num in range(10) %}
-                                <tr>
-                                    <td>12/22/22</td>
-                                    <td>12:30</td>
-                                    <td>5:30</td>
+                                <tr id="availability-0">
+                                    <td>2022-12-22</td>
+                                    <td>5</td>
                                     <td>Available</td>
-                                    <td onclick="" class="bx bx-edit"></td>
+                                    <td onclick="toggle_popup('edit-availability-0')" class="bx bx-edit"></td>
                                 </tr>
-                                {% endfor %}
+                                <tr id="availability-1">
+                                    <td>2022-12-21</td>
+                                    <td>6</td>
+                                    <td>Available</td>
+                                    <td onclick="toggle_popup('edit-availability-1')" class="bx bx-edit"></td>
+                                </tr>
                                 {% for availability in availabilities %}
                                 <tr>
                                     <td>{{ availability.start_time }}</td>
@@ -131,55 +184,119 @@
                             </tbody>
 
                       </table>
-                      </div>
-                  </div>
-                  <div class="staff-container" id="analytics">
-                          <div class="staff-container-header">
-                              Your analytics
-                          </div>
-                      Idk coming soon maybe
-                  </div>
-                  <div class="staff-container" id="leaderboard">
-                          <div class="staff-container-header">
-                              Runner leaderboard
-                          </div>
-                      </div>
+                    </div>
               </div>
+              <div class="staff-container" id="run-schedule">
+                  <div class="staff-container-header">
+                    Your run schedule
+                  </div>
+                  <div class="table-container">
+                    <table class="time-slots-table">
+                        <tbody>
+                            <tr>
+                                <th>Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {% for num in range(10) %}
+                            <tr>
+                                <td>12/22/22</td>
+                                <td>12:30</td>
+                                <td>5:30</td>
+                                <td>Available</td>
+                                <td onclick="" class="bx bx-edit"></td>
+                                <td onclick="" class="bx bx-receipt"></td>
+                            </tr>
+                            {% endfor %}
+                            {% for availability in availabilities %}
+                            <tr>
+                                <td>{{ availability.start_time }}</td>
+                                <td>{{ availability.end_time }}</td>
+                                <td>{{ availability.runner }}</td>
+                                <td onclick="" class="bx bx-edit"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
 
+                  </table>
+                  </div>
+              </div>
+              <div class="staff-container" id="completed-run">
+                  <div class="staff-container-header">
+                    Your completed runs
+                  </div>
+                  <div class="table-container">
+                    <table class="time-slots-table">
+                        <tbody>
+                            <tr>
+                                <th>Date</th>
+                                <th>Received Time</th>
+                                <th>Delivery Time</th>
+                                <th>Rating</th>
+                                <th></th>
+                            </tr>
+                            {% for num in range(10) %}
+                            <tr>
+                                <td>12/22/22</td>
+                                <td>12:30</td>
+                                <td>5:30</td>
+                                <td>Available</td>
+                                <td onclick="" class="bx bx-receipt"></td>
+                            </tr>
+                            {% endfor %}
+                            {% for availability in availabilities %}
+                            <tr>
+                                <td>{{ availability.start_time }}</td>
+                                <td>{{ availability.end_time }}</td>
+                                <td>{{ availability.runner }}</td>
+                                <td onclick="" class="bx bx-edit"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
 
-
+                  </table>
+                  </div>
+              </div>
+              <div class="staff-container" id="analytics">
+                      <div class="staff-container-header">
+                          Your analytics
+                      </div>
+                  Idk coming soon maybe
+              </div>
+              <div class="staff-container" id="leaderboard">
+                      <div class="staff-container-header">
+                          Runner leaderboard
+                      </div>
+                  </div>
           </div>
+
+      </div>
+
+
 
       </div>
     </section>
 
   </body>
 
-  <!-- Search/Filter Bar -->
-  <script>
-    function filterAdminTable(data_id) {
-      // Declare variables
-      var input, filter, table, tr, td, i, txtValue;
-      console.log("#" + data_id + " .search-box input")
-      input = document.querySelector("#" + data_id + " .search-box input");
-      filter = input.value.toUpperCase();
-      table = document.querySelector("#" + data_id + " #myTable");
-      tr = table.getElementsByTagName("tr");
+  <script id="show-popup">
+      function toggle_popup(id) {
+          let popup = document.getElementById(id)
 
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
+          // Initiate
+          if (id.includes('edit-availability') && !document.getElementById('edit-availability').classList.contains("revealed")) {
+              popup = document.getElementById('edit-availability')
+              let availability = document.getElementById("availability-" + id.split("-")[2])
+              document.getElementById("date").value = availability.childNodes[1].textContent
+              document.getElementById(availability.childNodes[3].textContent).selected = true
           }
-        }
+
+          popup.classList.toggle("revealed");
       }
-    }
-</script>
+  </script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>
