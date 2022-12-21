@@ -9,10 +9,10 @@ from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-loaded_environ = load_dotenv(find_dotenv())
-assert loaded_environ, "Failed to load environmental variables."
+assert load_dotenv(), "Failed to load environment."
 
 sql_host = os.getenv("SQL_HOST")
+print("GOT HOST: " + sql_host)
 sql_username = os.getenv("SQL_USERNAME")
 sql_password = os.getenv("SQL_PASSWORD")
 sql_database = os.getenv("SQL_DATABASE")
