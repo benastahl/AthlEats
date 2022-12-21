@@ -14,6 +14,9 @@
   - Matthew Watkins
   - Jake Zocco
 
+- Management:
+  - Jake Zocco
+
 
 
 
