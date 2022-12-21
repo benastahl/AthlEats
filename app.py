@@ -202,6 +202,8 @@ def display_reserve_calendar():
                            )
 
 
+
+
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
@@ -227,8 +229,9 @@ def process_reserve_form():
     restaurant = request.form['restaurant']
     phone_number = request.form['phone-number']
     restaurant_pickup_time = str(request.form['restaurant-pickup-time'])
-    pickup_time = str(request.form['pickup'])
+    pickup_time = str(request.form['restaurant-pickup-time'])
     pickup_location = request.form['pickup-location']
+    pickup_name = request.form['pickup-name']
     order_date = datetime.now().strftime("%D %H:%M:%S")
     sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
     fee = round(float(price) * 0.3, 2)
@@ -243,6 +246,7 @@ def process_reserve_form():
         restaurant_pickup_time=restaurant_pickup_time,
         pickup_time=pickup_time,
         price=price,
+        pickup_name=pickup_name,
         pickup_location=pickup_location,
         runner=""
 
@@ -285,8 +289,8 @@ def display_staff_dashboard():
 
     orders_list = ordersDB.get_all_entries(entry_id=user.entry_id)
     user_list = usersDB.get_all_entries(entry_id=user.entry_id)
-    incomplete_orders = [order for order in orders_list if order.is_complete == 0 or order.is_complete == 1]
-    completed_orders = [order for order in orders_list if order.is_complete == 2]
+    incomplete_orders = [order for order in orders_list if order.is_complete == 0]
+    completed_orders = [order for order in orders_list if order.is_complete == 1]
 
     return render_template("staff-dashboard.html",
                            user=user,
@@ -346,19 +350,7 @@ def display_profile():
         if user:
             orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
             return render_template("profile.html", user=user, user_order_list=orders_list)
-            orders_list = OrdersCloud().get_all_entries()
-            user_orders_list = []
-            user_current_orders = []
-            for order in orders_list:
-                if order.email == user.email:
-                    user_orders_list.append(order)
-                    if order.is_complete == 0 or order.is_complete == 1:
-                        user_current_orders.append(order)
 
-            return render_template("profile.html",
-                                   user=user,
-                                   user_order_list=user_orders_list,
-                                   user_current_orders=user_current_orders)
 
     return redirect("/", 302)
 

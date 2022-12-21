@@ -4,13 +4,15 @@ import sqlalchemy
 import bcrypt
 import os
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-load_dotenv(".env")
+
+assert load_dotenv(find_dotenv()), "Failed to find and load .env file"
+
 
 sql_host = os.getenv("SQL_HOST")
 sql_username = os.getenv("SQL_USERNAME")
@@ -223,6 +225,7 @@ class OrdersCloud(AthlEatsCloud):
             "restaurant_pickup_time:TEXT",
             "pickup_time:TEXT",
             "price:TEXT",
+            "pickup_name:TEXT",
             "pickup_location:TEXT",
             "runner:TEXT"
 

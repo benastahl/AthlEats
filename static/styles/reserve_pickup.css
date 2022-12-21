@@ -81,7 +81,7 @@
     overflow: hidden;
 }
 .restaurant-button.active {
-    max-height: 800px;
+    max-height: 1200px;
 }
 
 .restaurant-selection {
@@ -100,13 +100,19 @@
 .dropdown-images {
     display: flex;
     flex-direction: row;
-    margin: 0px 20px 0px 20px;
     justify-content: space-between;
-
-
 }
 
+.dropdown-right {
+    float: right;
+    display: flex;
+    flex-direction: column;
+}
 
+.dropdown-col {
+    display: flex;
+    flex-direction: column;
+}
 
 .input-form {
   margin: 0;
