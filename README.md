@@ -1,5 +1,8 @@
 # AthlEats
-## A Wayland High School: Honors Applied Computer Science Project
+## A Wayland High School Project: 
+- Honors Applied Computer Science
+- Evidence-Based Management (EBM)
+- Capstone Course 
 
 
 ## Credits: 
