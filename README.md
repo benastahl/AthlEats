@@ -1,4 +1,6 @@
 # AthlEats
+![Athleats-Logo](./static/images/athleats-logo.png)
+
 ## A Wayland High School Project: 
 - Honors Applied Computer Science
 - Evidence-Based Management (EBM)
