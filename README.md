@@ -1,5 +1,7 @@
 # AthlEats
-<img src="./static/images/athleats-logo.png" alt="Athleats-Logo" width="128"/>
+<div style="justify-content: center;">
+  <img style="" src="./static/images/athleats-logo.png" alt="Athleats-Logo" width="128"/>
+</div>
 
 ## A Wayland High School Project: 
 - Honors Applied Computer Science
