@@ -1,2 +1,19 @@
 # AthlEats
-Ben Stahl, Wesley Tse, Matthew Watkins, Jake Zocco, Eli Sodickson: Honors Applied Computer Science Project
+## A Wayland High School: Honors Applied Computer Science Project
+
+
+## Credits: 
+- Full Stack
+  - Ben Stahl
+  - Wesley Tse
+
+- Frontend
+  - Eli Sodickson
+
+- Backend
+  - Matthew Watkins
+  - Jake Zocco
+
+
+
+
