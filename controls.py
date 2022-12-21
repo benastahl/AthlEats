@@ -9,7 +9,8 @@ from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-assert load_dotenv(), "Failed to load environment."
+if not os.getenv("PUBLIC_ACTIVATED"):
+    assert load_dotenv(), "Failed to load environment."
 
 sql_host = os.getenv("SQL_HOST")
 print("GOT HOST: " + sql_host)
