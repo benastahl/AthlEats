@@ -6,6 +6,8 @@
 - Evidence-Based Management (EBM)
 - Capstone Course 
 
+### About
+This business and project creates the supply for the need of hungry athletes. We provide a trustworthy delivery service for teams and athleats who do not have time to collect their own food from a local resteraunt before their after-school game. 
 
 ## Credits: 
 - Full Stack
