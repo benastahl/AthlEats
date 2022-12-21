@@ -1,18 +1,11 @@
 import uuid
-from flask import Flask, render_template, url_for, request, redirect
-from werkzeug.utils import secure_filename
-from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
-
-from account_authority import Order
 import calendar
-from datetime import datetime, date
-import os
-
 import bcrypt
 import secrets
 
-import json
-from pathlib import Path
+from flask import Flask, render_template, request, redirect
+from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
+from datetime import datetime, date
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = r'./receipts'
@@ -308,21 +301,28 @@ def process_update_order():
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
-    user = UsersCloud().get_entry(auth_token=auth_token)
-    user_list = UsersCloud().get_all_entries()
-    completed_orders = OrdersCloud().get_all_entries(is_complete=1)
-    incomplete_orders = OrdersCloud().get_all_entries(is_complete=0)
-    staff_list = UsersCloud().get_all_entries(staff=1)
+    usersDb = UsersCloud()
+    ordersDb = OrdersCloud()
+    user = usersDb.get_entry(auth_token=auth_token, close_conn=False)
 
     if not user or not user.admin:
         return redirect("/", 302)
+
+    orders = ordersDb.get_all_entries()
+    users = usersDb.get_all_entries()
+
+    completed_orders = [order for order in orders if order.is_complete]
+    incomplete_orders = [order for order in orders if not order.is_complete]
+
+    staff_list = [user for user in users if user.staff]
 
     return render_template("admin-dashboard.html",
                            user=user,
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
-                           user_list=user_list,
-                           staff_list=staff_list)
+                           user_list=users,
+                           staff_list=staff_list
+                           )
 
 
 @app.route("/admin-dashboard", methods=["POST"])
@@ -339,26 +339,19 @@ def process_complete_order():
 def display_profile():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    usersDb = UsersCloud()
+    user = usersDb.get_entry(auth_token=auth_token)
 
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
-            return render_template("profile.html", user=user, user_order_list=orders_list)
-            orders_list = OrdersCloud().get_all_entries()
-            user_orders_list = []
-            user_current_orders = []
-            for order in orders_list:
-                if order.email == user.email:
-                    user_orders_list.append(order)
-                    if order.is_complete == 0 or order.is_complete == 1:
-                        user_current_orders.append(order)
-
-            return render_template("profile.html",
-                                   user=user,
-                                   user_order_list=user_orders_list,
-                                   user_current_orders=user_current_orders)
+    if user:
+        ordersDb = OrdersCloud()
+        orders = ordersDb.get_all_entries(email=user.email)
+        user_current_orders = [order for order in orders if not order.is_complete]
+        user_orders = [order for order in orders]
+        return render_template("profile.html",
+                               user=user,
+                               user_current_orders=user_current_orders,
+                               user_order_list=user_orders
+                               )
 
     return redirect("/", 302)
 
@@ -367,12 +360,10 @@ def display_profile():
 def display_settings():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    user = UsersCloud().get_entry(auth_token=auth_token)
 
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            return render_template("settings.html", user=user)
+    if user:
+        return render_template("settings.html", user=user)
 
     return redirect("/", 302)
 
@@ -381,16 +372,15 @@ def display_settings():
 def process_settings():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    usersDb = UsersCloud()
+    user = usersDb.get_entry(auth_token=auth_token)
 
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            if "delete-account" in request.form.keys():
-                UsersCloud().delete_entry(entry_id=user.entry_id)
-                return redirect("/", 302)
+    if user:
+        if "delete-account" in request.form.keys():
+            usersDb.delete_entry(entry_id=user.entry_id)
+            return redirect("/", 302)
 
-            return render_template("settings.html", user=user)
+        return render_template("settings.html", user=user)
 
     return redirect("/", 302)
 

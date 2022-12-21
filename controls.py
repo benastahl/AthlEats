@@ -1,16 +1,16 @@
-import os
 import secrets
 import sqlalchemy
 import bcrypt
 import os
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from datetime import datetime
 from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
-load_dotenv(".env")
+loaded_environ = load_dotenv(find_dotenv())
+assert loaded_environ, "Failed to load environmental variables."
 
 sql_host = os.getenv("SQL_HOST")
 sql_username = os.getenv("SQL_USERNAME")
