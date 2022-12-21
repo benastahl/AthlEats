@@ -7,7 +7,7 @@
 - Capstone Course 
 
 ### About
-This business and project creates the supply for the need of hungry athletes. We provide a trustworthy delivery service for teams and athleats who do not have time to collect their own food from a local resteraunt before their after-school game. 
+This business and project creates the supply for the need of hungry athletes. We provide a trustworthy delivery service for teams and athletes who do not have time to collect their own food from a local resteraunt before their after-school game. The team of runners (delivery drivers) are made up of only pre-approved WHS students.
 
 ## Credits: 
 - Full Stack
