@@ -215,17 +215,16 @@ class OrdersCloud(AthlEatsCloud):
         # FORMAT: "attribute name":"sql datatype name"
         self.table_attributes = [
             "entry_id:TEXT",
-            "runner_entry_id:TEXT"
+            "runner_entry_id:TEXT",
             "is_complete:INT",
             "email:TEXT",
             "restaurant:TEXT",
             "order_date:TEXT",
             "phone_number:TEXT",
             "restaurant_pickup_time:TEXT",
-            "pickup_time:TEXT",
             "price:TEXT",
             "pickup_name:TEXT",
-            "pickup_location:TEXT",
+            "pickup_location:TEXT"
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=Order)
 

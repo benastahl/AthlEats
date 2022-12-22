@@ -20,7 +20,7 @@ class User:
 
 
 class Order:
-    def __init__(self, entry_id, is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, pickup_time, price, pickup_location, pickup_name, runner_entry_id):
+    def __init__(self, entry_id, is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, price, pickup_location, pickup_name, runner_entry_id):
         self.entry_id = entry_id
         self.email = email
         self.runner_entry_id = runner_entry_id
@@ -28,7 +28,6 @@ class Order:
         self.restaurant = restaurant
         self.order_date = order_date
         self.phone_number = phone_number
-        self.pickup_time = pickup_time
         self.price = price
         self.pickup_name = pickup_name
         self.pickup_location = pickup_location

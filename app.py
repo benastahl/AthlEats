@@ -233,22 +233,25 @@ def process_reserve_form():
     restaurant = request.form['restaurant']
     phone_number = request.form['phone-number']
     restaurant_pickup_time = str(request.form['restaurant-pickup-time'])
-    pickup_time = str(request.form['restaurant-pickup-time'])
     pickup_location = request.form['pickup-location']
     order_date = datetime.now().strftime("%D %H:%M:%S")
+    pickup_name = request.form['pickup-name']
+    entry_id = request.args.get("availability")
+    runner_entry_id = RunnerAvailabilitiesCloud().get_entry(entry_id=entry_id)
+    entry_id = request.args.get("availability")
     sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
     fee = round(float(price) * 0.3, 2)
 
     OrdersCloud().create_entry(
         entry_id=str(uuid.uuid4()),
-        runner="",
+        runner_entry_id=runner_entry_id,
         is_complete=0,
         email=email,
         restaurant=restaurant,
         order_date=order_date,
         phone_number=phone_number,
         restaurant_pickup_time=restaurant_pickup_time,
-        pickup_time=pickup_time,
+        pickup_name=pickup_name,
         price=price,
         pickup_location=pickup_location,
 
@@ -259,7 +262,7 @@ def process_reserve_form():
     if auth_token:
         user = UsersCloud().get_entry(auth_token=auth_token)
         if user:
-            return render_template("order-complete.html", user=user, pickup_time=pickup_time,
+            return render_template("order-complete.html", user=user,
                                    pickup_location=pickup_location, fee=fee)
 
     return redirect("/", 302)
