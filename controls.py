@@ -10,10 +10,9 @@ from termcolor import colored
 from account_authority import User, Order, RunnerAvailability
 
 if not os.getenv("PUBLIC_ACTIVATED"):
-    assert load_dotenv(), "Failed to load environment."
+    assert load_dotenv(find_dotenv()), "Failed to load environment."
 
 sql_host = os.getenv("SQL_HOST")
-print("GOT HOST: " + sql_host)
 sql_username = os.getenv("SQL_USERNAME")
 sql_password = os.getenv("SQL_PASSWORD")
 sql_database = os.getenv("SQL_DATABASE")
@@ -53,8 +52,7 @@ class AthlEatsCloud:
         print(
             colored(
                 f"[{datetime.now().strftime('%m-%d-%Y %H:%M:%S')}] - "
-                f"[ATHLEATS DATABASE CLOUD: {sql_username}] - "
-                f"[TABLE: {self.table_name.upper()}] - "
+                f"[ATHLEATS: {self.table_name.upper()}] - "
                 f"{text}",
                 color_schemes.get(status)
             )
@@ -216,6 +214,7 @@ class OrdersCloud(AthlEatsCloud):
         # FORMAT: "attribute name":"sql datatype name"
         self.table_attributes = [
             "entry_id:TEXT",
+            "runner_entry_id:TEXT"
             "is_complete:INT",
             "email:TEXT",
             "restaurant:TEXT",
@@ -225,8 +224,6 @@ class OrdersCloud(AthlEatsCloud):
             "pickup_time:TEXT",
             "price:TEXT",
             "pickup_location:TEXT",
-            "runner:TEXT"
-
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=Order)
 
@@ -238,9 +235,8 @@ class RunnerAvailabilitiesCloud(AthlEatsCloud):
         self.table_attributes = [
             "entry_id:TEXT",
             "runner_entry_id:TEXT",
-            "status:TEXT",
+            "reserved:INT",
             "date:TEXT",
-            "start_time:TEXT",
-            "end_time:TEXT",
+            "block:TEXT",
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=RunnerAvailability)

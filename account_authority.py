@@ -20,26 +20,25 @@ class User:
 
 
 class Order:
-    def __init__(self, entry_id, is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, pickup_time, price, pickup_location, runner):
+    def __init__(self, entry_id, is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, pickup_time, price, pickup_location, runner_entry_id):
+        self.entry_id = entry_id
         self.email = email
+        self.runner_entry_id = runner_entry_id
         self.is_complete = is_complete
         self.restaurant = restaurant
-        self.entry_id = entry_id
         self.order_date = order_date
         self.phone_number = phone_number
         self.pickup_time = pickup_time
         self.price = price
         self.pickup_location = pickup_location
         self.restaurant_pickup_time = restaurant_pickup_time
-        self.runner = runner
 
 
 class RunnerAvailability:
-    def __init__(self, entry_id, runner_entry_id, status, date, start_time, end_time):
-        self.entry_id = entry_id,
+    def __init__(self, entry_id, runner_entry_id, reserved, date, block):
+        self.entry_id = entry_id
         self.runner_entry_id = runner_entry_id
-        self.status = status
-        self.date_string = datetime.fromtimestamp(date)
-        self.date = datetime.fromtimestamp(date)
-        self.start_time = start_time
-        self.end_time = end_time
+        self.reserved = bool(reserved)
+        self.date_string = date
+        self.date = datetime.strptime(date, "%Y-%m-%d")
+        self.block = block

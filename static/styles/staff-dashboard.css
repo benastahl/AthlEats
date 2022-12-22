@@ -46,13 +46,21 @@
     cursor: pointer;
 }
 .table-container {
-    max-height: 300px;
+    min-height: 300px;
     overflow-y: scroll;
+}
+.no-availabilities-message-container, table {
+    width: 530px;
+}
+.no-availabilities-message-container {
+    text-align: center;
+    padding-top: 120px;
+    font-weight: bold;
+    font-size: 25px;
 }
 
 table {
     border-spacing: 0;
-    width: 530px;
     justify-content: space-between;
     border: 1px solid lightgray;
     border-bottom: none;
@@ -171,7 +179,7 @@ form {
     .staff-dashboard-container .welcome-container {
         font-size: 15px;
     }
-    table {
+    table, .no-availabilities-message-container {
         width: 320px
     }
 }

@@ -115,17 +115,15 @@
                                 <tbody>
                                     <span class="date-header">12/{{ available_day }}/22</span>
                                     <tr>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
+                                        <th>Block</th>
                                         <th>Runner</th>
                                         <th></th>
                                     </tr>
                                     {% for availability in availabilities %}
                                     <tr>
-                                        <td>{{ availability.start_time }}</td>
-                                        <td>{{ availability.end_time }}</td>
+                                        <td>{{ availability.block }}</td>
                                         <td>{{ availability.runner }}</td>
-                                        <td onclick="location.href = '/reserve-form?slot_id={{ availability.entry_id }}'" class="bx bxs-check-square"></td>
+                                        <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'" class="bx bxs-check-square"></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

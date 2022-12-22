@@ -21,6 +21,10 @@ error_handles = {
     404: {
         "name": "Page not found (404)",
         "message": "This page was not found."
+    },
+    403: {
+        "name": "Access Denied (403)",
+        "message": "You do not have permissions to access this resource."
     }
 }
 sport_teams = [
@@ -169,15 +173,12 @@ def display_reserve_calendar():
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
 
-    # TODO: get all runner availability. Format in dict.
-
-    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries()
-
+    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries(reserved=False)
     available_days = [availability.date.day for availability in runner_availabilities]
-    available_days = [9, 10]
 
     return render_template("reserve_calendar.html",
                            user=user,
+                           availabilities=runner_availabilities,
 
                            # Calendar data
                            month_name=month_name,
@@ -197,19 +198,21 @@ def display_reserve_calendar():
 
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
-    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    reserve_date = request.args.get("reserve_date")
-    if not date:
+    entry_id = request.args.get("availability")
+
+    availability = RunnerAvailabilitiesCloud().get_entry(entry_id=entry_id)
+    user = UsersCloud().get_entry(auth_token=auth_token)
+
+    if not availability:
         return redirect("/reserve-calendar", 302)
+    if not user:
+        return redirect("/", 302)
 
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            return render_template("reserve_form.html", user=user, sports_teams=sport_teams)
-
-    return redirect("/", 302)
+    return render_template("reserve_form.html",
+                           user=user,
+                           sports_teams=sport_teams
+                           )
 
 
 @app.route("/reserve-form", methods=["POST"])
@@ -228,6 +231,7 @@ def process_reserve_form():
 
     OrdersCloud().create_entry(
         entry_id=str(uuid.uuid4()),
+        runner="",
         is_complete=0,
         email=email,
         restaurant=restaurant,
@@ -237,7 +241,6 @@ def process_reserve_form():
         pickup_time=pickup_time,
         price=price,
         pickup_location=pickup_location,
-        runner=""
 
     )
 
@@ -281,12 +284,62 @@ def display_staff_dashboard():
     incomplete_orders = [order for order in orders_list if order.is_complete == 0 or order.is_complete == 1]
     completed_orders = [order for order in orders_list if order.is_complete == 2]
 
+    runnerAvailsDb = RunnerAvailabilitiesCloud()
+    availabilities = runnerAvailsDb.get_all_entries(close_conn=False)
+    reserved_availabilities = runnerAvailsDb.get_all_entries(reserved=1)
+
     return render_template("staff-dashboard.html",
                            user=user,
+                           availabilities=availabilities,
+                           reserved_availabilities=reserved_availabilities,
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
                            user_list=user_list
                            )
+
+
+@app.route("/new-availability", methods=["POST"])
+def process_new_availability():
+    auth_token = request.cookies.get("auth_token")
+    usersDb = UsersCloud()
+    runner = usersDb.get_entry(auth_token=auth_token, close_conn=False)
+
+    if not runner or not runner.staff:
+        return "Access Denied", 403
+
+    # Create new runner availability
+    runnerAvailCloud = RunnerAvailabilitiesCloud()
+    runnerAvailCloud.create_entry(
+        entry_id=uuid.uuid4(),
+        runner_entry_id=runner.entry_id,
+        reserved=0,
+        date=request.form.get("date"),
+        block=request.form.get("block")
+    )
+
+    return redirect("/staff-dashboard", 302)
+
+
+@app.route("/edit-availability", methods=["POST"])
+def process_edit_availability():
+    auth_token = request.cookies.get("auth_token")
+    usersDb = UsersCloud()
+    runner = usersDb.get_entry(auth_token=auth_token, close_conn=False)
+
+    if not runner or not runner.staff:
+        return "Access Denied", 403
+
+    # Create new runner availability
+    runnerAvailCloud = RunnerAvailabilitiesCloud()
+    runnerAvailCloud.create_entry(
+        entry_id=uuid.uuid4(),
+        runner_entry_id=runner.entry_id,
+        reserved=0,
+        date=request.form.get("date"),
+        block=request.form.get("block")
+    )
+
+    return redirect("/staff-dashboard", 302)
 
 
 @app.route("/staff-dashboard", methods=["POST"])
