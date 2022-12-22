@@ -1,3 +1,4 @@
+import os
 import secrets
 import sqlalchemy
 import bcrypt
@@ -223,6 +224,7 @@ class OrdersCloud(AthlEatsCloud):
             "restaurant_pickup_time:TEXT",
             "pickup_time:TEXT",
             "price:TEXT",
+            "pickup_name:TEXT",
             "pickup_location:TEXT",
         ]
         super().__init__(self.table_name, self.table_attributes, Instance=Order)

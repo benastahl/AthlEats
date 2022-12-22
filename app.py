@@ -1,5 +1,13 @@
 import uuid
+from flask import Flask, render_template, url_for, request, redirect
+from werkzeug.utils import secure_filename
+from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
+
+from account_authority import Order
 import calendar
+from datetime import datetime, date
+import os
+
 import bcrypt
 import secrets
 
@@ -196,6 +204,8 @@ def display_reserve_calendar():
                            )
 
 
+
+
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
     auth_token = request.cookies.get("auth_token")
@@ -223,7 +233,7 @@ def process_reserve_form():
     restaurant = request.form['restaurant']
     phone_number = request.form['phone-number']
     restaurant_pickup_time = str(request.form['restaurant-pickup-time'])
-    pickup_time = str(request.form['pickup'])
+    pickup_time = str(request.form['restaurant-pickup-time'])
     pickup_location = request.form['pickup-location']
     order_date = datetime.now().strftime("%D %H:%M:%S")
     sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
@@ -281,8 +291,8 @@ def display_staff_dashboard():
 
     orders_list = ordersDB.get_all_entries(entry_id=user.entry_id)
     user_list = usersDB.get_all_entries(entry_id=user.entry_id)
-    incomplete_orders = [order for order in orders_list if order.is_complete == 0 or order.is_complete == 1]
-    completed_orders = [order for order in orders_list if order.is_complete == 2]
+    incomplete_orders = [order for order in orders_list if order.is_complete == 0]
+    completed_orders = [order for order in orders_list if order.is_complete == 1]
 
     runnerAvailsDb = RunnerAvailabilitiesCloud()
     availabilities = runnerAvailsDb.get_all_entries(close_conn=False)
@@ -405,6 +415,13 @@ def display_profile():
                                user_current_orders=user_current_orders,
                                user_order_list=user_orders
                                )
+    if auth_token:
+        # Checks to see if there's a corresponding user with auth token.
+        user = UsersCloud().get_entry(auth_token=auth_token)
+        if user:
+            orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
+            return render_template("profile.html", user=user, user_order_list=orders_list)
+
 
     return redirect("/", 302)
 
