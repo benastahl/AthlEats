@@ -1,5 +1,6 @@
 # AthlEats
 <img align="center" src="./static/images/athleats-logo.png" alt="Athleats-Logo" width="128"/>
+<a href="https://www.instagram.com/whs_athleats/">WHS Athleats Instagram</a>
 
 ## A Wayland High School Project: 
 - Honors Applied Computer Science
