@@ -24,12 +24,3 @@
           form.style.display = "flex";
       }
   }
-
-  // If message return in render_template (flask)
-  let message = null;
-  if ("{{message_type}}") {
-      message = document.querySelector("#{{ message_type }}-form .error-occurrence")
-      message.style.display = "block";
-      message.innerHTML =  "{{ message }}"
-      show_form("{{message_type}}-form")
-  }

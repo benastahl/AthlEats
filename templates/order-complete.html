@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
     <link rel="stylesheet" href="../static/styles/access_forms.css">
-    <link rel="stylesheet" href="../static/styles/order-reserved.css">    <link rel="icon" href="../static/uce-logo.png">
+    <link rel="stylesheet" href="../static/styles/order-reserved.css">    <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Order Confirmation - AthlEats </title>
    </head>
@@ -66,7 +66,11 @@
                     </span>
 
                     <span class="reserve-data-header">
-                        Pickup Location: {{pickup_location}}
+                        Pickup Location: {{order.pickup_location}}
+                    </span>
+
+                    <span class="reserve-data-header">
+                        Your runner: {{runner.first_name | capitalize}} {{runner.last_name | capitalize}}
                     </span>
 
                     <span class="reserve-data-header">
@@ -76,62 +80,6 @@
 
                 </div>
 
-
-
-
-
-              <form name="reserve" method="post">
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
-
-              </form>
-
-            </div>
-          </div>
-
-          <!-- Settings Form -->
-          <div style="display: none;" id="settings-form" class="access-form">
-            <div class="settings-form form-section">
-                <i onclick="hide_form('settings-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>UCE SETTINGS</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-
-                  </div>
-
-                  <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ login_message }}</p>
-
-              </form>
-              <button class="delete-account-button" onclick="show_form('delete-account-form')">Delete account</button>
-
-
-            </div>
-          </div>
-          <!-- Delete Account Form -->
-          <div style="display: none;" id="delete-account-form" class="access-form">
-            <div class="delete-account-form form-section">
-                <i onclick="hide_form('delete-account-form')" class='bx bx-x'></i>
-                <div class="form-header">
-                <h3>CONFIRM ACCOUNT DELETION</h3>
-              </div>
-
-              <form name="settings" method="post">
-                  <!-- Confirm Account Deletion Form -->
-                  <div style="display: none;" id="account-deletion-form" class="access-form">
-                    You are about to delete your account.
-                  </div>function calculate_fees(price) {
-        fee = price * 1.30;
-        return fee;
-
-        }
-                  <button class="delete-account-button" type="submit" onclick="show_delete_confirm()">Delete account</button>
-
-
-              </form>
             </div>
           </div>
 
@@ -139,22 +87,6 @@
     </section>
 
   </body>
-
-    <!-- Fee Calculator -->
-    <script>
-        function calculate_fees(price) {
-            fee = price * .30;
-
-            return fee;
-        }
-
-        function set_price_calc() {
-                console.log("Setting price...");
-                let total_price = calculate_fees(document.querySelector("#input-dollar").value);
-                document.querySelector(".fee-output").innerHTML = "Delivery fee: $" + total_price;
-
-        }
-    </script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

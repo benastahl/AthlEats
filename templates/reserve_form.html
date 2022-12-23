@@ -294,7 +294,7 @@
   </body>
 
       <!-- Fee Calculator -->
-    <script>
+      <script>
         function calculate_fees(price) {
             fee = price * .30;
 
@@ -307,9 +307,9 @@
                 document.querySelector(".fee-output").innerHTML = "Delivery fee: $" + total_price;
 
         }
-    </script>
+      </script>
 
-  <script>
+      <script>
       function show_restaurant_dropdown(rest_id) {
           let dropdown_div = document.getElementById(rest_id);
           dropdown_div.classList.toggle("active");
@@ -317,7 +317,7 @@
   </script>
 
       {% if user %}
-        <script src="../static/scripts/profile_dropdown.js"></script>
+      <script src="../static/scripts/profile_dropdown.js"></script>
       {% endif %}
 </html>
 

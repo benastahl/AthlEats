@@ -8,7 +8,7 @@ import os
 # part of the code
 gauth = GoogleAuth()
 
-# Creates local webserver and auto
+# Creates local.db webserver and auto
 # handles authentication.
 gauth.LocalWebserverAuth()
 drive = GoogleDrive(gauth)

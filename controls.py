@@ -1,4 +1,3 @@
-import os
 import secrets
 import sqlalchemy
 import bcrypt
@@ -24,7 +23,6 @@ google_password = os.getenv("GOOGLE_PASSWORD")
 drive_api_key = os.getenv("DRIVE_API_KEY")
 
 # dialect+driver://username:password@host:port/database
-
 
 class AthlEatsCloud:
     def __init__(self, table_name: str, table_attributes: list, Instance: type):
@@ -84,7 +82,10 @@ class AthlEatsCloud:
         return True
 
     def create_entry(self, close_conn=True, **kwargs):
-        # Creates a row in our database table for a user
+        # Creates a row in our database table
+
+        # Asserts that our table attributes order matches the kwargs order (sql order matters lol)
+        assert [attr.split(":")[0] for attr in self.table_attributes] == [kwarg for kwarg in kwargs.keys()], "table_attributes does not match correspond with the kwargs in create_entry call."
 
         # Create SQL query strings
         attributes = ", ".join([self.sql_conv(kwarg) for kwarg in kwargs.values()])
@@ -98,7 +99,7 @@ class AthlEatsCloud:
         if close_conn:
             self.connection.close()
 
-        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+        assert entries, f"Failed to find an entry with kwargs given ({kwargs})."
         entry = entries[0]
         self.log(f"Successfully created entry '{kwargs.get('entry_id')}'.", "s")
         return self.Instance(**entry)
@@ -114,7 +115,7 @@ class AthlEatsCloud:
         entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE entry_id = '{entry_id}'").fetchall()
         if close_conn:
             self.connection.close()
-        assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+        assert entries, f"Failed to find a entry with kwargs given ({kwargs})."
         entry = entries[0]
         return self.Instance(**entry)
 
@@ -152,24 +153,10 @@ class AthlEatsCloud:
             self.connection.close()
         if not entries:
             return []
-        # assert entries, f"Failed to find a user with kwargs given ({kwargs})."
+        # assert entries, f"Failed to find a entry with kwargs given ({kwargs})."
         self.log(f"Successfully collected entries from table '{self.table_name}'", "s")
 
         return [self.Instance(**entry) for entry in entries]
-
-    def get_entries(self, close_conn=True, **filters):
-        sql_string = f"SELECT * FROM {self.table_name}"
-        if filters:
-            conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
-            sql_string += f" WHERE {conditions}"
-        entries = self.connection.execute(sql_string).fetchall()
-        if close_conn:
-            self.connection.close()
-        if not entries:
-            return False
-        entry = entries[0]
-        self.log(f"Successfully collected entry '{entry[0]}'", "s")
-        return self.Instance(**entry)
 
 
 # EACH CHILD CLASS REPRESENTS A TABLE
@@ -215,7 +202,7 @@ class OrdersCloud(AthlEatsCloud):
         # FORMAT: "attribute name":"sql datatype name"
         self.table_attributes = [
             "entry_id:TEXT",
-            "runner_entry_id:TEXT",
+            "availability_entry_id:TEXT",
             "is_complete:INT",
             "email:TEXT",
             "restaurant:TEXT",

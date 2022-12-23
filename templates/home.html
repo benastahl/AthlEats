@@ -76,7 +76,7 @@
                 <h3>AthlEats SIGNUP</h3>
                 <p>Please enter details to signup.</p>
               </div>
-                <form name="signup" method="post">
+                <form name="signup" action="/signup" method="post">
                     <label>
                         <input required type="text" name="email" placeholder="email">
                     </label>
@@ -94,17 +94,13 @@
                             <option class="form-selection-placeholder" value="" disabled selected>terms of service</option>
                             <option value="agree">agree</option>
                           </select>
-
-
-
-                          <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ signup_message }}</p>
-                          <button id="submit-form-button" type="submit" value="SIGNUP" onclick="hide_button('submit-form-button')">SIGNUP</button>
-                          <p class="message">Already have an account?
+                    <p style="display: none;" class="error-occurrence" id="signup-error">{{ signup_message }}</p>
+                    <button id="submit-form-button" type="submit" value="SIGNUP" onclick="hide_button('submit-form-button')">SIGNUP</button>
+                    <p class="message">Already have an account?
                             <a href="/login">Login here</a>
                           </p>
-                            <a class="tos-agree-link" target="_blank" rel="noopener noreferrer" href="/terms-of-service">terms of service.</a>
-
-              </form>
+                    <a class="tos-agree-link" target="_blank" rel="noopener noreferrer" href="/terms-of-service">terms of service.</a>
+                </form>
             </div>
           </div>
           <!-- Login Form -->
@@ -117,22 +113,18 @@
                     <p>Please enter credentials to login.</p>
                 </div>
 
-                  <form name="login" method="post">
+                  <form name="login" action="/login" method="post">
                       <label>
                           <input required type="text" name="email" placeholder="email">
                       </label>
                       <label>
                           <input required type="password" name="pass" placeholder="password">
                       </label>
-
-
-                      <p style="display: none;" class="error-occurrence" id="error-occurrence">{{ message }}</p>
-
+                      <p style="display: none;" class="error-occurrence" id="login-error">{{ message }}</p>
                       <button id="submit-form-button" type="submit" value="LOGIN" >LOGIN</button>
                       <p class="message">Not registered?
                         <a href="/login">Create an account</a>
                       </p>
-
                   </form>
               </div>
           </div>
@@ -257,6 +249,19 @@
 
   <!-- Popup Forms -->
   <script src="../static/scripts/access-forms.js"></script>
+
+  <!-- Reveal signup/login error messages -->
+  <script>
+      // Add query collector. Optimize this.
+      let login_error = "{{ login_error }}"
+      let signup_error = "{{ signup_error }}"
+
+      if (login_error) {
+          document.getElementById("login-error").style.display = "flex"
+      } else if (signup_error) {
+        document.getElementById("signup-error").style.display = "flex"
+      }
+  </script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>

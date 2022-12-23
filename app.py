@@ -1,19 +1,11 @@
 import uuid
-from flask import Flask, render_template, url_for, request, redirect
-from werkzeug.utils import secure_filename
-from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
-
-from account_authority import Order
 import calendar
-from datetime import datetime, date
-import os
-
 import bcrypt
 import secrets
 
 from flask import Flask, render_template, request, redirect
 from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
-from datetime import datetime, date
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = r'./receipts'
@@ -57,6 +49,7 @@ for handle in error_handles.items():
     )
 
 
+# Do not touch thanks <3
 # @app.before_request
 # def coconut_malld():
 #     return render_template("coconut.html")
@@ -66,48 +59,48 @@ for handle in error_handles.items():
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
+    signup_error = request.args.get("signup_error")
+    login_error = request.args.get("login_error")
+    user = UsersCloud().get_entry(auth_token=auth_token)
 
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        return render_template("home.html", user=user)
-
-    # Redirects back to log in if no auth token found
-    return render_template("home.html", user=False)
+    # Returns user whether it can find auth token or not. Displays signup and login buttons if user=False.
+    return render_template("home.html", user=user, login_error=login_error, signup_error=signup_error)
 
 
-def process_login(_request):
-    email = _request.form["email"]
-    password = _request.form["pass"]  # plain text password
+@app.route("/login", methods=["POST"])
+def process_login():
+    email = request.form["email"]
+    password = request.form["pass"]  # plain text password
 
     # login_user returns auth_token of user if email and password correct
     auth_token = UsersCloud().login_user(email, password)
     if not auth_token:
-        return render_template("home.html", message_type="login", message="Password or email incorrect not found")
+        return redirect("/?login_error=Email or password not found", 302)
 
     response = redirect("/", 302)
     # Create an auth browser cookie (random letters and numbers) as our authentication
     # token so the user doesn't have to log in every single time.
-    response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
+    response.set_cookie('auth_token', auth_token, max_age=60 * 60 * 24 * 365)  # One year expiration (in seconds)
     return response
 
 
-def process_signup(_request):
+@app.route("/signup", methods=["POST"])
+def process_signup():
     # Collect POST request params from signup
-    tos_agree = _request.form.get("tos")
-    email = _request.form["email"]
-    grade = int(_request.form["grade"])
+    tos_agree = request.form.get("tos")
+    email = request.form["email"]
+    grade = int(request.form["grade"])
     # Hash password (hashing means that it is encrypted and impossible to decrypt)
     # We can now only check to see if a plain text input matches the hashed password (bcrypt.checkpw).
-    hashed_password = bcrypt.hashpw(bytes(str(_request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
+    hashed_password = bcrypt.hashpw(bytes(str(request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
     # Check if email is already in use (get_student returns list of users with that email).
     if UsersCloud().get_entry(email=email):
-        return render_template("home.html", message_type="signup", message="Email is already in use.")
+        return redirect("/?signup_error=Email is already in use.")
 
     # Check if email is valid student email
     if "waylandps.org" not in email:
-        return render_template("home.html", message_type="signup", message="Not a valid WHS email.")
+        return redirect("/signup_error=Not a valid WHS email.")
 
     # Checks if email is a real valid email address
     # if not validate_email(email, verify=True):
@@ -115,7 +108,7 @@ def process_signup(_request):
 
     # Check to see if Terms of Service is agreed to
     if tos_agree != "agree":
-        return render_template("home.html", message_type="signup", message="Please agree to TOS to access the website.")
+        return redirect("/?signup_error=Please agree to TOS to access the website.")
 
     # Set auth cookie token
     response = redirect("/", 302)
@@ -141,14 +134,6 @@ def process_signup(_request):
     )
 
     return response
-
-
-@app.route("/", methods=["POST"])
-def process_homepage():
-    if "tos" in request.form:
-        return process_signup(_request=request)
-    else:
-        return process_login(_request=request)
 
 
 @app.route("/reserve-calendar", methods=["GET"])
@@ -181,7 +166,7 @@ def display_reserve_calendar():
     weekends = [day_num + 1 for day_num in range(num_days_in_month) if
                 datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
 
-    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries(reserved=False)
+    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries(reserved=0)
     available_days = [availability.date.day for availability in runner_availabilities]
 
     return render_template("reserve_calendar.html",
@@ -202,8 +187,6 @@ def display_reserve_calendar():
 
                            available_days=available_days
                            )
-
-
 
 
 @app.route("/reserve-form", methods=["GET"])
@@ -227,59 +210,56 @@ def display_reserve_form():
 
 @app.route("/reserve-form", methods=["POST"])
 def process_reserve_form():
-    email = str(request.form['user_email'])
-    price = str(request.form['input-dollar'])
     receipt = request.files['receipt-upload']
-    restaurant = request.form['restaurant']
-    phone_number = request.form['phone-number']
-    restaurant_pickup_time = str(request.form['restaurant-pickup-time'])
-    pickup_location = request.form['pickup-location']
-    order_date = datetime.now().strftime("%D %H:%M:%S")
-    pickup_name = request.form['pickup-name']
-    entry_id = request.args.get("availability")
-    runner_entry_id = RunnerAvailabilitiesCloud().get_entry(entry_id=entry_id)
-    entry_id = request.args.get("availability")
+    availability_entry_id = request.args.get("availability")
+    auth_token = request.cookies.get("auth_token")
+
+    usersDb = UsersCloud()
+    user = usersDb.get_entry(auth_token=auth_token, close_conn=False)
+    if not user:
+        return redirect("/", 302)
+
+    # Checks if availability is valid/real and still available (not reserved)
+    availDb = RunnerAvailabilitiesCloud()
+    availability = availDb.get_entry(entry_id=availability_entry_id, close_conn=False)
+    if availability.reserved:
+        return redirect("/reserve-calendar", 302)
+    # Set reserved status of availability to true.
+    availDb.edit_entry(entry_id=availability_entry_id, reserved=1)
+
+    # Collect runner user instance
+    runner = usersDb.get_entry(entry_id=availability.runner_entry_id)
+
     sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
+    price = str(request.form['input-dollar'])
     fee = round(float(price) * 0.3, 2)
 
-    OrdersCloud().create_entry(
+    order = OrdersCloud().create_entry(
         entry_id=str(uuid.uuid4()),
-        runner_entry_id=runner_entry_id,
+        availability_entry_id=availability_entry_id,
         is_complete=0,
-        email=email,
-        restaurant=restaurant,
-        order_date=order_date,
-        phone_number=phone_number,
-        restaurant_pickup_time=restaurant_pickup_time,
-        pickup_name=pickup_name,
+        email=str(request.form['user_email']),
+        restaurant=request.form['restaurant'],
+        order_date=datetime.now().strftime("%D %H:%M:%S"),
+        phone_number=request.form['phone-number'],
+        restaurant_pickup_time=str(request.form['restaurant-pickup-time']),
+        pickup_name=request.form['pickup-name'],
         price=price,
-        pickup_location=pickup_location,
-
+        pickup_location=request.form['pickup-location'],
     )
 
-    auth_token = request.cookies.get("auth_token")
+    # TODO: Wesley: in the order-complete.html, add more details
+    #       about the order/availability using the instances provided
+    #       in jinja below. Check account_authority.py classes to see what info you can show :).
 
-    if auth_token:
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            return render_template("order-complete.html", user=user,
-                                   pickup_location=pickup_location, fee=fee)
-
-    return redirect("/", 302)
-
-
-@app.route("/order-reserved", methods=["GET"])
-def display_complete_form():
-    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
-    auth_token = request.cookies.get("auth_token")
-
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            return render_template("order-complete.html", user=user)
-
-    return redirect("/", 302)
+    # NOTE: url does not change (reserve-form), only renders new html template
+    return render_template("order-complete.html",
+                           user=user,
+                           order=order,
+                           availability=availability,
+                           runner=runner,
+                           fee=fee
+                           )
 
 
 @app.route("/staff-dashboard", methods=["GET"])
