@@ -1,5 +1,4 @@
 .access-form {
-  padding: 100px;
   display: flex;
   flex-direction: row;
 }
@@ -7,10 +6,8 @@
 /* Reserve Form */
 #reserve-form .reserve-form {
   max-width: 750px;
-  height: 1075px;
   height: 100%;
   margin: 0px auto 0px auto;
-  padding: 40px;
 }
 
 .form-section {
@@ -25,6 +22,7 @@
 .fee-output {
   margin: 10px 40px 20px 40px;
 }
+
 
 .access-form button {
   width: 60%;

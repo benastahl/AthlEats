@@ -1,0 +1,120 @@
+.reserve-slots-container {
+    padding-top: 170px;
+    display: flex;
+}
+.reserve-slots {
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    padding: 20px;
+    overflow: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    margin: auto;
+}
+.header {
+    display: flex;
+    border-bottom: 1px solid #e9e9e9;
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+.table-container {
+    min-height: 300px;
+    overflow-y: scroll;
+}
+.no-availabilities-message-container, table {
+    width: 630px;
+}
+.no-availabilities-message-container {
+    text-align: center;
+    padding-top: 120px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+table {
+    border-spacing: 0;
+    justify-content: space-between;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    overflow: auto;
+}
+th {
+    position: sticky;
+    top: 0;
+}
+td.bx {
+    padding: 0;
+    display: table-cell;
+    font-size: 30px;
+    width: 30px;
+    color: cornflowerblue;
+    cursor: pointer;
+}
+
+#icon-box{
+    width: 30px;
+}
+
+table td, table th {
+  text-align: center;
+  padding: 5px;
+  max-width: 75px;
+  white-space: nowrap;
+  overflow: auto;
+  border-bottom: 1px solid lightgray;
+}
+table tr:nth-child(odd) {
+  background-color: #f4f4f4;
+}
+table th:nth-child(even), table td:nth-child(even) {
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+}
+
+.search-box{
+  position: relative;
+  height: 50px;
+    margin-bottom: 10px;
+  max-width: 320px;
+  width: 100%;
+    align-content: center;
+    align-items: center;
+}
+.search-box input{
+  height: 100%;
+  width: 100%;
+  outline: none;
+  background: #F5F6FA;
+  border: 2px solid #EFEEF1;
+  border-radius: 6px;
+  font-size: 18px;
+  padding: 0 15px;
+  margin: 0;
+}
+.search-box .bx-filter-alt{
+  position: absolute;
+  background: #2697FF;
+  height: 40px;
+  width: 40px;
+  right: 5px;
+  top: 55%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+}
+
+@media screen and (max-width: 650px) {
+    .no-availabilities-message-container, table {
+        width: 320px;
+    }
+    .header {
+        font-size: 25px;
+        display: block;
+    }
+}

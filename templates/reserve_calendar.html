@@ -63,14 +63,14 @@
 
                     <div class="calendar-container">
                       <div class="calendar-header">
-                          <a href="/reserve-calendar?month="><i class='bx bx-chevron-left left' ></i></a>
+                          <a href="/reserve-calendar?month={{ last_month_name }}"><i class='bx bx-chevron-left left' ></i></a>
                           <div class="date-header">
                             <h1>
                               {{month_name}}
                             </h1>
                             <p>{{year}}</p>
                           </div>
-                          <i class='bx bx-chevron-right right'></i>
+                          <a href="/reserve-calendar?month={{ next_month_name }}"><i class='bx bx-chevron-right right' ></i></a>
                       </div>
                       <div class="calendar">
                           <span class="day-name">Mon</span><span class="day-name">Tue</span><span class="day-name">Wed</span><span class="day-name">Thu</span><span class="day-name">Fri</span><span class="day-name">Sat</span><span class="day-name">Sun</span>
@@ -85,7 +85,7 @@
 
                               <!-- Available for pickup days -->
                               {% if _day + 1 in available_days %}
-                                  <div onclick="document.querySelector('#day-details-{{ _day + 1 }}').classList.toggle('active')" class="day day--available">{{ _day + 1 }}</div>
+                                  <div onclick="location.href = '/reserve-form?availability={{ availabilities[0].entry_id }}'" class="day day--available">{{ _day + 1 }}</div>
 
                               <!-- Not available days -->
                               {% elif _day + 1 not in weekends %}
@@ -116,13 +116,11 @@
                                     <span class="date-header">12/{{ available_day }}/22</span>
                                     <tr>
                                         <th>Block</th>
-                                        <th>Runner</th>
                                         <th></th>
                                     </tr>
                                     {% for availability in availabilities %}
                                     <tr>
                                         <td>{{ availability.block }}</td>
-                                        <td>{{ availability.runner }}</td>
                                         <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'" class="bx bxs-check-square"></td>
                                     </tr>
                                     {% endfor %}

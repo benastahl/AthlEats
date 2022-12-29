@@ -1,5 +1,7 @@
 import secrets
 import sqlalchemy
+import uuid
+from sqlalchemy.exc import OperationalError
 import bcrypt
 import os
 
@@ -19,21 +21,82 @@ sql_database = os.getenv("SQL_DATABASE")
 
 google_username = os.getenv("GOOGLE_USERNAME")
 google_password = os.getenv("GOOGLE_PASSWORD")
+google_app_password = os.getenv("GOOGLE_APP_PASSWORD")
+
+flask_secret_password = os.getenv("FLASK_SECRET_PASSWORD")
 
 drive_api_key = os.getenv("DRIVE_API_KEY")
 
 # dialect+driver://username:password@host:port/database
 
-class AthlEatsCloud:
-    def __init__(self, table_name: str, table_attributes: list, Instance: type):
-        self.Instance = Instance
-        self.table_attributes = table_attributes
-        self.table_name = table_name
+tables = {
+    "users": {
+        "attributes": [
+            "entry_id:TEXT",
+            "email:TEXT",
+            "grade:INT",
+            "hashed_password:TEXT",
+            "auth_token:TEXT",
+            "creation_date:INT",
+            "staff:INT",
+            "admin:INT",
+            "sport_team:TEXT"
+        ],
+        "instance": User
+    },
+    "orders": {
+        "attributes": [
+            "entry_id:TEXT",
+            "availability_entry_id:TEXT",
+            "runner_entry_id:TEXT",
+            "is_complete:INT",
+            "email:TEXT",
+            "restaurant:TEXT",
+            "order_date:TEXT",
+            "phone_number:TEXT",
+            "restaurant_pickup_time:TEXT",
+            "price:TEXT",
+            "pickup_name:TEXT",
+            "pickup_location:TEXT"
+        ],
+        "instance": Order
+    },
+    "runner_availabilities": {
+        "attributes": [
+            "entry_id:TEXT",
+            "runner_entry_id:TEXT",
+            "order_entry_id:TEXT",
+            "reserved:INT",
+            "date:TEXT",
+            "block:TEXT",
+        ],
+        "instance": RunnerAvailability
+    }
+}
 
+
+class AthlEatsDatabase:
+    def __init__(self):
+        self.table_name = "TBD"
+        self.table_attributes = None
+        self.Instance = None
+        self.connection_id = uuid.uuid4()
+
+    def __enter__(self):
         self.log("Connecting to database...", "p")
-        self.connection = sqlalchemy.create_engine(
-            f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{sql_database}").connect()
-        self.log(f"Successfully connected to database '{sql_database}'.", "s")
+        self.database = sqlalchemy.create_engine(f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}/{sql_database}")
+        self.connection = self.database.connect()
+        self.log(f"Successfully connected to database '{sql_database}' ({self.connection_id}).", "s")
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+        self.database.dispose()
+        self.log(f"Connection closed and database disposed. ({self.connection_id})", "p")
+
+    def set_table(self, table_name: str):
+        self.table_name = table_name
+        self.table_attributes = tables[table_name]['attributes']
+        self.Instance = tables[table_name]['instance']
 
     def log(self, text: str, status: str) -> None:
         """
@@ -64,24 +127,27 @@ class AthlEatsCloud:
         else:
             return f"'{value}'"
 
-    def create_table(self, reset=False, close_conn=True) -> bool:
+    def create_table(self, table_name: str, reset=False) -> bool:
+        self.set_table(table_name)
         """
         Creates a new table based on table_attributes. Should only be used once.
+        :param table_name: 
         :param close_conn:
         :param reset: Deletes table in entirety before creating new one (if set to 'True').
         :return: True bool if successful.
         """
         if reset:
-            self.log(f"Resetting table (dropping) '{self.table_name}'.", "d")
-            self.connection.execute(f"DROP TABLE {self.table_name}")
+            self.log("Are you sure? This will delete all existing data in the table.", "d")
+            input("Press enter to continue")
+            self.log(f"Resetting table (dropping) '{table_name}'.", "d")
+            self.connection.execute(f"DROP TABLE {table_name}")
         attributes = ", ".join([f"{attr.split(':')[0]} {attr.split(':')[1]}" for attr in self.table_attributes])
-        self.connection.execute(f'CREATE TABLE {self.table_name} ({attributes})')
-        if close_conn:
-            self.connection.close()
-        self.log(f"Successfully created table '{self.table_name}'", "s")
+        self.connection.execute(f'CREATE TABLE {table_name} ({attributes})')
+        self.log(f"Successfully created table '{table_name}'", "s")
         return True
 
-    def create_entry(self, close_conn=True, **kwargs):
+    def create_entry(self, table_name: str, **kwargs):
+        self.set_table(table_name)
         # Creates a row in our database table
 
         # Asserts that our table attributes order matches the kwargs order (sql order matters lol)
@@ -92,102 +158,77 @@ class AthlEatsCloud:
         conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
 
         self.connection.execute(
-            f"INSERT INTO {self.table_name} "
+            f"INSERT INTO {table_name} "
             f"VALUES ({attributes})"
         )
-        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
-        if close_conn:
-            self.connection.close()
+        entries = self.connection.execute(f"SELECT * FROM {table_name} WHERE {conditions}").fetchall()
 
         assert entries, f"Failed to find an entry with kwargs given ({kwargs})."
         entry = entries[0]
         self.log(f"Successfully created entry '{kwargs.get('entry_id')}'.", "s")
         return self.Instance(**entry)
 
-    def edit_entry(self, entry_id, close_conn=True, **kwargs):
-        conditions = " AND ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
+    def edit_entry(self, table_name: str, entry_id, **kwargs):
+        self.set_table(table_name)
+        conditions = ", ".join([f"{kwarg} = {self.sql_conv(kwargs[kwarg])}" for kwarg in kwargs])
         self.connection.execute(
-            f"UPDATE {self.table_name} "
+            f"UPDATE {table_name} "
             f"SET {conditions} "
             f"WHERE entry_id = '{entry_id}'"
         )
 
-        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE entry_id = '{entry_id}'").fetchall()
-        if close_conn:
-            self.connection.close()
+        entries = self.connection.execute(f"SELECT * FROM {table_name} WHERE entry_id = '{entry_id}'").fetchall()
         assert entries, f"Failed to find a entry with kwargs given ({kwargs})."
         entry = entries[0]
         return self.Instance(**entry)
 
-    def delete_entry(self, entry_id, close_conn=True):
+    def delete_entry(self, table_name: str, entry_id):
+        self.set_table(table_name)
         self.connection.execute(
-            f"DELETE FROM {self.table_name} "
+            f"DELETE FROM {table_name} "
             f"WHERE entry_id = '{entry_id}'"
         )
-        self.log(f"Deleted account: {entry_id}.", "p")
-        if close_conn:
-            self.connection.close()
+        self.log(f"Deleted entry: {entry_id}.", "p")
 
-    def get_entry(self, close_conn=True, **filters):
+    def get_entry(self, table_name: str, **filters):
+        self.set_table(table_name)
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
-        entries = self.connection.execute(f"SELECT * FROM {self.table_name} WHERE {conditions}").fetchall()
-        if close_conn:
-            self.connection.close()
+        entries = self.connection.execute(f"SELECT * FROM {table_name} WHERE {conditions}").fetchall()
         if not entries:
             return False
         entry = entries[0]
         self.log(f"Successfully collected entry '{entry[0]}'", "s")
         return self.Instance(**entry)
 
-    def get_all_entries(self, close_conn=True, **filters):
+    def get_all_entries(self, table_name: str, **filters):
+        self.set_table(table_name)
         conditions = " AND ".join([f"{param} = {self.sql_conv(filters[param])}" for param in filters])
         query_string = \
             f"SELECT * " \
-            f"FROM {self.table_name} "
+            f"FROM {table_name} "
 
         if filters:
             query_string += f"WHERE {conditions}"
 
         entries = self.connection.execute(query_string).fetchall()
-        if close_conn:
-            self.connection.close()
         if not entries:
             return []
         # assert entries, f"Failed to find a entry with kwargs given ({kwargs})."
-        self.log(f"Successfully collected entries from table '{self.table_name}'", "s")
+        self.log(f"Successfully collected entries from table '{table_name}'", "s")
 
         return [self.Instance(**entry) for entry in entries]
-
-
-# EACH CHILD CLASS REPRESENTS A TABLE
-class UsersCloud(AthlEatsCloud):
-    def __init__(self):
-        self.table_name = "users"
-        # FORMAT: "attribute name":"sql datatype name"
-        self.table_attributes = [
-            "entry_id:TEXT",
-            "email:TEXT",
-            "grade:INT",
-            "hashed_password:TEXT",
-            "auth_token:TEXT",
-            "creation_date:INT",
-            "staff:INT",
-            "admin:INT"
-        ]
-
-        super().__init__(self.table_name, self.table_attributes, Instance=User)
 
     def login_user(self, email, password, new_auth=True):
 
         # Authenticates user email and password
-        user = self.get_entry(close_conn=False, email=email)
+        user = self.get_entry(table_name="users", email=email)
         if not user or not bcrypt.checkpw(bytes(password.encode("utf-8")), user.hashed_password.encode("utf-8")):
             return False
         if new_auth:
             # Creates new random auth token string
             auth_token = secrets.token_hex()
             # Sets new auth token to user database row
-            authenticated_user = self.edit_entry(entry_id=user.entry_id, auth_token=auth_token)
+            authenticated_user = self.edit_entry(table_name="users", entry_id=user.entry_id, auth_token=auth_token)
 
             # Returns new auth token of authenticated user
             return authenticated_user.auth_token
@@ -195,36 +236,7 @@ class UsersCloud(AthlEatsCloud):
         # Returns current auth token of user
         return user.auth_token
 
-
-class OrdersCloud(AthlEatsCloud):
-    def __init__(self):
-        self.table_name = "orders"
-        # FORMAT: "attribute name":"sql datatype name"
-        self.table_attributes = [
-            "entry_id:TEXT",
-            "availability_entry_id:TEXT",
-            "is_complete:INT",
-            "email:TEXT",
-            "restaurant:TEXT",
-            "order_date:TEXT",
-            "phone_number:TEXT",
-            "restaurant_pickup_time:TEXT",
-            "price:TEXT",
-            "pickup_name:TEXT",
-            "pickup_location:TEXT"
-        ]
-        super().__init__(self.table_name, self.table_attributes, Instance=Order)
-
-
-class RunnerAvailabilitiesCloud(AthlEatsCloud):
-    def __init__(self):
-        self.table_name = "runner_availabilities"
-        # FORMAT: "attribute name":"sql datatype name"
-        self.table_attributes = [
-            "entry_id:TEXT",
-            "runner_entry_id:TEXT",
-            "reserved:INT",
-            "date:TEXT",
-            "block:TEXT",
-        ]
-        super().__init__(self.table_name, self.table_attributes, Instance=RunnerAvailability)
+    def clear_old_availabilities(self):
+        self.set_table("runner_availabilities")
+        entries = self.connection.execute("DELETE FROM runner_availabilities WHERE date < CURRENT_DATE")
+        self.log("Cleared all old (outdated) runner availabilities from database.", "p")

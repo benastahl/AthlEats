@@ -93,7 +93,8 @@ td.bx {
 }
 .calendar-header i {
   color: black;
-  margin-bottom: 20px;
+  font-size: 30px;
+  margin-bottom: 32px;
   cursor: pointer;
 }
 .calendar-header .right {
@@ -101,6 +102,7 @@ td.bx {
 }
 .calendar-header .left {
   margin-right: 5px;
+  visibility: hidden;
 }
 
 .day--available {

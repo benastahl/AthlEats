@@ -6,11 +6,16 @@
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
     <link rel="stylesheet" href="../static/styles/access_forms.css">
-    <link rel="stylesheet" href="../static/styles/home.css">
+    <link rel="stylesheet" href="../static/styles/new_home.css">
       <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Home - AthlEats </title>
    </head>
+
+  <!-- Loading Activation -->
+  <link href="../static/styles/loading.css" rel="stylesheet">
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js" ></script>
 
   <body>
     <section class="home-section">
@@ -19,8 +24,8 @@
 
             {% if not user %}
               <div class="access-buttons-section">
-                  <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
-                  <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
+                  <button onclick="toggle_popup('login-form-container')" id="login-button" class="access-button"> LOGIN </button>
+                  <button onclick="toggle_popup('signup-form-container')" id="signup-button" class="access-button"> SIGNUP </button>
               </div>
           {% else %}
               <div class="profile-details">
@@ -52,26 +57,9 @@
       </nav>
 
       <div class="home-content">
-          <div class="home-content-buttons">
-              {% if user %}
-                  <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
-                  <form onsubmit="activateLoadingScreen('reserve-pickup-button')" method="get" action="/reserve-calendar">
-                      <button id="reserve-pickup-button" class="reserve-pickup-button">
-                          <span class="front">
-                            reserve pickup
-                          </span>
-                      </button>
-                  </form>
-              {% else %}
-                  <span id="guest-welcome-message" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
-              {% endif %}
-          </div>
-
-          <!-- HIDDEN -->
-          <!-- Signup Form -->
-          <div style="display: none;" id="signup-form" class="access-form">
-            <div class="signup-form form-section">
-                <i onclick="hide_form('signup-form')" class='bx bx-x'></i>
+          <div id="signup-form-container" class="form-container">
+            <div class="popup-form">
+                <i onclick="toggle_popup('signup-form-container')" class='bx bx-x'></i>
                 <div class="form-header">
                 <h3>AthlEats SIGNUP</h3>
                 <p>Please enter details to signup.</p>
@@ -110,16 +98,13 @@
                 </form>
             </div>
           </div>
-          <!-- Login Form -->
-          <div style="display: none;" id="login-form" class="access-form">
-
-              <div class="login-form form-section">
-                  <i onclick="hide_form('login-form')" class='bx bx-x'></i>
+          <div id="login-form-container" class="form-container">
+              <div class="popup-form">
+                  <i onclick="toggle_popup('login-form-container')" class='bx bx-x'></i>
                   <div class="form-header">
                     <h3>AthlEats LOGIN</h3>
                     <p>Please enter credentials to login.</p>
-                </div>
-
+                    </div>
                   <form onsubmit="activateLoadingScreen('submit-login-button')" name="login" action="/login" method="post">
                       <label>
                           <input required type="text" name="email" placeholder="email">
@@ -136,9 +121,25 @@
               </div>
           </div>
 
-          <div class="popular-restaurants">
-              <h3>Popular Restaurants</h3>
-              <div class="restaurant-list">
+
+          <div class="home-header">
+              {% if user %}
+                  <span class="welcome-message">Welcome, {{ user.first_name | capitalize }}.</span>
+                  <form onsubmit="activateLoadingScreen('reserve-pickup-button')" method="get" action="/reserve-calendar">
+                      <button id="reserve-pickup-button" class="reserve-pickup-button">
+                          <span class="front">
+                            reserve pickup
+                          </span>
+                      </button>
+                  </form>
+              {% else %}
+                  <span id="guest-welcome-message" class="welcome-message">Welcome. Sign up or log in to reserve a pickup.</span>
+              {% endif %}
+          </div>
+          <div class="popular-restaurants-container">
+                <div class="popular-restaurants">
+                    <h3>Popular Restaurants</h3>
+                    <div class="restaurant-list">
                   <div class="restaurant-visual">
                       <img src="https://www.godairyfree.org/wp-content/uploads/2007/10/fast-food-chipotle.jpg" alt="">
 
@@ -195,10 +196,11 @@
                       </span>
                   </div>
               </div>
+                </div>
+            </div>
 
-          </div>
-
-          <div class="process-visual-container">
+          <div class="home-widgets">
+              <div class="process-visual-container">
               <div class="process-visual">
                   <div class="process-step">
                       <i class='bx bx-store-alt'></i>
@@ -226,45 +228,28 @@
                   </div>
               </div>
           </div>
-          <div class="athleats-photos-container">
-            <div class="photo">
+              <div class="athleats-photos-container">
                 <img alt="the crew" src="../static/images/athleats-crew-real.jpeg">
-{#                <i class='bx bxs-circle'></i>#}
+                  <span class="name-plate" id="zocco">Jake Zocco</span>
+                  <span class="name-plate" id="stahl">Ben Stahl</span>
+                  <span class="name-plate" id="tse">Wesley Tse</span>
+                  <span class="name-plate" id="watkins">Matthew Watkins</span>
+
                 <span class="photo-caption">The developers</span>
             </div>
-        </div>
 
-          <div class="os-repo-container">
-              <i class='bx bxl-github'></i>
           </div>
-
       </div>
     </section>
   </body>
 
 
-  <!-- Loading Activation -->
-  <style>
-  .loading-overlay {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(192, 192, 192, 0.5);
-      background-image: url("https://i.stack.imgur.com/MnyxU.gif");
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  .loading-overlay.active {
-        display: flex;
-    }
-  </style>
-  <div class="loading-overlay"></div>
-  <script src="../static/scripts/loading.js" ></script>
-
   <!-- Popup Forms -->
-  <script src="../static/scripts/access-forms.js"></script>
+  <script>
+      function toggle_popup(id) {
+          document.getElementById(id).classList.toggle("revealed")
+      }
+  </script>
 
   <!-- Reveal signup/login error messages -->
   <script>

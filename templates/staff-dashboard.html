@@ -8,9 +8,15 @@
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
     <link rel="stylesheet" href="../static/styles/access_forms.css">
     <link rel="stylesheet" href="../static/styles/staff-dashboard.css">
+    <link rel="stylesheet" href="../static/styles/loading.css">
     <link rel="icon" href="../static/images/athleats-logo.png">
     <title> Staff Dashboard - AthlEats </title>
    </head>
+
+  <!-- Loading Activation -->
+  <link href="../static/styles/loading.css" rel="stylesheet">
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js" ></script>
 
   <body>
     <section class="home-section">
@@ -59,10 +65,10 @@
                 <div class="header">
                     <h3>Schedule Availability</h3>
                 </div>
-                <form action="/new-availability" method="post">
+                <form onsubmit="activateLoadingScreen('confirm-new-availability')" action="/new-availability" method="post">
                     <label>
                         Date
-                        <input required type="date" name="date">
+                        <input required onfocus="this.min=new Date().toISOString().split('T')[0]" type="date" name="date">
                     </label><br>
                     <label>
                         Block
@@ -73,7 +79,7 @@
                             <option>6</option>
                         </select>
                     </label>
-                    <button type="submit" value="confirm">Confirm</button>
+                    <button id="confirm-new-availability" type="submit" value="confirm">Confirm</button>
 
                     <!--
                     <label>
@@ -99,12 +105,13 @@
         </div>
         <div class="edit-availability-container">
             {% for availability in availabilities %}
-                <div class="edit-availability" id="edit-availability-{{ availabilities.index(availability) }}">
-                    <i onclick="toggle_popup('edit-availability-{{ availabilities.index(availability) }}')" class='bx bx-x'></i>
+                {% set availabilityNum = availabilities.index(availability) %}
+                <div class="edit-availability" id="edit-availability-{{ availabilityNum }}">
+                    <i onclick="toggle_popup('edit-availability-{{ availabilityNum }}')" class='bx bx-x'></i>
                     <div class="header">
                         <h3>Edit Availability</h3>
                     </div>
-                    <form action="/edit-availability" method="post">
+                    <form onsubmit="activateLoadingScreen('confirm-edit-availability-{{ availabilityNum }}')" action="/edit-availability" method="post">
                         <label>
                             Date
                             <input id="date" required type="date" name="date" value={{ availability.date_string }}>
@@ -121,10 +128,10 @@
                         <label style="display: none;">
                             <input id="availability_entry_id" name="availability_entry_id" style="display: none;" value="{{ availability.entry_id }}">
                         </label>
-                        <button style="background-color: cornflowerblue" type="submit">Confirm</button>
+                        <button id="confirm-edit-availability-{{ availabilityNum }}" style="background-color: cornflowerblue" type="submit">Confirm</button>
                         <button style="background-color: red" type="submit" formaction="/delete-availability" value="delete">Delete</button>
                         <script>
-                            blockElement = document.querySelectorAll("#edit-availability-{{ availabilities.index(availability) }} option")[{{ availability.block | int }} - 3];
+                            blockElement = document.querySelectorAll("#edit-availability-{{ availabilityNum }} option")[{{ availability.block | int }} - 3];
                             blockElement.selected = true;
                         </script>
                         <!-- Leave alone -->
@@ -179,11 +186,14 @@
                                     <td>{{ availability.date_string }}</td>
                                     <td>{{ availability.block }}</td>
                                     <td>{{ availability.reserved }}</td>
+                                    {% if not availability.reserved %}
                                     <td onclick="toggle_popup('edit-availability-{{ availabilities.index(availability) }}')" class="bx bx-edit"></td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
-
                       </table>
                     {% else %}
                         <div class="no-availabilities-message-container">
@@ -203,18 +213,16 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Block</th>
-                                <th>Location</th>
                                 <th></th>
                             </tr>
-                            {% for availability in reserved_availabilties %}
+                            {% for availability in reserved_availabilities %}
                             <tr>
                                 <td>{{ availability.date_string }}</td>
                                 <td>{{ availability.block }}</td>
-                                <td onclick="" class="bx bx-receipt"></td>
+                                <td onclick="location.href = '/order/{{ availability.order_entry_id }}'" class="bx bx-receipt"></td>
                             </tr>
                             {% endfor %}
                         </tbody>
-
                   </table>
                   {% else %}
                       <div class="no-availabilities-message-container">
@@ -284,14 +292,18 @@
 
       </div>
     </section>
-
   </body>
+  
 
   <script id="show-popup">
       function toggle_popup(id) {
           let popup = document.getElementById(id)
           popup.classList.toggle("revealed");
       }
+  </script>
+
+  <script>
+
   </script>
 
   {% if user %}

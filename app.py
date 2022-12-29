@@ -1,23 +1,19 @@
+import random
 import uuid
-import calendar
 import bcrypt
 import secrets
+import traceback
+import smtplib
 
-from flask import Flask, render_template, request, redirect
-from controls import UsersCloud, OrdersCloud, RunnerAvailabilitiesCloud
+from email.message import EmailMessage
+from email.utils import formataddr
+from flask import Flask, render_template, request, redirect, session, abort
+from controls import AthlEatsDatabase, google_app_password, flask_secret_password
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = r'./receipts'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER",
-          "DECEMBER"]
+app.secret_key = flask_secret_password
 error_handles = {
-    500: {
-        "name": "Internal Server Error (500)",
-        "message": "Something wrong happened on our end. The error has been logged and will be reviewed."
-    },
     404: {
         "name": "Page not found (404)",
         "message": "This page was not found."
@@ -25,7 +21,16 @@ error_handles = {
     403: {
         "name": "Access Denied (403)",
         "message": "You do not have permissions to access this resource."
-    }
+    },
+    429: {
+        "name": "Too many connections (429)",
+        "message": "We are experiencing a lot of traffic right now. Please try again in a bit.",
+    },
+    500: {
+        "name": "Internal Server Error (500)",
+        "message": "Something wrong happened on our end. The error has been logged and will be reviewed."
+    },
+
 }
 sport_teams = [
     "Boys Varsity Baseball",
@@ -36,23 +41,56 @@ sport_teams = [
 # TODO: ZOCCO TYPE IN TEAM NAMES from https://arbiterlive.com/Teams?entityId=24991#
 
 
-for handle in error_handles.items():
-    # Sets redirect for custom error pages.
-    status_code = handle[0]
-    app.register_error_handler(
-        status_code,
-        lambda x: render_template(
-            "error-page.html",
-            error_name=handle[1]["name"],
-            error_msg=handle[1]["message"]
-        )
-    )
+# for handle in error_handles.items():
+#     # Sets redirect for custom error pages.
+#     status_code = handle[0]
+#     app.register_error_handler(
+#         status_code,
+#         lambda x: render_template(
+#             "error-page.html",
+#             error_name=handle[1]["name"],
+#             error_msg=handle[1]["message"]
+#         )
+#     )
 
+
+# Fee calculator
+def calculate_fees(price) -> float:
+    return round(float(price) * 0.3, 2)
+
+
+def send_email(sender_name, recipient, subject, body):
+    em = EmailMessage()
+    em["From"] = formataddr((sender_name, "athleats.wayland@gmail.com"))
+    em["To"] = recipient
+    em["Subject"] = subject
+    em.set_content(body)
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login("athleats.wayland@gmail.com", google_app_password)
+            smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
+    except Exception as exc:
+        print(f"Failed to send email: {exc}")
+        traceback.print_exc()
+        abort(500)
+
+    return True
 
 # Do not touch thanks <3
 # @app.before_request
 # def coconut_malld():
 #     return render_template("coconut.html")
+
+
+@app.errorhandler(Exception)
+def handle_exception():
+    traceback.print_exc()
+    return render_template(
+        "error-page.html",
+        error_name=error_handles[500]["name"],
+        error_msg=error_handles[500]["message"]
+    )
 
 
 @app.route("/", methods=["GET"])
@@ -61,10 +99,20 @@ def home():
     auth_token = request.cookies.get("auth_token")
     signup_error = request.args.get("signup_error")
     login_error = request.args.get("login_error")
-    user = UsersCloud().get_entry(auth_token=auth_token)
+    verification_mode = request.args.get("verification_mode")
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
     # Returns user whether it can find auth token or not. Displays signup and login buttons if user=False.
-    return render_template("home.html", user=user, login_error=login_error, signup_error=signup_error)
+    return render_template("new_home.html",
+                           user=user,
+                           login_error=login_error,
+                           signup_error=signup_error,
+                           verification_mode=verification_mode,
+
+                           sport_teams=sport_teams
+                           )
 
 
 @app.route("/login", methods=["POST"])
@@ -72,8 +120,11 @@ def process_login():
     email = request.form["email"]
     password = request.form["pass"]  # plain text password
 
-    # login_user returns auth_token of user if email and password correct
-    auth_token = UsersCloud().login_user(email, password)
+    database = AthlEatsDatabase()
+    with database:
+        # login_user returns auth_token of user if email and password correct
+        auth_token = database.login_user(email, password)
+
     if not auth_token:
         return redirect("/?login_error=Email or password not found", 302)
 
@@ -90,17 +141,15 @@ def process_signup():
     tos_agree = request.form.get("tos")
     email = request.form["email"]
     grade = int(request.form["grade"])
+    sport_team = request.form['sport_team']
+
     # Hash password (hashing means that it is encrypted and impossible to decrypt)
     # We can now only check to see if a plain text input matches the hashed password (bcrypt.checkpw).
     hashed_password = bcrypt.hashpw(bytes(str(request.form["pass"]).encode("utf-8")), bcrypt.gensalt()).decode("utf-8")
 
-    # Check if email is already in use (get_student returns list of users with that email).
-    if UsersCloud().get_entry(email=email):
-        return redirect("/?signup_error=Email is already in use.")
-
     # Check if email is valid student email
-    if "waylandps.org" not in email:
-        return redirect("/signup_error=Not a valid WHS email.")
+    if "waylandps.org" not in email or "_" not in email:
+        return redirect("/?signup_error=Not a valid WHS email.")
 
     # Checks if email is a real valid email address
     # if not validate_email(email, verify=True):
@@ -118,19 +167,56 @@ def process_signup():
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # Create timestamp of the creation date of the account
+    # Not verified account.
+    # if not session['verified']:
+    #     # Hash verification code and set it as a session value. When the user inputs a verification code,
+    #     # it will be checked it against the hashed session value.
+    #     verification_code = str(random.randint(100000, 999999))
+    #     session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code)), bcrypt.gensalt()).decode("utf8")
+    #
+    #     # Create timestamp of the creation date of the account
+    #
+
+
     creation_date = int(datetime.timestamp(datetime.now()))
 
-    # Add user to database
-    UsersCloud().create_entry(
-        entry_id=uuid.uuid4(),
-        email=email,
-        grade=grade,
-        hashed_password=hashed_password,
-        auth_token=auth_token,
-        creation_date=creation_date,
-        staff=0,
-        admin=0
+    # Check if email is already in use (get_student returns list of users with that email).
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=email)
+
+        if user:
+            return redirect("/?signup_error=Email is already in use.")
+
+        # Add user to database
+        user = database.create_entry(
+            table_name="users",
+
+            entry_id=uuid.uuid4(),
+            email=email,
+            grade=grade,
+            hashed_password=hashed_password,
+            auth_token=auth_token,
+            creation_date=creation_date,
+            staff=0,
+            admin=0,
+            sport_team=sport_team
+        )
+
+    send_email(
+        sender_name="WHS AthlEats",
+        recipient="athleats.wayland@gmail.com",
+        subject=f"SIGNUP ALERT: {user.first_name.capitalize()} {user.last_name.capitalize()}",
+        body=f"""
+
+        A new user has just signed up: 
+        {user.first_name.capitalize()} {user.last_name.capitalize()}
+        {user.email}
+        {user.year_name}
+        {user.sport_team}
+        {user.creation_date}
+        
+        """
     )
 
     return response
@@ -140,52 +226,28 @@ def process_signup():
 def display_reserve_calendar():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    month_name = request.args.get("month")
 
-    if not auth_token:
-        return redirect("/", 302)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    # Checks to see if there's a corresponding user with auth token.
-    user = UsersCloud().get_entry(auth_token=auth_token)
+        if not user:
+            return redirect("/", 302)
 
-    now = datetime.now()
-    if not month_name:
-        month_name = months[now.month - 1].upper()
+        # Clear all outdated availabilities.
+        database.clear_old_availabilities()
 
-    month = months.index(month_name.upper()) + 1
-    year = now.year
+        availabilities = database.get_all_entries(table_name="runner_availabilities", reserved=0)
 
-    day = now.day
+        # Format time in table
+        for avail in availabilities:
+            avail.date_string = avail.date.strftime("%A, %m/%d/%y")
 
-    first_weekday, past_month_days = calendar.monthrange(year, month - 1)
-    first_weekday, num_days_in_month = calendar.monthrange(year, month)
-    next_month_weekday, next_month_days = calendar.monthrange(year, 1)
-    if month + 1 != 13:
-        next_month_weekday, next_month_days = calendar.monthrange(year, month + 1)
 
-    weekends = [day_num + 1 for day_num in range(num_days_in_month) if
-                datetime(year, month, day_num + 1).isoweekday() in [6, 7]]
 
-    runner_availabilities = RunnerAvailabilitiesCloud().get_all_entries(reserved=0)
-    available_days = [availability.date.day for availability in runner_availabilities]
-
-    return render_template("reserve_calendar.html",
+    return render_template("new_reserve_calendar.html",
                            user=user,
-                           availabilities=runner_availabilities,
-
-                           # Calendar data
-                           month_name=month_name,
-                           month=month,
-                           year=year,
-                           day=day,
-
-                           weekends=weekends,
-                           past_month_days=past_month_days,
-                           num_days_in_month=num_days_in_month,
-                           next_month_weekday=next_month_weekday,
-                           first_weekday=first_weekday,
-
-                           available_days=available_days
+                           availabilities=availabilities,
                            )
 
 
@@ -194,10 +256,12 @@ def display_reserve_form():
     auth_token = request.cookies.get("auth_token")
     entry_id = request.args.get("availability")
 
-    availability = RunnerAvailabilitiesCloud().get_entry(entry_id=entry_id)
-    user = UsersCloud().get_entry(auth_token=auth_token)
+    database = AthlEatsDatabase()
+    with database:
+        availability = database.get_entry(table_name="runner_availabilities", entry_id=entry_id)
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if not availability:
+    if not availability or availability.reserved:
         return redirect("/reserve-calendar", 302)
     if not user:
         return redirect("/", 302)
@@ -214,40 +278,58 @@ def process_reserve_form():
     availability_entry_id = request.args.get("availability")
     auth_token = request.cookies.get("auth_token")
 
-    usersDb = UsersCloud()
-    user = usersDb.get_entry(auth_token=auth_token, close_conn=False)
-    if not user:
-        return redirect("/", 302)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+        if not user:
+            return redirect("/", 302)
 
-    # Checks if availability is valid/real and still available (not reserved)
-    availDb = RunnerAvailabilitiesCloud()
-    availability = availDb.get_entry(entry_id=availability_entry_id, close_conn=False)
-    if availability.reserved:
-        return redirect("/reserve-calendar", 302)
-    # Set reserved status of availability to true.
-    availDb.edit_entry(entry_id=availability_entry_id, reserved=1)
+        # Checks if availability is valid/real and still available (not reserved)
+        availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
+        if availability.reserved:
+            return redirect("/reserve-calendar", 302)
+        order_entry_id = str(uuid.uuid4())
+        # Set reserved status of availability to true.
+        database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1, order_entry_id=order_entry_id)
 
-    # Collect runner user instance
-    runner = usersDb.get_entry(entry_id=availability.runner_entry_id)
+        # Collect runner user instance
+        runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
 
-    sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
-    price = str(request.form['input-dollar'])
-    fee = round(float(price) * 0.3, 2)
+        sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
+        price = str(request.form['input-dollar'])
+        fee = calculate_fees(price)
 
-    order = OrdersCloud().create_entry(
-        entry_id=str(uuid.uuid4()),
-        availability_entry_id=availability_entry_id,
-        is_complete=0,
-        email=str(request.form['user_email']),
-        restaurant=request.form['restaurant'],
-        order_date=datetime.now().strftime("%D %H:%M:%S"),
-        phone_number=request.form['phone-number'],
-        restaurant_pickup_time=str(request.form['restaurant-pickup-time']),
-        pickup_name=request.form['pickup-name'],
-        price=price,
-        pickup_location=request.form['pickup-location'],
+        order = database.create_entry(
+            table_name="orders",
+
+            entry_id=order_entry_id,
+            availability_entry_id=availability_entry_id,
+            runner_entry_id=availability.runner_entry_id,
+            is_complete=0,
+            email=str(request.form['user_email']),
+            restaurant=request.form['restaurant'],
+            order_date=datetime.now().strftime("%D %H:%M:%S"),
+            phone_number=request.form['phone-number'],
+            restaurant_pickup_time=str(request.form['restaurant-pickup-time']),
+            price=price,
+            pickup_name=request.form['pickup-name'],
+            pickup_location=request.form['pickup-location'],
+        )
+
+    send_email(
+        sender_name="WHS AthlEats Deliveries",
+        recipient=runner.email,
+        subject="ALERT: Delivery Scheduled",
+        body=f"""
+        
+        An availability you have created has been scheduled for a reservation!
+        Set a reminder or alert for yourself so you do not forget.
+        
+        Click this link or go to your staff dashboard for more details about the order:
+        https://www.athleats.app/order/{order_entry_id}
+        
+        """
     )
-
     # TODO: Wesley: in the order-complete.html, add more details
     #       about the order/availability using the instances provided
     #       in jinja below. Check account_authority.py classes to see what info you can show :).
@@ -262,24 +344,47 @@ def process_reserve_form():
                            )
 
 
+@app.route("/order/<order_entry_id>", methods=["GET"])
+def display_order_details(order_entry_id):
+    auth_token = request.cookies.get("auth_token")
+
+    database = AthlEatsDatabase()
+    with database:
+        # Confirm order is real. Does not need a user logged in to see order details. Anyone can see it with link.
+        order = database.get_entry(table_name="orders", entry_id=order_entry_id)
+        availability = database.get_entry(table_name="runner_availabilities", entry_id=order.availability_entry_id)
+        runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+
+    if not order or not availability or not runner:
+        return redirect("/", 302)
+
+    return render_template("order-complete.html",
+                            user=user,
+                            order=order,
+                            availability=order,
+                            runner=runner,
+                            fee=calculate_fees(order.price),
+                            )
+
+
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")
-    usersDB = UsersCloud()
-    ordersDB = OrdersCloud()
 
-    user = usersDB.get_entry(auth_token=auth_token, close_conn=False)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+        orders_list = database.get_all_entries(table_name="orders", entry_id=user.entry_id)
+        availabilities = database.get_all_entries(table_name="runner_availabilities", runner_entry_id=user.entry_id)  # TODO: delete connection closes
+
     if not user or not user.staff:
         return redirect("/", 302)
 
-    orders_list = ordersDB.get_all_entries(entry_id=user.entry_id)
-    user_list = usersDB.get_all_entries(entry_id=user.entry_id)
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]
 
-    runnerAvailsDb = RunnerAvailabilitiesCloud()
-    availabilities = runnerAvailsDb.get_all_entries(close_conn=False)
-    reserved_availabilities = runnerAvailsDb.get_all_entries(reserved=1)
+    reserved_availabilities = [avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id]
 
     return render_template("staff-dashboard.html",
                            user=user,
@@ -287,28 +392,31 @@ def display_staff_dashboard():
                            reserved_availabilities=reserved_availabilities,
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
-                           user_list=user_list
                            )
 
 
 @app.route("/new-availability", methods=["POST"])
 def process_new_availability():
     auth_token = request.cookies.get("auth_token")
-    usersDb = UsersCloud()
-    runner = usersDb.get_entry(auth_token=auth_token, close_conn=False)
 
-    if not runner or not runner.staff:
-        return "Access Denied", 403
+    database = AthlEatsDatabase()
+    with database:
+        runner = database.get_entry(table_name="users", auth_token=auth_token)
 
-    # Create new runner availability
-    runnerAvailCloud = RunnerAvailabilitiesCloud()
-    runnerAvailCloud.create_entry(
-        entry_id=uuid.uuid4(),
-        runner_entry_id=runner.entry_id,
-        reserved=0,
-        date=request.form.get("date"),
-        block=request.form.get("block")
-    )
+        if not runner or not runner.staff:
+            return "Access Denied", 403
+
+        # Create new runner availability
+        database.create_entry(
+            table_name="runner_availabilities",
+
+            entry_id=uuid.uuid4(),
+            runner_entry_id=runner.entry_id,
+            order_entry_id="",  # TBD
+            reserved=0,
+            date=request.form.get("date"),
+            block=request.form.get("block")
+        )
 
     return redirect("/staff-dashboard", 302)
 
@@ -316,30 +424,51 @@ def process_new_availability():
 @app.route("/edit-availability", methods=["POST"])
 def process_edit_availability():
     auth_token = request.cookies.get("auth_token")
-    usersDb = UsersCloud()
-    runner = usersDb.get_entry(auth_token=auth_token, close_conn=False)
 
-    if not runner or not runner.staff:
-        return "Access Denied", 403
+    database = AthlEatsDatabase()
+    with database:
+        runner = database.get_entry(table_name="users", auth_token=auth_token)
 
-    # Create new runner availability
-    runnerAvailCloud = RunnerAvailabilitiesCloud()
-    runnerAvailCloud.create_entry(
-        entry_id=uuid.uuid4(),
-        runner_entry_id=runner.entry_id,
-        reserved=0,
-        date=request.form.get("date"),
-        block=request.form.get("block")
-    )
+        if not runner or not runner.staff:
+            return "Access Denied", 403
+
+        availability_entry_id = request.form.get("availability_entry_id")
+
+        # Edit runner availability
+        avail = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
+        if not avail:
+            return "Availability not found", 500
+
+        database.edit_entry(
+            table_name="runner_availabilities",
+
+            entry_id=availability_entry_id,
+            date=request.form.get("date"),
+            block=request.form.get("block"),
+        )
 
     return redirect("/staff-dashboard", 302)
 
 
-@app.route("/staff-dashboard", methods=["POST"])
-def process_update_order():
-    if request.form.get('update-order') == 'update-order':
-        entry_id = request.form.get("index")
-        OrdersCloud().edit_entry(entry_id=entry_id, is_complete=1)
+@app.route("/delete-availability", methods=["POST"])
+def process_delete_availability():
+    auth_token = request.cookies.get("auth_token")
+
+    database = AthlEatsDatabase()
+    with database:
+        runner = database.get_entry(table_name="users", auth_token=auth_token)
+
+        if not runner or not runner.staff:
+            return "Access Denied", 403
+
+        availability_entry_id = request.form.get("availability_entry_id")
+
+        # Edit runner availability
+        avail = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
+        if not avail:
+            return "Availability not found", 500
+
+        database.delete_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
 
     return redirect("/staff-dashboard", 302)
 
@@ -347,15 +476,16 @@ def process_update_order():
 @app.route("/admin-dashboard", methods=["GET"])
 def display_admin_dashboard():
     auth_token = request.cookies.get("auth_token")
-    usersDb = UsersCloud()
-    ordersDb = OrdersCloud()
-    user = usersDb.get_entry(auth_token=auth_token, close_conn=False)
 
-    if not user or not user.admin:
-        return redirect("/", 302)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    orders = ordersDb.get_all_entries()
-    users = usersDb.get_all_entries()
+        if not user or not user.admin:
+            return redirect("/", 302)
+
+        orders = database.get_all_entries(table_name="orders")
+        users = database.get_all_entries(table_name="users")
 
     completed_orders = [order for order in orders if order.is_complete]
     incomplete_orders = [order for order in orders if not order.is_complete]
@@ -375,8 +505,9 @@ def display_admin_dashboard():
 def process_complete_order():
     if request.form.get('update-order') == 'update-order':
         entry_id = request.form.get("index")
-        order_db = OrdersCloud()
-        order_db.edit_entry(entry_id=entry_id, is_complete=1)
+        database = AthlEatsDatabase()
+        with database:
+            database.edit_entry(table_name="orders", entry_id=entry_id, is_complete=1)
 
     return redirect("/admin-dashboard", 302)
 
@@ -385,58 +516,51 @@ def process_complete_order():
 def display_profile():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    usersDb = UsersCloud()
-    user = usersDb.get_entry(auth_token=auth_token)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if user:
-        ordersDb = OrdersCloud()
-        orders = ordersDb.get_all_entries(email=user.email)
-        user_current_orders = [order for order in orders if not order.is_complete]
-        user_orders = [order for order in orders]
-        return render_template("profile.html",
-                               user=user,
-                               user_current_orders=user_current_orders,
-                               user_order_list=user_orders
-                               )
-    if auth_token:
-        # Checks to see if there's a corresponding user with auth token.
-        user = UsersCloud().get_entry(auth_token=auth_token)
-        if user:
-            orders_list = OrdersCloud().get_all_entries(entry_id=user.entry_id)
-            return render_template("profile.html", user=user, user_order_list=orders_list)
+        if not user:
+            return redirect("/", 302)
 
+        orders = database.get_all_entries(table_name="orders", email=user.email)
 
-    return redirect("/", 302)
-
+    user_current_orders = [order for order in orders if not order.is_complete]
+    user_orders = [order for order in orders]
+    return render_template("profile.html",
+                           user=user,
+                           user_current_orders=user_current_orders,
+                           user_order_list=user_orders
+                           )
 
 @app.route("/settings", methods=["GET"])
 def display_settings():
-    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    user = UsersCloud().get_entry(auth_token=auth_token)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if user:
-        return render_template("settings.html", user=user)
+    if not user:
+        return redirect("/", 302)
 
-    return redirect("/", 302)
-
+    return render_template("settings.html", user=user)
 
 @app.route("/settings", methods=["POST"])
 def process_settings():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    usersDb = UsersCloud()
-    user = usersDb.get_entry(auth_token=auth_token)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if user:
-        if "delete-account" in request.form.keys():
-            usersDb.delete_entry(entry_id=user.entry_id)
+        if not user:
             return redirect("/", 302)
 
-        return render_template("settings.html", user=user)
+        if "delete-account" in request.form.keys():
+            database.delete_entry(table_name="users", entry_id=user.entry_id)
+            return redirect("/", 302)
 
-    return redirect("/", 302)
-
+    return render_template("settings.html", user=user)
 
 @app.route("/logout", methods=["GET"])
 def logout():
@@ -446,17 +570,17 @@ def logout():
 
     return response
 
-
 @app.route("/coconut", methods=["GET"])
 def display_coconut():
     return redirect("https://youjustgotcoconutmalld.com/", 302)
-
 
 @app.route("/about-us", methods=["GET"])
 def display_about():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
-    user = UsersCloud().get_entry(auth_token=auth_token)
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
 

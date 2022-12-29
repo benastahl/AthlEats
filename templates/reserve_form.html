@@ -222,7 +222,7 @@
                     <h3>Reserve Pickup Form</h3>
                 </div>
 
-                <form enctype="multipart/form-data" class="input-form" name="order-form" method="post">
+                <form onsubmit="activateLoadingScreen('confirm-new-availability')" enctype="multipart/form-data" class="input-form" name="order-form" method="post">
 
                     <div class="form-input-container">
                         <input style="display: none" id="user_email" name="user_email" value="{{user.email}}">
@@ -293,31 +293,51 @@
 
   </body>
 
-      <!-- Fee Calculator -->
-      <script>
-        function calculate_fees(price) {
-            fee = price * .30;
+  <!-- Loading Activation -->
+  <style>
+  .loading-overlay {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(192, 192, 192, 0.5);
+      background-image: url("https://i.stack.imgur.com/MnyxU.gif");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  .loading-overlay.active {
+        display: flex;
+    }
+  </style>
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js"></script>
 
-            return fee;
-        }
+  <!-- Fee Calculator -->
+  <script>
+    function calculate_fees(price) {
+        fee = price * .30;
 
-        function set_price_calc() {
-                console.log("Setting price...");
-                let total_price = calculate_fees(document.querySelector("#input-dollar").value);
-                document.querySelector(".fee-output").innerHTML = "Delivery fee: $" + total_price;
+        return fee;
+    }
 
-        }
-      </script>
+    function set_price_calc() {
+            console.log("Setting price...");
+            let total_price = calculate_fees(document.querySelector("#input-dollar").value);
+            document.querySelector(".fee-output").innerHTML = "Delivery fee: $" + total_price;
 
-      <script>
-      function show_restaurant_dropdown(rest_id) {
-          let dropdown_div = document.getElementById(rest_id);
-          dropdown_div.classList.toggle("active");
-      }
+    }
   </script>
 
-      {% if user %}
-      <script src="../static/scripts/profile_dropdown.js"></script>
-      {% endif %}
+  <script>
+  function show_restaurant_dropdown(rest_id) {
+      let dropdown_div = document.getElementById(rest_id);
+      dropdown_div.classList.toggle("active");
+  }
+</script>
+
+  {% if user %}
+  <script src="../static/scripts/profile_dropdown.js"></script>
+  {% endif %}
 </html>
 

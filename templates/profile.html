@@ -57,26 +57,27 @@
                       <i class='bx bx-user-circle'></i>
                       <span class="profile-card-name">{{ user.first_name | capitalize }} {{ user.last_name | capitalize }}</span>
                       <span class="profile-card-year">{{ user.year_name }}</span>
+                      <span class="profile-card-year">{{ user.sport_team }}</span>
                   </div>
                   <div class="profile-card-info-container">
                     <div class="profile-card-info">
-                        <div class="profile-info order-count">
+                        <div class="profile-info">
                             <span class="profile-info-title">Account creation</span>
                             <span class="profile-info-value">{{ user.creation_date}}</span>
                         </div>
-                        <div class="profile-info order-count">
+                        <div class="profile-info">
                             <span class="profile-info-title">Order count</span>
                             <span class="profile-info-value">{{ user_order_list | length }}</span>
                         </div>
-                        <div class="profile-info order-count">
+                        <div class="profile-info">
                             <span class="profile-info-title">Email</span>
                             <span class="profile-info-value">{{ user.email }}</span>
                         </div>
-                        <div class="profile-info order-count">
+                        <div class="profile-info">
                             <span class="profile-info-title">Staff Member</span>
                             <span class="profile-info-value">{{ user.staff }}</span>
                         </div>
-                        <div class="profile-info order-count">
+                        <div class="profile-info">
                             <span class="profile-info-title">Administrator</span>
                             <span class="profile-info-value">{{ user.admin }}</span>
                         </div>
@@ -90,7 +91,7 @@
           <div class="acc-order-data-container">
               <h3 class="acc-data-header"> Order History </h3>
               <div class="acc-order-data-list">
-                  {% for orders in user_order_list %}
+                  {% for orders in user_order_list | reverse %}
                       <div class="acc-data receipt">
                         <div class="acc-data-header">
                             <h5>{{orders.order_date}}</h5>
