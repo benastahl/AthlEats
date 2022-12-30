@@ -5,6 +5,7 @@ import secrets
 import traceback
 import smtplib
 
+from werkzeug.exceptions import HTTPException
 from email.message import EmailMessage
 from email.utils import formataddr
 from flask import Flask, render_template, request, redirect, session, abort
@@ -41,19 +42,6 @@ sport_teams = [
 # TODO: ZOCCO TYPE IN TEAM NAMES from https://arbiterlive.com/Teams?entityId=24991#
 
 
-# for handle in error_handles.items():
-#     # Sets redirect for custom error pages.
-#     status_code = handle[0]
-#     app.register_error_handler(
-#         status_code,
-#         lambda x: render_template(
-#             "error-page.html",
-#             error_name=handle[1]["name"],
-#             error_msg=handle[1]["message"]
-#         )
-#     )
-
-
 # Fee calculator
 def calculate_fees(price) -> float:
     return round(float(price) * 0.3, 2)
@@ -84,14 +72,42 @@ def send_email(sender_name, recipient, subject, body):
 
 
 @app.errorhandler(Exception)
-def handle_exception():
-    traceback.print_exc()
+def handle_outlier_exceptions(e):
+    exception = traceback.TracebackException.from_exception(e)
+    ending_cause = exception.stack[len(exception.stack) - 1]
+
+    exception_data = {
+        "exception_type": exception.exc_type,
+        "exception_desc": exception.__dict__['_str'],
+        "lineno": ending_cause.lineno,
+        "filename": ending_cause.filename
+    }
+
+    # return error data
+    for name, details in exception_data.items():
+        print(f"{name} -> {details}")
+    data = {
+        "code": 500,
+        "name": "Internal Server Error",
+        "description": exception_data,
+    }
     return render_template(
         "error-page.html",
-        error_name=error_handles[500]["name"],
-        error_msg=error_handles[500]["message"]
+        error_data=data
     )
 
+@app.errorhandler(HTTPException)
+def handle_exceptions(e):
+
+    data = {
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    }
+    return render_template(
+        "error-page.html",
+        error_data=data
+    )
 
 @app.route("/", methods=["GET"])
 def home():
@@ -330,6 +346,29 @@ def process_reserve_form():
         
         """
     )
+    send_email(
+        sender_name="WHS AthlEats Deliveries",
+        recipient=user.email,
+        subject="Pickup Confirmation - AthlEats Deliveries",
+        body=f"""
+
+        Hello {user.first_name.capitalize()},
+        
+        Your delivery is scheduled for:
+        {availability.date_string} after school at {order.pickup_location}.
+        
+        To view full details about your order, follow this link:
+        https://www.athleats.app/order/{order_entry_id}
+        
+        Thanks for ordering with WHS AthlEats,
+        
+        Sincerely,
+        The AthlEats Team
+        athleats.wayland@gmail.com
+
+        """
+    )
+
     # TODO: Wesley: in the order-complete.html, add more details
     #       about the order/availability using the instances provided
     #       in jinja below. Check account_authority.py classes to see what info you can show :).
@@ -362,9 +401,30 @@ def display_order_details(order_entry_id):
     return render_template("order-complete.html",
                             user=user,
                             order=order,
-                            availability=order,
+                            availability=availability,
                             runner=runner,
                             fee=calculate_fees(order.price),
+                            )
+
+
+@app.route("/availability/<availability_entry_id>", methods=["GET"])
+def display_availability_details(availability_entry_id):
+    auth_token = request.cookies.get("auth_token")
+
+    database = AthlEatsDatabase()
+    with database:
+        # Confirm order is real. Does not need a user logged in to see order details. Anyone can see it with link.
+        availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
+        runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+
+    if not availability or not runner:
+        return redirect("/", 302)
+
+    return render_template("availability_details.html",
+                            user=user,
+                            availability=availability,
+                            runner=runner,
                             )
 
 
@@ -583,7 +643,6 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=4949)

@@ -12,10 +12,15 @@
     <title> Reservation Calendar - AthlEats </title>
    </head>
 
+  <!-- Loading Activation -->
+  <link href="../static/styles/loading.css" rel="stylesheet">
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js" ></script>
+
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'; activateLoadingScreen(null);" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
 {#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
             {% if not user %}
@@ -71,14 +76,17 @@
                             <tbody>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Dropoff Time</th>
+                                    <th>Drop-off Time</th>
+                                    <th id="icon-box"></th>
                                     <th id="icon-box"></th>
                                 </tr>
                                 {% for availability in availabilities %}
                                 <tr>
                                     <td>{{ availability.date_string }}</td>
                                     <td>After school</td>
-                                    <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'" id="icon-box" class="bx bxs-check-square"> </td>
+                                    <td onclick="location.href = '/availability/{{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-info-circle"> </td>
+                                    <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-check-square"> </td>
+
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -95,7 +103,6 @@
 
       </div>
     </section>
-
   </body>
 
 

@@ -91,7 +91,7 @@ class AthlEatsDatabase:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
         self.database.dispose()
-        self.log(f"Connection closed and database disposed. ({self.connection_id})", "p")
+        self.log(f"Connection closed and database engine disposed. ({self.connection_id})", "p")
 
     def set_table(self, table_name: str):
         self.table_name = table_name
@@ -238,5 +238,7 @@ class AthlEatsDatabase:
 
     def clear_old_availabilities(self):
         self.set_table("runner_availabilities")
-        entries = self.connection.execute("DELETE FROM runner_availabilities WHERE date < CURRENT_DATE")
+        # Delete availabilities that are out of date and were NEVER RESERVED.
+        # Does not delete any availabilities that were scheduled.
+        self.connection.execute("DELETE FROM runner_availabilities WHERE date < CURRENT_DATE AND reserved = 0")
         self.log("Cleared all old (outdated) runner availabilities from database.", "p")

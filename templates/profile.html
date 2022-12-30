@@ -12,10 +12,15 @@
     <title> Profile - AthlEats </title>
    </head>
 
+    <!-- Loading Activation -->
+  <link href="../static/styles/loading.css" rel="stylesheet">
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js" ></script>
+
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'; activateLoadingScreen(null)" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
             {% if not user %}
               <div class="access-buttons-section">
@@ -87,29 +92,28 @@
 
           </div>
 
-
           <div class="acc-order-data-container">
               <h3 class="acc-data-header"> Order History </h3>
               <div class="acc-order-data-list">
-                  {% for orders in user_order_list | reverse %}
+                  {% for order in user_order_list | reverse %}
                       <div class="acc-data receipt">
                         <div class="acc-data-header">
-                            <h5>{{orders.order_date}}</h5>
+                            <h5>{{order.order_date}}</h5>
                         </div>
                         <div class="acc-data-box">
                             <span class="acc-data-title">
                               Price:
                             </span>
                              <span class="acc-data-info">
-                                 ${{orders.price}}
+                                 ${{order.price}}
                             </span>
                         </div>
                         <div class="acc-data-box">
                             <span class="acc-data-title">
-                              Pickup Time:
+                              Drop-off Time:
                             </span>
                             <span class="acc-data-info">
-                              {{orders.pickup_time}}
+                              After School
                             </span>
                         </div>
                         <div class="acc-data-box">
@@ -117,17 +121,12 @@
                               Restaurant:
                             </span>
                             <span class="acc-data-info">
-                              {{orders.restaurant}}
+                              {{order.restaurant}}
                             </span>
                         </div>
+                        <a target="_blank" href="/order/{{ order.entry_id }}" class="bx bx-receipt"></a>
                       </div>
                   {% endfor %}
-
-
-
-
-
-
               </div>
               {% if not user_order_list %}
                   <div class="no-orders-container">

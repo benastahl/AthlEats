@@ -5,8 +5,8 @@ class User:
     def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin, sport_team):
         self.entry_id = entry_id
 
-        self.first_name = email.split('@')[0].split('_')[0]
-        self.last_name = email.split('@')[0].split('_')[1]
+        self.first_name = email.split('@')[0].split('_')[0].capitalize()
+        self.last_name = email.split('@')[0].split('_')[1].capitalize()
         self.email = email
         self.hashed_password = hashed_password
         self.grade = grade

@@ -80,8 +80,9 @@
   font-size: 36px;
   font-weight: 400;
   border-bottom: 1px solid lightgray;
-  padding: 5px;
-  margin: 20px;
+}
+h3.acc-data-header {
+  padding: 15px;
 }
 .acc-data-header h4 {
   font-size: 36px;
@@ -95,7 +96,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 0px 20px 10px 20px;
 }
 .acc-data-title {
   margin: 7px 0 0 0;
@@ -107,6 +107,14 @@
   font-size: 16px;
 
 
+}
+.acc-data .bx {
+  text-decoration: none;
+  color: black;
+  font-size: 35px;
+  margin-top: 20px;
+  background: #CDEAFF;
+  border-radius: 5px;
 }
 .acc-order-data-container {
   background: rgba(255,255,255,0.9);
@@ -124,7 +132,7 @@
 .receipt {
   height: 400px;
   min-width: 300px;
-  padding: 20px;
+  padding: 32px;
 }
 .no-orders-container {
   display: flex;

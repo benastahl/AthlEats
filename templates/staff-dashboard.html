@@ -21,7 +21,7 @@
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="AthlEats Logo">
+          <img onclick="location.href = '/'; activateLoadingScreen(null)" class="athleats-logo" src="../static/images/athleats-logo.png" alt="AthlEats Logo">
 
           {% if not user %}
               <div class="access-buttons-section">
@@ -68,7 +68,7 @@
                 <form onsubmit="activateLoadingScreen('confirm-new-availability')" action="/new-availability" method="post">
                     <label>
                         Date
-                        <input required onfocus="this.min=new Date().toISOString().split('T')[0]" type="date" name="date">
+                        <input required onfocus="this.min=tomorrow" type="date" name="date">
                     </label><br>
                     <label>
                         Block
@@ -114,7 +114,7 @@
                     <form onsubmit="activateLoadingScreen('confirm-edit-availability-{{ availabilityNum }}')" action="/edit-availability" method="post">
                         <label>
                             Date
-                            <input id="date" required type="date" name="date" value={{ availability.date_string }}>
+                            <input id="date" required onfocus="this.min=tomorrow" type="date" name="date" value={{ availability.date_string }}>
                         </label><br>
                         <label>
                             Block
@@ -219,7 +219,7 @@
                             <tr>
                                 <td>{{ availability.date_string }}</td>
                                 <td>{{ availability.block }}</td>
-                                <td onclick="location.href = '/order/{{ availability.order_entry_id }}'" class="bx bx-receipt"></td>
+                                <td onclick="location.href = '/order/{{ availability.order_entry_id }}'; activateLoadingScreen(null)" class="bx bx-receipt"></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -303,7 +303,14 @@
   </script>
 
   <script>
-
+    const today = new Date()
+    // to return the date number(1-31) for the specified date
+    console.log("today => ",today)
+    let tomorrow =  new Date()
+    tomorrow.setDate(today.getDate() + 1)
+    tomorrow = tomorrow.toISOString().split('T')[0]
+    //returns the tomorrow date
+    console.log("tomorrow => ",tomorrow)
   </script>
 
   {% if user %}

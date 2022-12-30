@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded",
 )
 function activateLoadingScreen(button_id) {
     loading_overlay.classList.toggle("active")
-    disableButton(button_id)
+    if (button_id) {
+        disableButton(button_id)
+    }
 }
 function disableButton(id) {
     document.getElementById(id).disabled = true;

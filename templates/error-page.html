@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-      <title> {{ error_name }} - AthlEats </title>
+      <title> {{ error_data["name"] }} - AthlEats </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -19,12 +19,12 @@
         <div class="error-container">
             <div class="error-header">
                 <div class="error-title">
-                    {{error_name}}
+                    {{error_data["name"]}}
                 </div>
             </div>
             <div class="error-body">
                 <div class="error-message">
-                    {{ error_msg }}
+                    {{ error_data["description"] }}
                 </div>
             </div>
                         <a class='bx bx-home' href="/"></a>

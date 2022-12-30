@@ -8,18 +8,13 @@
     <link rel="stylesheet" href="../static/styles/access_forms.css">
     <link rel="stylesheet" href="../static/styles/order-reserved.css">    <link rel="icon" href="../static/images/athleats-logo.png">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Order Confirmation - AthlEats </title>
+    <title> Availability Details - AthlEats </title>
    </head>
-
-  <!-- Loading Activation -->
-  <link href="../static/styles/loading.css" rel="stylesheet">
-  <div class="loading-overlay"></div>
-  <script src="../static/scripts/loading.js" ></script>
 
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'; activateLoadingScreen(null)" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
             {% if user %}
               <div class="profile-details">
@@ -56,27 +51,16 @@
           <div id="reserve-form" class="access-form">
             <div class="reserve-form form-section">
                 <div class="form-header">
-                    <h3>Order Review</h3>
+                    <h3>Availability Details</h3>
                 </div>
                 <div class="reserve-data-box">
                     <span class="reserve-data-header">
-                        Pickup Fee: {{fee}} <br>
-                        Venmo this fee to @ <br>
-                        Or paypal to the following link: <br>
-                    </span>
+                        Id: {{ availability.entry_id }}<br>
+                        Runner Id: {{ availability.runner_entry_id }}<br>
+                        Runner Name: {{ runner.first_name | capitalize }} {{ runner.last_name | capitalize }}
+                        Reserved: {{ availability.reserved }}<br>
 
-                    <span class="reserve-data-header">
-                        Pickup Location: {{order.pickup_location}}
                     </span>
-
-                    <span class="reserve-data-header">
-                        Your runner: {{runner.first_name | capitalize}} {{runner.last_name | capitalize}}
-                    </span>
-
-                    <span class="reserve-data-header">
-                        Pickup Time: 3:10 / 2:25pm
-                    </span>
-{#                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2950.8587835227354!2d-71.40347662380701!3d42.30287857119835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3888c2e5632bb%3A0x87d88d4862b86fc6!2sMcDonald&#39;s!5e0!3m2!1sen!2snl!4v1672059954839!5m2!1sen!2snl" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>#}
 
                 </div>
 

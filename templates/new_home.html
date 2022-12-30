@@ -20,7 +20,7 @@
   <body>
     <section class="home-section">
       <nav>
-          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+          <img onclick="location.href = '/'; activateLoadingScreen(null)" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
 
             {% if not user %}
               <div class="access-buttons-section">
@@ -200,7 +200,8 @@
             </div>
 
           <div class="home-widgets">
-              <div class="process-visual-container">
+              <div class="widgets-left">
+                  <div class="process-visual-container">
               <div class="process-visual">
                   <div class="process-step">
                       <i class='bx bx-store-alt'></i>
@@ -228,7 +229,9 @@
                   </div>
               </div>
           </div>
-              <div class="athleats-photos-container">
+              </div>
+              <div class="widgets-right">
+                  <div class="athleats-photos-container">
                 <img alt="the crew" src="../static/images/athleats-crew-real.jpeg">
                   <span class="name-plate" id="zocco">Jake Zocco</span>
                   <span class="name-plate" id="stahl">Ben Stahl</span>
@@ -237,12 +240,45 @@
 
                 <span class="photo-caption">The developers</span>
             </div>
+                  <div class="plugs-container">
+                      <div class="plugs">
+                          <div class="plugs-header">
+                            Our socials
+                          </div>
+                          <a target="_blank" href="https://github.com/benastahl/AthlEats" id="github-athleats" class="plug">
+                              <i class="bx bxl-github"></i>
+                              <span>AthlEats (website code)</span>
+                          </a>
+                          <a target="_blank" href="https://www.instagram.com/whs_athleats/" id="instagram-athleats" class="plug">
+                              <i class="bx bxl-instagram"></i>
+                              <span>AthlEats</span>
+                          </a>
+                          <a target="_blank" href="https://www.instagram.com/wesleyy0409" id="instagram-tse" class="plug">
+                              <i class="bx bxl-instagram"></i>
+                              <span>Wesley Tse</span>
+                          </a>
+                          <a target="_blank" href="https://www.instagram.com/benastahl" id="instagram-stahl" class="plug">
+                              <i class="bx bxl-instagram"></i>
+                              <span>Ben Stahl</span>
+                          </a>
+                          <a target="_blank" href="https://www.instagram.com/j_zocc0" id="instagram-zocco" class="plug">
+                              <i class="bx bxl-instagram"></i>
+                              <span>Jake Zocco</span>
+                          </a>
+                          <a target="_blank" href="https://www.instagram.com/elisodickson" id="instagram-sodickson" class="plug">
+                              <i onclick="" class="bx bxl-instagram"></i>
+                              <span>Eli Sodickson</span>
+                          </a>
+                      </div>
+
+                  </div>
+              </div>
+
 
           </div>
       </div>
     </section>
   </body>
-
 
   <!-- Popup Forms -->
   <script>

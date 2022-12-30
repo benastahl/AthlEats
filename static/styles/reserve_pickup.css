@@ -7,7 +7,7 @@
 #reserve-form .reserve-form {
   max-width: 750px;
   height: 100%;
-  margin: 0px auto 0px auto;
+  margin: 0 auto 10px auto;
 }
 
 .form-section {
@@ -120,7 +120,19 @@
 }
 
 @media screen and (max-width: 650px) {
-  .access-form {
-    padding: 100px 10px;
-  }
+    .access-form {
+      padding: 100px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .left-section {
+        width: 350px;
+        margin-bottom: 10px;
+    }
+    .restaurant-button {
+        width: auto;
+    }
+    .restaurant-selection {
+        padding: 0;
+    }
 }
