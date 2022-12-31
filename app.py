@@ -98,6 +98,7 @@ def handle_outlier_exceptions(e):
         error_data=data
     )
 
+
 @app.errorhandler(HTTPException)
 def handle_exceptions(e):
 
@@ -119,6 +120,7 @@ def home():
     signup_error = request.args.get("signup_error")
     login_error = request.args.get("login_error")
     confirmation_mode = request.args.get("confirmation_mode")
+    reset_password_mode = request.args.get("reset_password_mode")
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
@@ -129,6 +131,7 @@ def home():
                            login_error=login_error,
                            signup_error=signup_error,
                            confirmation_mode=confirmation_mode,
+                           reset_password_mode=reset_password_mode,
                            sport_teams=sport_teams
                            )
 
@@ -192,8 +195,6 @@ def process_signup():
     # token so the user doesn't have to log in every single time.
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
-
-
 
     user_data = {
         "email": email,
@@ -272,6 +273,70 @@ def confirm_signup():
             admin=0,
             sport_team=user_data["sport_team"]
         )
+    return redirect("/")
+
+
+@app.route("/password-recovery", methods=["POST"])
+def password_recovery():
+    email = request.form["email"]
+
+    database = AthlEatsDatabase()
+    with database:
+        # login_user returns auth_token of user if email and password correct
+        user = database.get_entry(table_name="users", email=email)
+
+    if not user:
+        return redirect("/?signup_error=Email not found")
+
+    # make OTP for password reset
+    one_time_password = str(random.randint(1000000000, 9999999999))
+
+    # store all necessary information for reset_password() in session variables
+    session["password_creation_time"] = int(datetime.timestamp(datetime.now()))
+    session["reset_password_for_email"] = email
+    session["hashed_OTP"] = bcrypt.hashpw(bytes(str(one_time_password).encode("utf8")), bcrypt.gensalt()).decode("utf8")
+
+    # sends email to recipient with OTP
+    send_email(sender_name="WHS AthlEats",
+               recipient=email,
+               subject=f"Password Reset",
+               body=f"""
+                    
+                    One time passord: {one_time_password}
+                    This temporary password expires in 10 minutes.
+                    If you did not make this request or this was a mistake please ignore this email.
+                """)
+
+    return redirect("/?reset_password_mode=true")
+
+
+@app.route("/reset-password", method=["POST"])
+def reset_password():
+    email = request.form["email"]
+    one_time_password = request.form["one time password"]  # one time password
+    password = request.form["new password"]      # new password
+
+    # confirm emails are the same
+    if email != session["reset_password_for_email"]:
+        return redirect("/?reset_password_error=emails do not match for password reset", 302)
+
+    # confirm OTP has not expired
+    current_time = int(datetime.timestamp(datetime.now()))
+    if current_time - session["password_creation_time"] >= 600:
+        return redirect("/?reset_password_error=OTP expired", 302)
+
+    # confirm OTP is correct
+    if not bcrypt.checkpw(bytes(one_time_password.encode("utf8")), bytes(session["hashed_OTP"].encode("utf8"))):
+        return redirect("/?reset_password_error=Incorrect OTP", 302)
+
+    # hashes new password and saves it to user in the database
+    new_password = str(bcrypt.hashpw(bytes(str(password).encode("utf-8")), bcrypt.gensalt()).decode("utf-8"))
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=email)
+        # change user password
+        database.edit_entry(table_name="users", entry_id=user.entry_id, hashed_password=new_password)
+
     return redirect("/")
 
 
