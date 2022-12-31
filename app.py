@@ -1,3 +1,5 @@
+import base64
+import json
 import random
 import uuid
 import bcrypt
@@ -109,13 +111,14 @@ def handle_exceptions(e):
         error_data=data
     )
 
+
 @app.route("/", methods=["GET"])
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
     signup_error = request.args.get("signup_error")
     login_error = request.args.get("login_error")
-    verification_mode = request.args.get("verification_mode")
+    confirmation_mode = request.args.get("confirmation_mode")
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
@@ -125,8 +128,7 @@ def home():
                            user=user,
                            login_error=login_error,
                            signup_error=signup_error,
-                           verification_mode=verification_mode,
-
+                           confirmation_mode=confirmation_mode,
                            sport_teams=sport_teams
                            )
 
@@ -175,27 +177,6 @@ def process_signup():
     if tos_agree != "agree":
         return redirect("/?signup_error=Please agree to TOS to access the website.")
 
-    # Set auth cookie token
-    response = redirect("/", 302)
-
-    # Create an auth browser cookie (random letters and numbers) as our authentication
-    # token so the user doesn't have to log in every single time.
-    auth_token = secrets.token_hex()
-    response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
-
-    # Not verified account.
-    # if not session['verified']:
-    #     # Hash verification code and set it as a session value. When the user inputs a verification code,
-    #     # it will be checked it against the hashed session value.
-    #     verification_code = str(random.randint(100000, 999999))
-    #     session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code)), bcrypt.gensalt()).decode("utf8")
-    #
-    #     # Create timestamp of the creation date of the account
-    #
-
-
-    creation_date = int(datetime.timestamp(datetime.now()))
-
     # Check if email is already in use (get_student returns list of users with that email).
     database = AthlEatsDatabase()
     with database:
@@ -204,20 +185,30 @@ def process_signup():
         if user:
             return redirect("/?signup_error=Email is already in use.")
 
-        # Add user to database
-        user = database.create_entry(
-            table_name="users",
+    # Set auth cookie token
+    response = redirect("/?confirmation_mode=true", 302)
 
-            entry_id=uuid.uuid4(),
-            email=email,
-            grade=grade,
-            hashed_password=hashed_password,
-            auth_token=auth_token,
-            creation_date=creation_date,
-            staff=0,
-            admin=0,
-            sport_team=sport_team
-        )
+    # Create an auth browser cookie (random letters and numbers) as our authentication
+    # token so the user doesn't have to log in every single time.
+    auth_token = secrets.token_hex()
+    response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
+
+
+
+    user_data = {
+        "email": email,
+        "grade": grade,
+        "hashed_password": hashed_password,
+        "auth_token": auth_token,
+        "sport_team": sport_team
+    }
+    data_as_string = json.dumps(user_data)
+    session["user_data"] = data_as_string
+
+    # Hash verification code and set it as a session value. When the user inputs a verification code,
+    # it will be checked it against the hashed session value.
+    verification_code = str(random.randint(100000, 999999))
+    session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code).encode("utf8")), bcrypt.gensalt()).decode("utf8")
 
     send_email(
         sender_name="WHS AthlEats",
@@ -235,7 +226,53 @@ def process_signup():
         """
     )
 
+    send_email(sender_name="WHS AthlEats",
+               recipient=user.email,
+               subject=f"SIGNUP VERIFICATION: {user.first_name.capitalize()} {user.last_name.capitalize()}",
+               body=f"""
+                
+                Verification Code: {verification_code}
+                
+                """)
+
     return response
+
+
+@app.route("/confirm-signup", methods=["POST"])
+def confirm_signup():
+    code = request.form["confirm"]
+
+    stored_code = session['verifCode']
+
+    if bcrypt.checkpw(bytes(code.encode("utf8")), bytes(stored_code.encode("utf8"))):
+        return redirect("/?confirm_error=Verification code is incorrect.")
+
+    user_data = json.loads(session["user_data"])
+
+    # Create timestamp of the creation date of the account
+    creation_date = int(datetime.timestamp(datetime.now()))
+
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=user_data["email"])
+
+        if user:
+            return redirect("/?signup_error=Email is already in use.")
+
+        # Add user to database
+        user = database.create_entry(
+            table_name=user_data["users"],
+            entry_id=uuid.uuid4(),
+            email=user_data["email"],
+            grade=user_data["grade"],
+            hashed_password=user_data["hashed_password"],
+            auth_token=user_data["auth_token"],
+            creation_date=creation_date,
+            staff=0,
+            admin=0,
+            sport_team=user_data["sport_team"]
+        )
+    return redirect("/")
 
 
 @app.route("/reserve-calendar", methods=["GET"])
