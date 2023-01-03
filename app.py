@@ -207,6 +207,7 @@ def process_login():
 
 @app.route("/signup", methods=["POST"])
 def process_signup():
+    auth_token = request.cookies.get("auth_token")
     # Collect POST request params from signup
     tos_agree = request.form.get("tos")
     email = request.form["email"]
@@ -232,7 +233,7 @@ def process_signup():
     # Check if email is already in use (get_student returns list of users with that email).
     database = AthlEatsDatabase()
     with database:
-        user = database.get_entry(table_name="users", email=email)
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
 
         if user:
             return redirect("/?signup_error=Email is already in use.")
@@ -290,6 +291,7 @@ def process_signup():
 
 @app.route("/confirm-signup", methods=["POST"])
 def confirm_signup():
+    auth_token = request.cookies.get("auth_token")
     code = request.form["confirm"]
 
     stored_code = session['verifCode']
@@ -304,7 +306,7 @@ def confirm_signup():
 
     database = AthlEatsDatabase()
     with database:
-        user = database.get_entry(table_name="users", email=user_data["email"])
+        user = database.get_entry(table_name="users", email=user_data["email"], auth_token=auth_token)
 
         if user:
             return redirect("/?signup_error=Email is already in use.")
@@ -327,12 +329,13 @@ def confirm_signup():
 
 @app.route("/password-recovery", methods=["POST"])
 def password_recovery():
+    auth_token = request.cookies.get("auth_token")
     email = request.form["email"]
 
     database = AthlEatsDatabase()
     with database:
         # login_user returns auth_token of user if email and password correct
-        user = database.get_entry(table_name="users", email=email)
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
 
     if not user:
         return redirect("/?signup_error=Email not found")
@@ -359,11 +362,12 @@ def password_recovery():
     return redirect("/?reset_password_mode=true")
 
 
-@app.route("/reset-password", method=["POST"])
+@app.route("/reset-password", methods=["POST"])
 def reset_password():
     email = request.form["email"]
     one_time_password = request.form["one time password"]  # one time password
     password = request.form["new password"]      # new password
+    auth_token = request.cookies.get("auth_token")
 
     # confirm emails are the same
     if email != session["reset_password_for_email"]:
@@ -382,7 +386,7 @@ def reset_password():
     new_password = str(bcrypt.hashpw(bytes(str(password).encode("utf-8")), bcrypt.gensalt()).decode("utf-8"))
     database = AthlEatsDatabase()
     with database:
-        user = database.get_entry(table_name="users", email=email)
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
         # change user password
         database.edit_entry(table_name="users", entry_id=user.entry_id, hashed_password=new_password)
 
@@ -712,6 +716,22 @@ def display_admin_dashboard():
                            )
 
 
+@app.route("/process-admin-order-update/<table>", methods=["POST"])
+def process_admin_order_update(table):
+    # kwargs to pass to edit_entry()
+    form_as_dict = request.form.to_dict()
+    # get table type/name from HTML
+    table_name = str(table)
+    # get entry_id (this only works for orders right now)
+    entry_id = request.form.get("index")
+
+    database = AthlEatsDatabase()
+    with database:
+        database.edit_entry(table_name=table_name, entry_id=entry_id, **form_as_dict)
+
+    return redirect("/admin-dashboard", 302)
+
+
 @app.route("/admin-dashboard", methods=["POST"])
 def process_complete_order():
     if request.form.get('update-order') == 'update-order':
@@ -744,6 +764,7 @@ def display_profile():
                            user_order_list=user_orders
                            )
 
+
 @app.route("/settings", methods=["GET"])
 def display_settings():
     auth_token = request.cookies.get("auth_token")
@@ -755,6 +776,7 @@ def display_settings():
         return redirect("/", 302)
 
     return render_template("settings.html", user=user)
+
 
 @app.route("/settings", methods=["POST"])
 def process_settings():
@@ -773,6 +795,7 @@ def process_settings():
 
     return render_template("settings.html", user=user)
 
+
 @app.route("/logout", methods=["GET"])
 def logout():
     # Remove auth token cookie
@@ -781,9 +804,11 @@ def logout():
 
     return response
 
+
 @app.route("/coconut", methods=["GET"])
 def display_coconut():
     return redirect("https://youjustgotcoconutmalld.com/", 302)
+
 
 @app.route("/about-us", methods=["GET"])
 def display_about():
@@ -794,6 +819,7 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=4949)
