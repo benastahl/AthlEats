@@ -314,12 +314,12 @@
 
       if (login_error !== "None") {
           document.getElementById("login-error").style.display = "block"
-          document.querySelector(".home-content-buttons").style.display = "none";
-          document.getElementById("login-form").style.display = "flex"
+          document.getElementById("guest-welcome-message").style.display = "none";
+          toggle_popup("login-form-container");
       } else if (signup_error !== "None") {
           document.getElementById("signup-error").style.display = "block";
-          document.querySelector(".home-content-buttons").style.display = "none";
-          document.getElementById("signup-form").style.display = "flex";
+          document.getElementById("guest-welcome-message").style.display = "none";
+          toggle_popup("signup-form-container");
       }
   </script>
 
