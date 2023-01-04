@@ -411,6 +411,7 @@ select {
 
   .process-step .process-info {
     width: 250px;
+    left: 120px;
   }
 
   .process-visual-container {
@@ -434,6 +435,10 @@ select {
   .photo .photo-caption, .photo .photo-name {
     padding: 10px;
     font-size: 15px;
+  }
+
+  .home-widgets {
+    padding: 20px;
   }
 
 }
