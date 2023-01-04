@@ -95,7 +95,7 @@ sport_teams = [
 
 # Fee calculator
 def calculate_fees(price) -> float:
-    return round(float(price) * 0.3, 2)
+    return round(float(price) * 0.35, 2)
 
 
 def send_email(sender_name, recipient, subject, body):
@@ -486,6 +486,9 @@ def process_reserve_form():
         price = str(request.form['input-dollar'])
         fee = calculate_fees(price)
 
+
+
+
         order = database.create_entry(
             table_name="orders",
 
@@ -622,13 +625,31 @@ def display_staff_dashboard():
 
     reserved_availabilities = [avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id]
 
+    completed_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
+    incomplete_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 0]
+    print(incomplete_reserved_orders)
+
+
     return render_template("staff-dashboard.html",
                            user=user,
                            availabilities=availabilities,
                            reserved_availabilities=reserved_availabilities,
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
+                           completed_reserved_orders=completed_reserved_orders,
+                           incomplete_reserved_orders=incomplete_reserved_orders
                            )
+
+
+@app.route("/order-complete", methods=["POST"])
+def process_complete_order():
+    entry_id = request.form.get("entry_id")
+    database = AthlEatsDatabase()
+    with database:
+        order = database.edit_entry(table_name="orders", entry_id=entry_id, is_complete=1)
+        database.edit_entry(table_name="runner_availabilities", entry_id=order.availability_entry_id, is_complete=1)
+
+    return redirect("/staff-dashboard", 302)
 
 
 @app.route("/new-availability", methods=["POST"])
@@ -651,7 +672,8 @@ def process_new_availability():
             order_entry_id="",  # TBD
             reserved=0,
             date=request.form.get("date"),
-            block=request.form.get("block")
+            block=request.form.get("block"),
+            is_complete=0,
         )
 
     return redirect("/staff-dashboard", 302)
@@ -733,7 +755,8 @@ def display_admin_dashboard():
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
                            user_list=users,
-                           staff_list=staff_list
+                           staff_list=staff_list,
+                           calculate_fees=calculate_fees
                            )
 
 
@@ -753,15 +776,7 @@ def process_admin_order_update(table):
     return redirect("/admin-dashboard", 302)
 
 
-@app.route("/admin-dashboard", methods=["POST"])
-def process_complete_order():
-    if request.form.get('update-order') == 'update-order':
-        entry_id = request.form.get("index")
-        database = AthlEatsDatabase()
-        with database:
-            database.edit_entry(table_name="orders", entry_id=entry_id, is_complete=1)
 
-    return redirect("/admin-dashboard", 302)
 
 
 @app.route("/profile", methods=["GET"])
