@@ -22,8 +22,6 @@ sql_database = os.getenv("SQL_DATABASE")
 google_username = os.getenv("GOOGLE_USERNAME")
 google_password = os.getenv("GOOGLE_PASSWORD")
 google_app_password = os.getenv("GOOGLE_APP_PASSWORD")
-print("GOOGLE APP PASSWORD: " + google_app_password)
-
 flask_secret_password = os.getenv("FLASK_SECRET_PASSWORD")
 
 drive_api_key = os.getenv("DRIVE_API_KEY")
