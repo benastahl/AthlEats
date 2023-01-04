@@ -121,7 +121,7 @@ def home():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     # Returns user whether it can find auth token or not. Displays signup and login buttons if user=False.
-    return render_template("new_home.html",
+    return render_template("home.html",
                            user=user,
                            login_error=login_error,
                            signup_error=signup_error,
@@ -158,6 +158,7 @@ def process_signup():
     email = request.form["email"]
     grade = int(request.form["grade"])
     sport_team = request.form['sport_team']
+    confirmation_mode = request.args.get("confirmation_mode")
 
     # Hash password (hashing means that it is encrypted and impossible to decrypt)
     # We can now only check to see if a plain text input matches the hashed password (bcrypt.checkpw).
@@ -183,15 +184,14 @@ def process_signup():
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # Not verified account.
-    # if not session['verified']:
-    #     # Hash verification code and set it as a session value. When the user inputs a verification code,
-    #     # it will be checked it against the hashed session value.
-    #     verification_code = str(random.randint(100000, 999999))
-    #     session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code)), bcrypt.gensalt()).decode("utf8")
-    #
-    #     # Create timestamp of the creation date of the account
-    #
+    # Confirm account mode (otp)
+    if confirmation_mode:
+        # Hash verification code and set it as a session value. When the user inputs a verification code,
+        # it will be checked it against the hashed session value.
+        verification_code = str(random.randint(100000, 999999))
+        session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code)), bcrypt.gensalt()).decode("utf8")
+
+        # Create timestamp of the creation date of the account
 
 
     creation_date = int(datetime.timestamp(datetime.now()))
@@ -386,17 +386,22 @@ def process_reserve_form():
 @app.route("/order/<order_entry_id>", methods=["GET"])
 def display_order_details(order_entry_id):
     auth_token = request.cookies.get("auth_token")
+    failed_response = redirect("/", 302)
 
     database = AthlEatsDatabase()
     with database:
         # Confirm order is real. Does not need a user logged in to see order details. Anyone can see it with link.
         order = database.get_entry(table_name="orders", entry_id=order_entry_id)
+        if not order:
+            return redirect("/", 302)
         availability = database.get_entry(table_name="runner_availabilities", entry_id=order.availability_entry_id)
+        if not availability:
+            return redirect("/", 302)
         runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
+        if not runner:
+            return redirect("/", 302)
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if not order or not availability or not runner:
-        return redirect("/", 302)
 
     return render_template("order-complete.html",
                             user=user,
@@ -645,4 +650,4 @@ def display_about():
     return render_template("about.html", user=user)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4949)
+    app.run(debug=False, port=4949)

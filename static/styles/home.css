@@ -1,5 +1,140 @@
-.home-section {
+.home-header {
     background: #f5f5f5 url("https://wallpaper.dog/large/10755958.jpg");
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+  padding-top: 80px;
+}
+
+.form-container {
+  position: absolute;
+  width: 100%;
+  display: none;
+}
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+    z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 120px auto;
+  padding: 20px 30px 30px;
+  text-align: center;
+  border-radius: 40px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.revealed {
+  display: flex;
+}
+
+/* FORMS */
+.popup-form .bx-x  {
+  position: absolute;
+  margin-left: 280px;
+  font-size: 30px;
+  cursor: pointer;
+
+}
+.form-header {
+  padding-bottom: 15px;
+}
+.form-header h3 {
+  text-align: center;
+  font-size: 30px;
+  margin: 5px 15px 15px 22px;
+  border-bottom: 1px solid lightgray;
+  padding: 0 0 15px 0;
+}
+.popup-form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 15px 0 15px 0;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.popup-form select {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 15px 0 15px 0;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.popup-form button {
+  pointer-events: auto;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background-color: #43a0f2;
+  width: 50%;
+  border: 0;
+  border-radius: 50px;
+  font-weight: bold;
+  padding: 15px;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+  font-size: 14px;
+  cursor: pointer;
+}
+.popup-form .delete-account-button {
+  background-color: red;
+  min-width: 150px;
+}
+.popup-form .message {
+  color: #b3b3b3;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.popup-form .error-occurrence {
+  margin: 5px 5px 10px;
+  color: red;
+  font-size: 12px;
+}
+.popup-form a {
+  color: red;
+  text-decoration: none;
+}
+.tos-agree-link {
+  font-size: 10px;
+}
+select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+.form-selection {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 14px;
+  color: black;
+}
+.form-selection .form-selection-placeholder {
+  color: #777777;
+}
+
+.input-form {
+  margin: 10px 40px 10px 40px;
 }
 
 .access-buttons-section {
@@ -7,11 +142,7 @@
   opacity: 100%;
 }
 .home-content-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 175px;
+
 }
 .access-button, .reserve-pickup-button {
   margin: 10px;
@@ -73,14 +204,13 @@
 }
 
 /* HOME POPULAR RESTAURANTS */
+.popular-restaurants-container {
+  padding: 20px;
+}
 .popular-restaurants {
-  position: absolute;
   background: #e9e9e9;
   border-radius: 10px;
-  top: 550px;
   padding: 10px 20px;
-  width: 1400px;
-  margin-left: 20px;
 }
 .restaurant-list {
   display: flex;
@@ -119,17 +249,19 @@
 }
 
 
+.home-widgets {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  padding: 20px 100px;
+}
 .process-visual-container {
-  top: 1100px;
-  left: 50px;
-  position: absolute;
 }
 .process-visual {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  margin-top: 160px;
-  padding: 15px;
 }
 .process-visual i, .process-visual img {
   font-size: 100px;
@@ -157,20 +289,17 @@
   font-size: 20px;
   font-weight: bold;
   position: absolute;
-  left: 130px;
   margin-top: 100px;
+  left: 220px;
   width: 300px;
 }
 
 .athleats-photos-container {
-  position: absolute;
-  top: 1300px;
-  left: 800px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
 }
-.athleats-photos-container .photo {
-
-}
-.photo .photo-caption, .photo .photo-name {
+.photo-caption {
   display: inline-block;
   background: #e9e9e9;
   border-radius: 16px;
@@ -179,27 +308,34 @@
   font-weight: bold;
   position: relative;
 }
-.photo .photo-caption {
+.photo-caption {
   background: #CDEAFF;
-  top: 0;
-  left: 150px;
-
+  text-align: center;
+  width: 200px;
 }
-.photo-name.wesley-tse {
-  bottom: 80px;
-  left: 250px;
+.name-plate {
+  position: absolute;
+  background: #e9e9e9;
+  border-radius: 16px;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
-.photo-name.matthew-watkins {
-  left: 400px;
-  bottom: 550px;
+.name-plate#zocco {
+  margin-top: 50px;
+  margin-left: -40px;
 }
-.photo-name.jake-zocco {
-  bottom: 550px;
-  right: 250px;
+.name-plate#stahl {
+  margin-top: 380px;
+  margin-left: -40px;
 }
-.photo-name.ben-stahl {
-  bottom: 100px;
-  left: -380px;
+.name-plate#tse {
+  margin-top: 380px;
+  margin-left: 400px;
+}
+.name-plate#watkins {
+  margin-top: 50px;
+  margin-left: 380px;
 }
 .photo i {
   position: relative;
@@ -213,13 +349,34 @@
   /*filter: contrast(2000%);*/
 }
 
-.gist {
-  position: absolute;
-  width: 500px;
-  height: 300px;
-  top: 2000px;
-  left: 800px;
-
+.plugs-container {
+  padding: 20px;
+  align-content: center;
+}
+.plugs {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  background: #e9e9e9;
+  padding: 20px;
+  justify-content: space-between;
+  border-radius: 5px;
+  width: 270px;
+}
+.plugs-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.plug {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  background: #f4f4f4;
+  text-decoration: none;
+  color: black;
+}
+.plug .bx {
+  font-size: 30px;
 }
 
 @media screen and (max-width: 650px) {
@@ -260,12 +417,14 @@
     top: 2650px;
     left: 0;
   }
-  .athleats-photos-container {
-    top: 4000px;
-    left: 45px;
+  .process-visual {
+    padding: 0;
   }
-  .athleats-photos-container .photo img {
-    width: 300px;
+  .name-plate {
+    display: none;
+  }
+  .athleats-photos-container img {
+    width: 350px;
   }
 
   .photo .photo-caption {
@@ -275,22 +434,6 @@
   .photo .photo-caption, .photo .photo-name {
     padding: 10px;
     font-size: 15px;
-  }
-  .photo-name.jake-zocco {
-    left: 45px;
-    bottom: 220px;
-  }
-  .photo-name.wesley-tse {
-    left: 80px;
-    bottom: 30px;
-  }
-  .photo-name.matthew-watkins {
-    left: -40px;
-    bottom: 70px;
-  }
-  .photo-name.ben-stahl {
-    left: -50px;
-    bottom: 265px;
   }
 
 }
