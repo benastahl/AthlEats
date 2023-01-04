@@ -13,6 +13,7 @@ from email.utils import formataddr
 from flask import Flask, render_template, request, redirect, session, abort
 from controls import AthlEatsDatabase, google_app_password, flask_secret_password
 from datetime import datetime
+import image_processing
 
 app = Flask(__name__)
 app.secret_key = flask_secret_password
@@ -478,9 +479,6 @@ def process_reserve_form():
         price = str(request.form['input-dollar'])
         fee = calculate_fees(price)
 
-
-
-
         order = database.create_entry(
             table_name="orders",
 
@@ -497,6 +495,10 @@ def process_reserve_form():
             pickup_name=request.form['pickup-name'],
             pickup_location=request.form['pickup-location'],
         )
+
+    # file byte stream to be uploaded and name
+    # TODO: compress the file first
+    image_processing.upload(receipt.stream, order_entry_id)
 
     send_email(
         sender_name="WHS AthlEats Deliveries",
