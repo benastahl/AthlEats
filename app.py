@@ -35,8 +35,7 @@ error_handles = {
     },
 
 }
-sport_teams = [
-
+fall_sport_teams = [
     # Fall Sports
     "Cross Country",
     "Varsity Field Hockey",
@@ -53,8 +52,8 @@ sport_teams = [
     "Girls Freshman Soccer",
     "Girls Varsity Volleyball",
     "Girls JV Volleyball",
-    "No Sport",
-
+]
+winter_sport_teams = [
     # Winter Sports
     "Boys Varsity Basketball",
     "Boys JV Basketball",
@@ -67,8 +66,9 @@ sport_teams = [
     "Ski",
     "Swimming/Dive",
     "Wrestling",
-    "No Sport",
+]
 
+spring_sport_teams = [
     # Spring Sports
     "Boys Varsity Baseball",
     "Boys JV Baseball",
@@ -84,10 +84,6 @@ sport_teams = [
     "Boys Volleyball",
     "Girls Varsity Softball",
     "Girls JV Softball",
-    "No Sport",
-
-
-
 ]
 
 # TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
@@ -174,8 +170,11 @@ def home():
                            signup_error=signup_error,
                            confirmation_mode=confirmation_mode,
                            reset_password_mode=reset_password_mode,
-                           sport_teams=sport_teams
-                           )
+                           fall_sport_teams=fall_sport_teams,
+                           winter_sport_teams = winter_sport_teams,
+                           spring_sport_teams = spring_sport_teams,
+
+    )
 
 
 @app.route("/login", methods=["POST"])
