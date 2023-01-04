@@ -1,3 +1,5 @@
+import base64
+import json
 import random
 import uuid
 import bcrypt
@@ -34,12 +36,61 @@ error_handles = {
 
 }
 sport_teams = [
+
+    # Fall Sports
+    "Cross Country",
+    "Varsity Field Hockey",
+    "JV Field Hockey",
+    "Varsity Football",
+    "JV Football",
+    "Freshman Football",
+    "Golf"
+    "Boys Varsity Soccer",
+    "Boys JV Soccer",
+    "Boys Freshmen Soccer",
+    "Girls Varsity Soccer",
+    "Girls JV Soccer",
+    "Girls Freshman Soccer",
+    "Girls Varsity Volleyball",
+    "Girls JV Volleyball",
+    "No Sport",
+
+    # Winter Sports
+    "Boys Varsity Basketball",
+    "Boys JV Basketball",
+    "Boys Freshmen Basketball",
+    "Girls Varsity Basketball",
+    "Girls JV Basketball",
+    "Girls Hockey",
+    "Boys Hockey",
+    "Indoor Track",
+    "Ski",
+    "Swimming/Dive",
+    "Wrestling",
+    "No Sport",
+
+    # Spring Sports
     "Boys Varsity Baseball",
     "Boys JV Baseball",
-    "Boys Freshman Baseball",
+    "Boys Varsity Lacrosse",
+    "Boys JV Lacrosse",
+    "Girls Varsity Lacrosse"
+    "Girls JV Lacrosse",
+    "Outdoor Track",
+    "Boys Varsity Tennis",
+    "Boys JV Tennis",
+    "Girls Varsity Tennis",
+    "Girls JV Tennis",
+    "Boys Volleyball",
+    "Girls Varsity Softball",
+    "Girls JV Softball",
+    "No Sport",
+
+
+
 ]
 
-# TODO: ZOCCO TYPE IN TEAM NAMES from https://arbiterlive.com/Teams?entityId=24991#
+# TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
 
 
 # Fee calculator
@@ -96,6 +147,7 @@ def handle_outlier_exceptions(e):
         error_data=data
     )
 
+
 @app.errorhandler(HTTPException)
 def handle_exceptions(e):
 
@@ -109,13 +161,15 @@ def handle_exceptions(e):
         error_data=data
     )
 
+
 @app.route("/", methods=["GET"])
 def home():
     # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
     auth_token = request.cookies.get("auth_token")
     signup_error = request.args.get("signup_error")
     login_error = request.args.get("login_error")
-    verification_mode = request.args.get("verification_mode")
+    confirmation_mode = request.args.get("confirmation_mode")
+    reset_password_mode = request.args.get("reset_password_mode")
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
@@ -125,8 +179,8 @@ def home():
                            user=user,
                            login_error=login_error,
                            signup_error=signup_error,
-                           verification_mode=verification_mode,
-
+                           confirmation_mode=confirmation_mode,
+                           reset_password_mode=reset_password_mode,
                            sport_teams=sport_teams
                            )
 
@@ -153,6 +207,7 @@ def process_login():
 
 @app.route("/signup", methods=["POST"])
 def process_signup():
+    auth_token = request.cookies.get("auth_token")
     # Collect POST request params from signup
     tos_agree = request.form.get("tos")
     email = request.form["email"]
@@ -176,48 +231,36 @@ def process_signup():
     if tos_agree != "agree":
         return redirect("/?signup_error=Please agree to TOS to access the website.")
 
+    # Check if email is already in use (get_student returns list of users with that email).
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
+
+        if user:
+            return redirect("/?signup_error=Email is already in use.")
+
     # Set auth cookie token
-    response = redirect("/", 302)
+    response = redirect("/?confirmation_mode=true", 302)
 
     # Create an auth browser cookie (random letters and numbers) as our authentication
     # token so the user doesn't have to log in every single time.
     auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    # Confirm account mode (otp)
-    if confirmation_mode:
-        # Hash verification code and set it as a session value. When the user inputs a verification code,
-        # it will be checked it against the hashed session value.
-        verification_code = str(random.randint(100000, 999999))
-        session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code)), bcrypt.gensalt()).decode("utf8")
+    user_data = {
+        "email": email,
+        "grade": grade,
+        "hashed_password": hashed_password,
+        "auth_token": auth_token,
+        "sport_team": sport_team
+    }
+    data_as_string = json.dumps(user_data)
+    session["user_data"] = data_as_string
 
-        # Create timestamp of the creation date of the account
-
-
-    creation_date = int(datetime.timestamp(datetime.now()))
-
-    # Check if email is already in use (get_student returns list of users with that email).
-    database = AthlEatsDatabase()
-    with database:
-        user = database.get_entry(table_name="users", email=email)
-
-        if user:
-            return redirect("/?signup_error=Email is already in use.")
-
-        # Add user to database
-        user = database.create_entry(
-            table_name="users",
-
-            entry_id=uuid.uuid4(),
-            email=email,
-            grade=grade,
-            hashed_password=hashed_password,
-            auth_token=auth_token,
-            creation_date=creation_date,
-            staff=0,
-            admin=0,
-            sport_team=sport_team
-        )
+    # Hash verification code and set it as a session value. When the user inputs a verification code,
+    # it will be checked it against the hashed session value.
+    verification_code = str(random.randint(100000, 999999))
+    session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code).encode("utf8")), bcrypt.gensalt()).decode("utf8")
 
     send_email(
         sender_name="WHS AthlEats",
@@ -235,7 +278,120 @@ def process_signup():
         """
     )
 
+    send_email(sender_name="WHS AthlEats",
+               recipient=user.email,
+               subject=f"SIGNUP VERIFICATION: {user.first_name.capitalize()} {user.last_name.capitalize()}",
+               body=f"""
+                
+                Verification Code: {verification_code}
+                
+                """)
+
     return response
+
+
+@app.route("/confirm-signup", methods=["POST"])
+def confirm_signup():
+    auth_token = request.cookies.get("auth_token")
+    code = request.form["confirm"]
+
+    stored_code = session['verifCode']
+
+    if bcrypt.checkpw(bytes(code.encode("utf8")), bytes(stored_code.encode("utf8"))):
+        return redirect("/?confirm_error=Verification code is incorrect.")
+
+    user_data = json.loads(session["user_data"])
+
+    # Create timestamp of the creation date of the account
+    creation_date = int(datetime.timestamp(datetime.now()))
+
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=user_data["email"], auth_token=auth_token)
+
+        if user:
+            return redirect("/?signup_error=Email is already in use.")
+
+        # Add user to database
+        user = database.create_entry(
+            table_name=user_data["users"],
+            entry_id=uuid.uuid4(),
+            email=user_data["email"],
+            grade=user_data["grade"],
+            hashed_password=user_data["hashed_password"],
+            auth_token=user_data["auth_token"],
+            creation_date=creation_date,
+            staff=0,
+            admin=0,
+            sport_team=user_data["sport_team"]
+        )
+    return redirect("/")
+
+
+@app.route("/password-recovery", methods=["POST"])
+def password_recovery():
+    auth_token = request.cookies.get("auth_token")
+    email = request.form["email"]
+
+    database = AthlEatsDatabase()
+    with database:
+        # login_user returns auth_token of user if email and password correct
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
+
+    if not user:
+        return redirect("/?signup_error=Email not found")
+
+    # make OTP for password reset
+    one_time_password = str(random.randint(1000000000, 9999999999))
+
+    # store all necessary information for reset_password() in session variables
+    session["password_creation_time"] = int(datetime.timestamp(datetime.now()))
+    session["reset_password_for_email"] = email
+    session["hashed_OTP"] = bcrypt.hashpw(bytes(str(one_time_password).encode("utf8")), bcrypt.gensalt()).decode("utf8")
+
+    # sends email to recipient with OTP
+    send_email(sender_name="WHS AthlEats",
+               recipient=email,
+               subject=f"Password Reset",
+               body=f"""
+                    
+                    One time passord: {one_time_password}
+                    This temporary password expires in 10 minutes.
+                    If you did not make this request or this was a mistake please ignore this email.
+                """)
+
+    return redirect("/?reset_password_mode=true")
+
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password():
+    email = request.form["email"]
+    one_time_password = request.form["one time password"]  # one time password
+    password = request.form["new password"]      # new password
+    auth_token = request.cookies.get("auth_token")
+
+    # confirm emails are the same
+    if email != session["reset_password_for_email"]:
+        return redirect("/?reset_password_error=emails do not match for password reset", 302)
+
+    # confirm OTP has not expired
+    current_time = int(datetime.timestamp(datetime.now()))
+    if current_time - session["password_creation_time"] >= 600:
+        return redirect("/?reset_password_error=OTP expired", 302)
+
+    # confirm OTP is correct
+    if not bcrypt.checkpw(bytes(one_time_password.encode("utf8")), bytes(session["hashed_OTP"].encode("utf8"))):
+        return redirect("/?reset_password_error=Incorrect OTP", 302)
+
+    # hashes new password and saves it to user in the database
+    new_password = str(bcrypt.hashpw(bytes(str(password).encode("utf-8")), bcrypt.gensalt()).decode("utf-8"))
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
+        # change user password
+        database.edit_entry(table_name="users", entry_id=user.entry_id, hashed_password=new_password)
+
+    return redirect("/")
 
 
 @app.route("/reserve-calendar", methods=["GET"])
@@ -566,6 +722,22 @@ def display_admin_dashboard():
                            )
 
 
+@app.route("/process-admin-order-update/<table>", methods=["POST"])
+def process_admin_order_update(table):
+    # kwargs to pass to edit_entry()
+    form_as_dict = request.form.to_dict()
+    # get table type/name from HTML
+    table_name = str(table)
+    # get entry_id (this only works for orders right now)
+    entry_id = request.form.get("index")
+
+    database = AthlEatsDatabase()
+    with database:
+        database.edit_entry(table_name=table_name, entry_id=entry_id, **form_as_dict)
+
+    return redirect("/admin-dashboard", 302)
+
+
 @app.route("/admin-dashboard", methods=["POST"])
 def process_complete_order():
     if request.form.get('update-order') == 'update-order':
@@ -598,6 +770,7 @@ def display_profile():
                            user_order_list=user_orders
                            )
 
+
 @app.route("/settings", methods=["GET"])
 def display_settings():
     auth_token = request.cookies.get("auth_token")
@@ -609,6 +782,7 @@ def display_settings():
         return redirect("/", 302)
 
     return render_template("settings.html", user=user)
+
 
 @app.route("/settings", methods=["POST"])
 def process_settings():
@@ -627,6 +801,7 @@ def process_settings():
 
     return render_template("settings.html", user=user)
 
+
 @app.route("/logout", methods=["GET"])
 def logout():
     # Remove auth token cookie
@@ -635,9 +810,11 @@ def logout():
 
     return response
 
+
 @app.route("/coconut", methods=["GET"])
 def display_coconut():
     return redirect("https://youjustgotcoconutmalld.com/", 302)
+
 
 @app.route("/about-us", methods=["GET"])
 def display_about():
@@ -648,6 +825,7 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
+
 
 if __name__ == '__main__':
     app.run(debug=False, port=4949)
