@@ -607,11 +607,10 @@ def display_staff_dashboard():
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
+        if not user or not user.staff:
+            return redirect("/", 302)
         orders_list = database.get_all_entries(table_name="orders", entry_id=user.entry_id)
         availabilities = database.get_all_entries(table_name="runner_availabilities", runner_entry_id=user.entry_id)  # TODO: delete connection closes
-
-    if not user or not user.staff:
-        return redirect("/", 302)
 
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]
