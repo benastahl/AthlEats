@@ -105,16 +105,9 @@ def send_email(sender_name, recipient, subject, body):
     em["Subject"] = subject
     em.set_content(body)
 
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login("athleats.wayland@gmail.com", google_app_password)
-            smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
-    except Exception as exc:
-        print(f"Failed to send email: {exc}")
-        traceback.print_exc()
-        abort(500)
-
-    return True
+    with smtplib.SMTP_SSL("smtp.gmail.com", 587) as smtp:
+        smtp.login("athleats.wayland@gmail.com", google_app_password)
+        smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
 
 # Do not touch thanks <3
 # @app.before_request

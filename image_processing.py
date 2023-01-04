@@ -93,7 +93,7 @@ def purge(key_file_location, scope = 'https://www.googleapis.com/auth/drive'):
             try:
                 service.files().delete(fileId=item['id']).execute()
                 print("{} ({}) deleted successfully".format(item['name'], item['id']))
-            except:
+            except Exception as exc:
                 print("Could not delete file: {} ({})".format(item['name'], item['id']))
 
     except HttpError as error:
@@ -130,7 +130,7 @@ def list_files(key_file_location):
     except HttpError as error:
         print(f'An error occurred: {error}')
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # this will delete everything, use at your own risk
     # purge(key_file_location='receipt-storage-372419-0812a91ef949.json')
-    # list_files(key_file_location='receipt-storage-372419-0812a91ef949.json')
+    list_files(key_file_location='receipt-storage-372419-0812a91ef949.json')
