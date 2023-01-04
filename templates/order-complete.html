@@ -81,7 +81,7 @@
                         Order Phone Number: {{order.phone_number}} <br>
                     </span>
 
-                    {% if user.staff %}
+                    {% if user.entry_id == order.runner_entry_id %}
                     <form action="/order-complete" name="update-order" method="post">
                         <input type="hidden" id="entry_id" name="entry_id" value={{order.entry_id}}>
                         <button class="update-order-button" name="update-order" value="update-order" type="submit">
