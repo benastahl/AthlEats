@@ -36,8 +36,7 @@ error_handles = {
     },
 
 }
-sport_teams = [
-
+fall_sport_teams = [
     # Fall Sports
     "Cross Country",
     "Varsity Field Hockey",
@@ -54,8 +53,8 @@ sport_teams = [
     "Girls Freshman Soccer",
     "Girls Varsity Volleyball",
     "Girls JV Volleyball",
-    "No Sport",
-
+]
+winter_sport_teams = [
     # Winter Sports
     "Boys Varsity Basketball",
     "Boys JV Basketball",
@@ -68,8 +67,9 @@ sport_teams = [
     "Ski",
     "Swimming/Dive",
     "Wrestling",
-    "No Sport",
+]
 
+spring_sport_teams = [
     # Spring Sports
     "Boys Varsity Baseball",
     "Boys JV Baseball",
@@ -85,10 +85,6 @@ sport_teams = [
     "Boys Volleyball",
     "Girls Varsity Softball",
     "Girls JV Softball",
-    "No Sport",
-
-
-
 ]
 
 # TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
@@ -106,16 +102,9 @@ def send_email(sender_name, recipient, subject, body):
     em["Subject"] = subject
     em.set_content(body)
 
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-            smtp.login("athleats.wayland@gmail.com", google_app_password)
-            smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
-    except Exception as exc:
-        print(f"Failed to send email: {exc}")
-        traceback.print_exc()
-        abort(500)
-
-    return True
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login("athleats.wayland@gmail.com", google_app_password)
+        smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
 
 # Do not touch thanks <3
 # @app.before_request
@@ -182,8 +171,11 @@ def home():
                            signup_error=signup_error,
                            confirmation_mode=confirmation_mode,
                            reset_password_mode=reset_password_mode,
-                           sport_teams=sport_teams
-                           )
+                           fall_sport_teams=fall_sport_teams,
+                           winter_sport_teams = winter_sport_teams,
+                           spring_sport_teams = spring_sport_teams,
+
+    )
 
 
 @app.route("/login", methods=["POST"])
@@ -616,11 +608,10 @@ def display_staff_dashboard():
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
+        if not user or not user.staff:
+            return redirect("/", 302)
         orders_list = database.get_all_entries(table_name="orders", entry_id=user.entry_id)
         availabilities = database.get_all_entries(table_name="runner_availabilities", runner_entry_id=user.entry_id)  # TODO: delete connection closes
-
-    if not user or not user.staff:
-        return redirect("/", 302)
 
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]

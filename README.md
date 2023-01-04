@@ -15,10 +15,8 @@ This business and project creates the supply for the need of hungry athletes. We
   - Ben Stahl
   - Wesley Tse
 
-- Frontend
-  - Eli Sodickson
-
 - Backend
+  - Eli Sodickson
   - Matthew Watkins
   - Jake Zocco
 
