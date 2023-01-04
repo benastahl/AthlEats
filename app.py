@@ -105,7 +105,7 @@ def send_email(sender_name, recipient, subject, body):
     em["Subject"] = subject
     em.set_content(body)
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 587) as smtp:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login("athleats.wayland@gmail.com", google_app_password)
         smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
 
