@@ -448,7 +448,6 @@ def display_reserve_form():
 
     return render_template("reserve_form.html",
                            user=user,
-                           sports_teams=sport_teams
                            )
 
 

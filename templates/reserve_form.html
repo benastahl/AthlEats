@@ -361,14 +361,6 @@
 
                         <label for="pickup-location">Pickup Name</label><br>
                         <input type="text" id="pickup-name" name="pickup-name" required><br>
-
-                        <label for="sports-team">Select your sports team</label>
-                        <select name="sports-team" id="sports-team" required>
-                            <option value="" disabled selected></option>
-                            {% for team in sports_teams %}
-                                <option value="{{ team }}">{{ team }}</option>
-                            {% endfor %}
-                        </select>
                     </div>
 
                     <div class="fee-output">Delivery Fee: </div>
