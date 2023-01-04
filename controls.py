@@ -68,6 +68,7 @@ tables = {
             "reserved:INT",
             "date:TEXT",
             "block:TEXT",
+            "is_complete:TEXT"
         ],
         "instance": RunnerAvailability
     }

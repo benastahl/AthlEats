@@ -37,7 +37,7 @@ class Order:
 
 
 class RunnerAvailability:
-    def __init__(self, entry_id, runner_entry_id, order_entry_id, reserved, date, block):
+    def __init__(self, entry_id, runner_entry_id, order_entry_id, reserved, date, block, is_complete):
         self.entry_id = entry_id
         self.runner_entry_id = runner_entry_id
         self.order_entry_id = order_entry_id
@@ -45,6 +45,7 @@ class RunnerAvailability:
         self.date_string = date
         self.date = datetime.strptime(date, "%Y-%m-%d")
         self.block = block
+        self.is_complete = int(is_complete)
 
 
 # Experimental

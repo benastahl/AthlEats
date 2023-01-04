@@ -77,29 +77,33 @@
                                   <tr class="header">
                                     <th>Email</th>
                                     <th>Order Date</th>
+                                    <th>Order Id</th>
                                     <th>Phone Number</th>
+                                    <th>Runner</th>
                                     <th>Restaurant</th>
                                     <th>Restaurant Pickup Time</th>
                                     <th>Pickup Time</th>
                                     <th>Price</th>
+                                    <th>Fee</th>
                                     <th>Pickup Location</th>
-                                    <th>Order Status</th>
                                     <th></th>
                                   </tr>
                                   {% for order in incomplete_orders %}
                                   <tr>
                                       <td>{{order.email}}</td>
                                       <td>{{order.order_date}}</td>
+                                      <td>{{order.entry_id}}</td>
                                       <td>{{order.phone_number}}</td>
+                                      <td>{{order.runner_entry_id}}</td>
                                       <td>{{order.restaurant}}</td>
                                       <td>{{order.restaurant_pickup_time}}</td>
-                                      <td>{{order.pickup_time}}</td>
+                                      <td>After School</td>
                                       <td>${{order.price}}</td>
+                                      <td>${{calculate_fees(order.price)}}</td>
                                       <td>{{order.pickup_location}}</td>
-                                      <td></td>
                                       <td class="update-order-button">
-                                          <form name="update-order" method="post">
-                                              <input type="hidden" id="index" name="index" value={{order.entry_id}}>
+                                          <form action="/order-complete" method="post">
+                                              <input type="hidden" id="entry_id" name="entry_id" value={{order.entry_id}}>
                                               <button class="update-order-button" name="update-order" value="update-order" type="submit">
                                                   Update Order </button>
                                           </form>
@@ -133,12 +137,14 @@
                                   <tr class="header">
                                     <th>Email</th>
                                     <th>Order Date</th>
+                                    <th>Order Id</th>
                                     <th>Phone Number</th>
+                                    <th>Runner</th>
                                     <th>Restaurant</th>
                                     <th>Restaurant Pickup Time</th>
                                     <th>Pickup Time</th>
-                                    <th>Order Date</th>
                                     <th>Price</th>
+                                    <th>Fee</th>
                                     <th>Pickup Location</th>
                                     <th></th>
                                   </tr>
@@ -146,12 +152,14 @@
                                   <tr>
                                       <td>{{order.email}}</td>
                                       <td>{{order.order_date}}</td>
+                                      <td>{{order.entry_id}}</td>
                                       <td>{{order.phone_number}}</td>
+                                      <td>{{order.runner_entry_id}}</td>
                                       <td>{{order.restaurant}}</td>
                                       <td>{{order.restaurant_pickup_time}}</td>
-                                      <td>{{order.pickup_time}}</td>
-                                      <td>{{order.order_date}}</td>
+                                      <td>After School</td>
                                       <td>${{order.price}}</td>
+                                      <td>${{calculate_fees(order.price)}}</td>
                                       <td>{{order.pickup_location}}</td>
                                       <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
                                   </tr>

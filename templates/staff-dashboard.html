@@ -68,7 +68,7 @@
                 <form onsubmit="activateLoadingScreen('confirm-new-availability')" action="/new-availability" method="post">
                     <label>
                         Date
-                        <input required onfocus="this.min=tomorrow" type="date" name="date">
+                        <input required type="date" name="date"> <!-- onfocus="this.min=tomorrow" -->
                     </label><br>
                     <label>
                         Block
@@ -215,11 +215,12 @@
                                 <th>Block</th>
                                 <th></th>
                             </tr>
-                            {% for availability in reserved_availabilities %}
+                            {% for availability in incomplete_reserved_orders %}
                             <tr>
                                 <td>{{ availability.date_string }}</td>
                                 <td>{{ availability.block }}</td>
                                 <td onclick="location.href = '/order/{{ availability.order_entry_id }}'; activateLoadingScreen(null)" class="bx bx-receipt"></td>
+<!--                                <td type="submit" onclick="activateLoadingScreen(null)" class="bx bx-check-square"></td>-->
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -237,30 +238,19 @@
                   </div>
                   <div class="table-container">
                     <table class="time-slots-table">
-                        {% if not availabilities %}
+                        {% if completed_reserved_orders %}
                             <tbody>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Received Time</th>
-                                    <th>Delivery Time</th>
                                     <th>Rating</th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
-                                {% for num in range(10) %}
+                                {% for availability in completed_reserved_orders %}
                                 <tr>
-                                    <td>12/22/22</td>
-                                    <td>12:30</td>
-                                    <td>5:30</td>
-                                    <td>Available</td>
-                                    <td onclick="" class="bx bx-receipt"></td>
-                                </tr>
-                                {% endfor %}
-                                {% for availability in availabilities %}
-                                <tr>
-                                    <td>{{ availability.start_time }}</td>
-                                    <td>{{ availability.end_time }}</td>
-                                    <td>{{ availability.runner }}</td>
+                                    <td>{{ availability.date_string }}</td>
                                     <td onclick="" class="bx bx-edit"></td>
+                                    <td onclick="location.href = '/order/{{ availability.order_entry_id }}'; activateLoadingScreen(null)" class="bx bx-receipt"></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
