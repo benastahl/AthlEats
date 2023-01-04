@@ -1,10 +1,9 @@
 from __future__ import print_function
-from google.oauth2.credentials import Credentials
+
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from google.oauth2 import service_account
-from googleapiclient.http import MediaFileUpload, MediaIoBaseUpload
-from PIL import Image
+from googleapiclient.http import MediaIoBaseUpload
 
 
 def get_service(api_name='drive', api_version='v3', scopes='https://www.googleapis.com/auth/drive', key_file_location='receipt-storage-372419-0812a91ef949.json'):
