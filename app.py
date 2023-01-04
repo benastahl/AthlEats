@@ -207,7 +207,6 @@ def process_login():
 
 @app.route("/signup", methods=["POST"])
 def process_signup():
-    auth_token = request.cookies.get("auth_token")
     # Collect POST request params from signup
     tos_agree = request.form.get("tos")
     email = request.form["email"]
@@ -231,36 +230,54 @@ def process_signup():
     if tos_agree != "agree":
         return redirect("/?signup_error=Please agree to TOS to access the website.")
 
+    auth_token = secrets.token_hex()
+
+    # Create timestamp of the creation date of the account
+    creation_date = int(datetime.timestamp(datetime.now()))
+
     # Check if email is already in use (get_student returns list of users with that email).
     database = AthlEatsDatabase()
     with database:
-        user = database.get_entry(table_name="users", email=email, auth_token=auth_token)
+        user = database.get_entry(table_name="users", email=email)
 
         if user:
             return redirect("/?signup_error=Email is already in use.")
+
+        # Add user to database
+        user = database.create_entry(
+            table_name="users",
+            entry_id=uuid.uuid4(),
+            email=email,
+            grade=grade,
+            hashed_password=hashed_password,
+            auth_token=auth_token,
+            creation_date=creation_date,
+            staff=0,
+            admin=0,
+            sport_team=sport_team
+        )
 
     # Set auth cookie token
     response = redirect("/?confirmation_mode=true", 302)
 
     # Create an auth browser cookie (random letters and numbers) as our authentication
     # token so the user doesn't have to log in every single time.
-    auth_token = secrets.token_hex()
     response.set_cookie('auth_token', auth_token, max_age=31540000)  # One year expiration (in seconds)
 
-    user_data = {
-        "email": email,
-        "grade": grade,
-        "hashed_password": hashed_password,
-        "auth_token": auth_token,
-        "sport_team": sport_team
-    }
-    data_as_string = json.dumps(user_data)
-    session["user_data"] = data_as_string
+    # user_data = {
+    #     "email": email,
+    #     "grade": grade,
+    #     "hashed_password": hashed_password,
+    #     "auth_token": auth_token,
+    #     "sport_team": sport_team
+    # }
+    # data_as_string = json.dumps(user_data)
+    # session["user_data"] = data_as_string
 
     # Hash verification code and set it as a session value. When the user inputs a verification code,
     # it will be checked it against the hashed session value.
-    verification_code = str(random.randint(100000, 999999))
-    session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code).encode("utf8")), bcrypt.gensalt()).decode("utf8")
+    # verification_code = str(random.randint(100000, 999999))
+    # session['verifCode'] = bcrypt.hashpw(bytes(str(verification_code).encode("utf8")), bcrypt.gensalt()).decode("utf8")
 
     send_email(
         sender_name="WHS AthlEats",
@@ -268,24 +285,22 @@ def process_signup():
         subject=f"SIGNUP ALERT: {user.first_name.capitalize()} {user.last_name.capitalize()}",
         body=f"""
 
-        A new user has just signed up: 
-        {user.first_name.capitalize()} {user.last_name.capitalize()}
+        A new user has just signed up:
         {user.email}
         {user.year_name}
         {user.sport_team}
-        {user.creation_date}
-        
+
         """
     )
 
-    send_email(sender_name="WHS AthlEats",
-               recipient=user.email,
-               subject=f"SIGNUP VERIFICATION: {user.first_name.capitalize()} {user.last_name.capitalize()}",
-               body=f"""
-                
-                Verification Code: {verification_code}
-                
-                """)
+    # send_email(sender_name="WHS AthlEats",
+    #            recipient=email,
+    #            subject=f"ATHLEATS SIGNUP VERIFICATION",
+    #            body=f"""
+    #
+    #             Verification Code: {verification_code}
+    #
+    #             """)
 
     return response
 
@@ -307,7 +322,7 @@ def confirm_signup():
 
     database = AthlEatsDatabase()
     with database:
-        user = database.get_entry(table_name="users", email=user_data["email"], auth_token=auth_token)
+        user = database.get_entry(table_name="users", email=user_data["email"])
 
         if user:
             return redirect("/?signup_error=Email is already in use.")
@@ -828,4 +843,4 @@ def display_about():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=4949)
+    app.run(debug=True, port=4949)
