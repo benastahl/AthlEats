@@ -21,7 +21,7 @@ class User:
 
 
 class Order:
-    def __init__(self, entry_id, availability_entry_id,  is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, price, pickup_location, pickup_name, runner_entry_id):
+    def __init__(self, entry_id, availability_entry_id,  is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, price, pickup_location, pickup_name, runner_entry_id, receipt_id):
         self.entry_id = entry_id
         self.email = email
         self.availability_entry_id = availability_entry_id
@@ -34,6 +34,8 @@ class Order:
         self.pickup_name = pickup_name
         self.pickup_location = pickup_location
         self.restaurant_pickup_time = restaurant_pickup_time
+        self.receipt_id=receipt_id
+
 
 
 class RunnerAvailability:

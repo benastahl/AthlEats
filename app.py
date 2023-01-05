@@ -481,7 +481,6 @@ def process_reserve_form():
 
         order = database.create_entry(
             table_name="orders",
-            receipt_id=receipt_id,
             entry_id=order_entry_id,
             availability_entry_id=availability_entry_id,
             runner_entry_id=availability.runner_entry_id,
@@ -494,6 +493,8 @@ def process_reserve_form():
             price=price,
             pickup_name=request.form['pickup-name'],
             pickup_location=request.form['pickup-location'],
+            receipt_id=receipt_id,
+
         )
 
 
@@ -609,6 +610,7 @@ def display_staff_dashboard():
             return redirect("/", 302)
         orders_list = database.get_all_entries(table_name="orders", entry_id=user.entry_id)
         availabilities = database.get_all_entries(table_name="runner_availabilities", runner_entry_id=user.entry_id)  # TODO: delete connection closes
+        database.clear_old_availabilities()
 
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]
