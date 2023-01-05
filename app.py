@@ -39,28 +39,18 @@ error_handles = {
 fall_sport_teams = [
     # Fall Sports
     "Cross Country",
-    "Varsity Field Hockey",
-    "JV Field Hockey",
-    "Varsity Football",
-    "JV Football",
-    "Freshman Football",
-    "Golf"
-    "Boys Varsity Soccer",
-    "Boys JV Soccer",
-    "Boys Freshmen Soccer",
-    "Girls Varsity Soccer",
-    "Girls JV Soccer",
-    "Girls Freshman Soccer",
-    "Girls Varsity Volleyball",
-    "Girls JV Volleyball",
+    "Field Hockey",
+    "Football",
+    "Golf",
+    "Boys Soccer",
+    "Girls Soccer",
+    "Girls Volleyball",
+
 ]
 winter_sport_teams = [
     # Winter Sports
-    "Boys Varsity Basketball",
-    "Boys JV Basketball",
-    "Boys Freshmen Basketball",
-    "Girls Varsity Basketball",
-    "Girls JV Basketball",
+    "Boys Basketball",
+    "Girls Basketball",
     "Girls Hockey",
     "Boys Hockey",
     "Indoor Track",
@@ -71,23 +61,18 @@ winter_sport_teams = [
 
 spring_sport_teams = [
     # Spring Sports
-    "Boys Varsity Baseball",
-    "Boys JV Baseball",
-    "Boys Varsity Lacrosse",
-    "Boys JV Lacrosse",
-    "Girls Varsity Lacrosse"
-    "Girls JV Lacrosse",
+    "Baseball",
+    "Boys Lacrosse",
+    "Girls Lacrosse"
     "Outdoor Track",
-    "Boys Varsity Tennis",
-    "Boys JV Tennis",
-    "Girls Varsity Tennis",
-    "Girls JV Tennis",
+    "Boys Tennis",
+    "Girls Tennis",
     "Boys Volleyball",
-    "Girls Varsity Softball",
-    "Girls JV Softball",
+    "Softball",
+
 ]
 
-# TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
+
 
 
 # Fee calculator
