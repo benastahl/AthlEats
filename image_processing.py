@@ -1,9 +1,10 @@
 from __future__ import print_function
-
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseUpload
+from PIL import Image
+from io import BytesIO
 
 
 def get_service(api_name='drive', api_version='v3', scopes='https://www.googleapis.com/auth/drive', key_file_location='receipt-storage-372419-0812a91ef949.json'):
@@ -103,10 +104,28 @@ def purge(key_file_location, scope='https://www.googleapis.com/auth/drive'):
         print(f'An error occurred: {error}')
 
 
-# def compress_file(file, verbose=False):
-#     # compress the image before upload
-#
-#     picture = Image.open()
+def compress_file(file):
+    """
+    :param file: receipt (FileStorage object)
+    :return: IO stream of compressed image as BytesIO object
+    """
+
+    # change file to bytes
+    image_bytes = BytesIO(file.stream.read())
+    # make PIL image object
+    img = Image.open(image_bytes)
+    # convert to black and white
+    img = img.convert('1')
+
+    # compress pixel size
+    pixels = img.size[0] * img.size[1]
+    if pixels > 921600:
+        factor = 921600/pixels
+        img = img.resize((round(img.size[0]*factor), round(img.size[1]*factor)))
+
+    image_stream = BytesIO()
+    img.save(image_stream, format='PNG')
+    return image_stream
 
 
 def list_files(key_file_location):
@@ -138,6 +157,7 @@ def list_files(key_file_location):
             print(u'{0} ({1})'.format(item['name'], item['id']))
     except HttpError as error:
         print(f'An error occurred: {error}')
+
 
 if __name__ == '__main__':
     # this will delete everything, use at your own risk

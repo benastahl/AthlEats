@@ -39,18 +39,28 @@ error_handles = {
 fall_sport_teams = [
     # Fall Sports
     "Cross Country",
-    "Field Hockey",
-    "Football",
-    "Golf",
-    "Boys Soccer",
-    "Girls Soccer",
-    "Girls Volleyball",
-
+    "Varsity Field Hockey",
+    "JV Field Hockey",
+    "Varsity Football",
+    "JV Football",
+    "Freshman Football",
+    "Golf"
+    "Boys Varsity Soccer",
+    "Boys JV Soccer",
+    "Boys Freshmen Soccer",
+    "Girls Varsity Soccer",
+    "Girls JV Soccer",
+    "Girls Freshman Soccer",
+    "Girls Varsity Volleyball",
+    "Girls JV Volleyball",
 ]
 winter_sport_teams = [
     # Winter Sports
-    "Boys Basketball",
-    "Girls Basketball",
+    "Boys Varsity Basketball",
+    "Boys JV Basketball",
+    "Boys Freshmen Basketball",
+    "Girls Varsity Basketball",
+    "Girls JV Basketball",
     "Girls Hockey",
     "Boys Hockey",
     "Indoor Track",
@@ -61,18 +71,23 @@ winter_sport_teams = [
 
 spring_sport_teams = [
     # Spring Sports
-    "Baseball",
-    "Boys Lacrosse",
-    "Girls Lacrosse"
+    "Boys Varsity Baseball",
+    "Boys JV Baseball",
+    "Boys Varsity Lacrosse",
+    "Boys JV Lacrosse",
+    "Girls Varsity Lacrosse"
+    "Girls JV Lacrosse",
     "Outdoor Track",
-    "Boys Tennis",
-    "Girls Tennis",
+    "Boys Varsity Tennis",
+    "Boys JV Tennis",
+    "Girls Varsity Tennis",
+    "Girls JV Tennis",
     "Boys Volleyball",
-    "Softball",
-
+    "Girls Varsity Softball",
+    "Girls JV Softball",
 ]
 
-
+# TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
 
 
 # Fee calculator
@@ -440,8 +455,10 @@ def process_reserve_form():
     availability_entry_id = request.args.get("availability")
     auth_token = request.cookies.get("auth_token")
 
+    compressed_image = image_processing.compress_file(receipt)
     order_entry_id = str(uuid.uuid4())
-    receipt_id = image_processing.upload(receipt.stream, order_entry_id)
+    # file byte stream of compressed image to be uploaded and name
+    receipt_id = image_processing.upload(compressed_image, order_entry_id)
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
@@ -478,9 +495,6 @@ def process_reserve_form():
             pickup_name=request.form['pickup-name'],
             pickup_location=request.form['pickup-location'],
         )
-
-    # file byte stream to be uploaded and name
-    # TODO: compress the file first
 
 
     send_email(
