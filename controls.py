@@ -1,7 +1,6 @@
 import secrets
 import sqlalchemy
 import uuid
-from sqlalchemy.exc import OperationalError
 import bcrypt
 import os
 

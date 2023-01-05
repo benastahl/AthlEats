@@ -36,42 +36,41 @@ error_handles = {
     },
 
 }
-fall_sport_teams = [
-    # Fall Sports
-    "Cross Country",
-    "Field Hockey",
-    "Football",
-    "Golf",
-    "Boys Soccer",
-    "Girls Soccer",
-    "Girls Volleyball",
-
-]
-winter_sport_teams = [
-    # Winter Sports
-    "Boys Basketball",
-    "Girls Basketball",
-    "Girls Hockey",
-    "Boys Hockey",
-    "Indoor Track",
-    "Ski",
-    "Swimming/Dive",
-    "Wrestling",
-]
-spring_sport_teams = [
-    # Spring Sports
-    "Baseball",
-    "Boys Lacrosse",
-    "Girls Lacrosse",
-    "Outdoor Track",
-    "Boys Tennis",
-    "Girls Tennis",
-    "Boys Volleyball",
-    "Softball",
-
-]
-
-
+sport_teams = {
+    "fall": [
+        # Fall Sports
+        "Cross Country",
+        "Field Hockey",
+        "Football",
+        "Golf",
+        "Boys Soccer",
+        "Girls Soccer",
+        "Girls Volleyball",
+    ],
+    "winter": [
+        # Winter Sports
+        "Boys Basketball",
+        "Girls Basketball",
+        "Girls Hockey",
+        "Boys Hockey",
+        "Indoor Track",
+        "Ski",
+        "Swimming/Dive",
+        "Wrestling",
+    ],
+    "spring": [
+        # Spring Sports
+        "Baseball",
+        "Boys Lacrosse",
+        "Girls Lacrosse",
+        "Outdoor Track",
+        "Boys Tennis",
+        "Girls Tennis",
+        "Boys Volleyball",
+        "Softball",
+    ]
+}
+sport_season = "winter"  # Change to season (fall, winter, spring). Case sensitive.
 
 
 # Fee calculator
@@ -155,10 +154,8 @@ def home():
                            signup_error=signup_error,
                            confirmation_mode=confirmation_mode,
                            reset_password_mode=reset_password_mode,
-                           fall_sport_teams=fall_sport_teams,
-                           winter_sport_teams = winter_sport_teams,
-                           spring_sport_teams = spring_sport_teams,
-
+                           sport_season=sport_season,
+                           sport_teams=sport_teams.get(sport_season)
     )
 
 
