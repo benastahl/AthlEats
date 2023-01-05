@@ -54,6 +54,13 @@ table td, table th {
   overflow: auto;
   border-bottom: 1px solid lightgray;
 }
+.access-form input {
+  all: unset;
+  text-align: left;
+  padding: 5px;
+  white-space: nowrap;
+  overflow: auto;
+}
 table tr:nth-child(odd) {
   background-color: #f4f4f4;
 }
@@ -140,15 +147,14 @@ table .bx {
   position: absolute;
   height: 40px;
   width: 40px;
-  right: 5px;
-  top: 50%;
+  right: -25px;
+  top: 55%;
   transform: translateY(-50%);
   border-radius: 4px;
   line-height: 40px;
   text-align: center;
   color: #fff;
   font-size: 22px;
-  transition: all 0.4 ease;
 }
 
 /* Admin Data Color Theme */

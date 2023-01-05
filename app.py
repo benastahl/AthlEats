@@ -39,28 +39,18 @@ error_handles = {
 fall_sport_teams = [
     # Fall Sports
     "Cross Country",
-    "Varsity Field Hockey",
-    "JV Field Hockey",
-    "Varsity Football",
-    "JV Football",
-    "Freshman Football",
-    "Golf"
-    "Boys Varsity Soccer",
-    "Boys JV Soccer",
-    "Boys Freshmen Soccer",
-    "Girls Varsity Soccer",
-    "Girls JV Soccer",
-    "Girls Freshman Soccer",
-    "Girls Varsity Volleyball",
-    "Girls JV Volleyball",
+    "Field Hockey",
+    "Football",
+    "Golf",
+    "Boys Soccer",
+    "Girls Soccer",
+    "Girls Volleyball",
+
 ]
 winter_sport_teams = [
     # Winter Sports
-    "Boys Varsity Basketball",
-    "Boys JV Basketball",
-    "Boys Freshmen Basketball",
-    "Girls Varsity Basketball",
-    "Girls JV Basketball",
+    "Boys Basketball",
+    "Girls Basketball",
     "Girls Hockey",
     "Boys Hockey",
     "Indoor Track",
@@ -68,26 +58,20 @@ winter_sport_teams = [
     "Swimming/Dive",
     "Wrestling",
 ]
-
 spring_sport_teams = [
     # Spring Sports
-    "Boys Varsity Baseball",
-    "Boys JV Baseball",
-    "Boys Varsity Lacrosse",
-    "Boys JV Lacrosse",
-    "Girls Varsity Lacrosse"
-    "Girls JV Lacrosse",
+    "Baseball",
+    "Boys Lacrosse",
+    "Girls Lacrosse",
     "Outdoor Track",
-    "Boys Varsity Tennis",
-    "Boys JV Tennis",
-    "Girls Varsity Tennis",
-    "Girls JV Tennis",
+    "Boys Tennis",
+    "Girls Tennis",
     "Boys Volleyball",
-    "Girls Varsity Softball",
-    "Girls JV Softball",
+    "Softball",
+
 ]
 
-# TODO: ZOCCO TYPE IN TEAM NAMES from `https://arbiterlive.com/Teams?entityId=24991#`
+
 
 
 # Fee calculator
@@ -469,6 +453,7 @@ def process_reserve_form():
         availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
         if availability.reserved:
             return redirect("/reserve-calendar", 302)
+        order_entry_id = str(uuid.uuid4())
         # Set reserved status of availability to true.
         database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1, order_entry_id=order_entry_id)
 
@@ -481,6 +466,7 @@ def process_reserve_form():
 
         order = database.create_entry(
             table_name="orders",
+
             entry_id=order_entry_id,
             availability_entry_id=availability_entry_id,
             runner_entry_id=availability.runner_entry_id,
@@ -615,11 +601,11 @@ def display_staff_dashboard():
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]
 
+    your_availabilities = [avail for avail in availabilities if avail.date >= datetime.now() and avail.runner_entry_id == user.entry_id]
     reserved_availabilities = [avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id]
 
     completed_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
     incomplete_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 0]
-    print(incomplete_reserved_orders)
 
 
     return render_template("staff-dashboard.html",
@@ -754,21 +740,24 @@ def display_admin_dashboard():
 
 @app.route("/process-admin-order-update/<table>", methods=["POST"])
 def process_admin_order_update(table):
-    # kwargs to pass to edit_entry()
-    form_as_dict = request.form.to_dict()
-    # get table type/name from HTML
-    table_name = str(table)
-    # get entry_id (this only works for orders right now)
-    entry_id = request.form.get("index")
+    auth_token = request.args.get("auth_token")
 
     database = AthlEatsDatabase()
     with database:
+        user = database.get_entry("users", auth_token=auth_token)
+        if not user:
+            return redirect("/", 302)
+
+        # kwargs to pass to edit_entry()
+        form_as_dict = request.form.to_dict()
+        # get table type/name from HTML
+        table_name = str(table)
+        # get entry_id (this only works for orders right now)
+        entry_id = request.form.get("index")
+
         database.edit_entry(table_name=table_name, entry_id=entry_id, **form_as_dict)
 
     return redirect("/admin-dashboard", 302)
-
-
-
 
 
 @app.route("/profile", methods=["GET"])
