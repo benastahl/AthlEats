@@ -423,8 +423,6 @@ def display_reserve_calendar():
         for avail in availabilities:
             avail.date_string = avail.date.strftime("%A, %m/%d/%y")
 
-
-
     return render_template("new_reserve_calendar.html",
                            user=user,
                            availabilities=availabilities,
@@ -457,6 +455,8 @@ def process_reserve_form():
     availability_entry_id = request.args.get("availability")
     auth_token = request.cookies.get("auth_token")
 
+    order_entry_id = str(uuid.uuid4())
+    receipt_id = image_processing.upload(receipt.stream, order_entry_id)
     database = AthlEatsDatabase()
     with database:
         user = database.get_entry(table_name="users", auth_token=auth_token)
@@ -467,7 +467,6 @@ def process_reserve_form():
         availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
         if availability.reserved:
             return redirect("/reserve-calendar", 302)
-        order_entry_id = str(uuid.uuid4())
         # Set reserved status of availability to true.
         database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1, order_entry_id=order_entry_id)
 
@@ -480,7 +479,7 @@ def process_reserve_form():
 
         order = database.create_entry(
             table_name="orders",
-
+            receipt_id=receipt_id,
             entry_id=order_entry_id,
             availability_entry_id=availability_entry_id,
             runner_entry_id=availability.runner_entry_id,
@@ -497,7 +496,7 @@ def process_reserve_form():
 
     # file byte stream to be uploaded and name
     # TODO: compress the file first
-    image_processing.upload(receipt.stream, order_entry_id)
+
 
     send_email(
         sender_name="WHS AthlEats Deliveries",
