@@ -40,8 +40,7 @@ def upload(file, file_name):
     """
 
     # Define the auth scopes to request.
-    scopes = ['https://www.googleapis.com/auth/drive',
-            'https://www.googleapis.com/auth/drive.file']
+    scopes = 'https://www.googleapis.com/auth/drive'
     try:
 
         file_metadata = {
