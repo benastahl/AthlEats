@@ -58,7 +58,8 @@ tables = {
             "price:TEXT",
             "pickup_name:TEXT",
             "pickup_location:TEXT",
-            "receipt_id:TEXT"
+            "receipt_id:TEXT",
+            "location:INT"
         ],
         "instance": Order
     },
@@ -70,7 +71,8 @@ tables = {
             "reserved:INT",
             "date:TEXT",
             "block:TEXT",
-            "is_complete:TEXT"
+            "is_complete:TEXT",
+            "location:INT"
         ],
         "instance": RunnerAvailability
     }

@@ -21,7 +21,7 @@ class User:
 
 
 class Order:
-    def __init__(self, entry_id, availability_entry_id,  is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, price, pickup_location, pickup_name, runner_entry_id, receipt_id):
+    def __init__(self, entry_id, availability_entry_id,  is_complete, email, restaurant, order_date, phone_number, restaurant_pickup_time, price, pickup_location, pickup_name, runner_entry_id, receipt_id, location):
         self.entry_id = entry_id
         self.email = email
         self.availability_entry_id = availability_entry_id
@@ -35,11 +35,12 @@ class Order:
         self.pickup_location = pickup_location
         self.restaurant_pickup_time = restaurant_pickup_time
         self.receipt_id=receipt_id
+        self.location = location
 
 
 
 class RunnerAvailability:
-    def __init__(self, entry_id, runner_entry_id, order_entry_id, reserved, date, block, is_complete):
+    def __init__(self, entry_id, runner_entry_id, order_entry_id, reserved, date, block, is_complete, location):
         self.entry_id = entry_id
         self.runner_entry_id = runner_entry_id
         self.order_entry_id = order_entry_id
@@ -48,6 +49,7 @@ class RunnerAvailability:
         self.date = datetime.strptime(date, "%Y-%m-%d")
         self.block = block
         self.is_complete = int(is_complete)
+        self.location = location
 
 
 # Experimental

@@ -72,6 +72,17 @@ sport_teams = {
 }
 sport_season = "winter"  # Change to season (fall, winter, spring). Case sensitive.
 
+# locations
+LOCATIONS = {
+    "Panera": 1,
+    "Chipotle": 1,
+    "Five Guys": 1,
+    "McDonalds": 2,
+    "Chick-Fil-a": 2,
+    "Wayland Pizza House": 3,
+    "Dunkin Donuts": 4
+}
+
 
 # Fee calculator
 def calculate_fees(price) -> float:
@@ -88,6 +99,7 @@ def send_email(sender_name, recipient, subject, body):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login("athleats.wayland@gmail.com", google_app_password)
         smtp.sendmail("athleats.wayland@gmail.com", recipient, em.as_string())
+
 
 # Do not touch thanks <3
 # @app.before_request
@@ -123,7 +135,6 @@ def handle_outlier_exceptions(e):
 
 @app.errorhandler(HTTPException)
 def handle_exceptions(e):
-
     data = {
         "code": e.code,
         "name": e.name,
@@ -156,7 +167,7 @@ def home():
                            reset_password_mode=reset_password_mode,
                            sport_season=sport_season,
                            sport_teams=sport_teams.get(sport_season)
-    )
+                           )
 
 
 @app.route("/login", methods=["POST"])
@@ -356,7 +367,7 @@ def password_recovery():
 def reset_password():
     email = request.form["email"]
     one_time_password = request.form["one time password"]  # one time password
-    password = request.form["new password"]      # new password
+    password = request.form["new password"]  # new password
     auth_token = request.cookies.get("auth_token")
 
     # confirm emails are the same
@@ -398,7 +409,7 @@ def display_reserve_calendar():
         # Clear all outdated availabilities.
         database.clear_old_availabilities()
 
-        availabilities = database.get_all_entries(table_name="runner_availabilities", reserved=0)
+        availabilities = database.get_all_entries(table_name="runner_availabilities")
 
         # Format time in table
         for avail in availabilities:
@@ -420,14 +431,20 @@ def display_reserve_form():
         availability = database.get_entry(table_name="runner_availabilities", entry_id=entry_id)
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
-    if not availability or availability.reserved:
+    if not availability:
         return redirect("/reserve-calendar", 302)
     if not user:
         return redirect("/", 302)
-
-    return render_template("reserve_form.html",
-                           user=user,
-                           )
+    if availability.location is not None and availability.location != 0:
+        return render_template("reserve_form.html",
+                               user=user,
+                               location=availability.location
+                               )
+    else:
+        return render_template("reserve_form.html",
+                               user=user,
+                               location=0
+                               )
 
 
 @app.route("/reserve-form", methods=["POST"])
@@ -448,11 +465,16 @@ def process_reserve_form():
 
         # Checks if availability is valid/real and still available (not reserved)
         availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
-        if availability.reserved:
-            return redirect("/reserve-calendar", 302)
+        print("aaaaaaaa")
+        print(availability.location)
+        print(LOCATIONS[request.form['restaurant']])
+        if availability.location is not None and availability.location != 0:
+            if availability.location != LOCATIONS[request.form['restaurant']]:
+                return redirect("/reserve-calendar", 302)
         order_entry_id = str(uuid.uuid4())
         # Set reserved status of availability to true.
-        database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1, order_entry_id=order_entry_id)
+        database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1,
+                            order_entry_id=order_entry_id, location=LOCATIONS[request.form['restaurant']])
 
         # Collect runner user instance
         runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
@@ -463,7 +485,6 @@ def process_reserve_form():
 
         order = database.create_entry(
             table_name="orders",
-
             entry_id=order_entry_id,
             availability_entry_id=availability_entry_id,
             runner_entry_id=availability.runner_entry_id,
@@ -477,8 +498,8 @@ def process_reserve_form():
             pickup_name=request.form['pickup-name'],
             pickup_location=request.form['pickup-location'],
             receipt_id=receipt_id,
+            location=LOCATIONS[request.form['restaurant']]
         )
-
 
     send_email(
         sender_name="WHS AthlEats Deliveries",
@@ -550,14 +571,13 @@ def display_order_details(order_entry_id):
             return redirect("/", 302)
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
-
     return render_template("order-complete.html",
-                            user=user,
-                            order=order,
-                            availability=availability,
-                            runner=runner,
-                            fee=calculate_fees(order.price),
-                            )
+                           user=user,
+                           order=order,
+                           availability=availability,
+                           runner=runner,
+                           fee=calculate_fees(order.price),
+                           )
 
 
 @app.route("/availability/<availability_entry_id>", methods=["GET"])
@@ -575,10 +595,10 @@ def display_availability_details(availability_entry_id):
         return redirect("/", 302)
 
     return render_template("availability_details.html",
-                            user=user,
-                            availability=availability,
-                            runner=runner,
-                            )
+                           user=user,
+                           availability=availability,
+                           runner=runner,
+                           )
 
 
 @app.route("/staff-dashboard", methods=["GET"])
@@ -591,18 +611,22 @@ def display_staff_dashboard():
         if not user or not user.staff:
             return redirect("/", 302)
         orders_list = database.get_all_entries(table_name="orders", entry_id=user.entry_id)
-        availabilities = database.get_all_entries(table_name="runner_availabilities", runner_entry_id=user.entry_id)  # TODO: delete connection closes
+        availabilities = database.get_all_entries(table_name="runner_availabilities",
+                                                  runner_entry_id=user.entry_id)  # TODO: delete connection closes
         database.clear_old_availabilities()
 
     incomplete_orders = [order for order in orders_list if order.is_complete == 0]
     completed_orders = [order for order in orders_list if order.is_complete == 1]
 
-    your_availabilities = [avail for avail in availabilities if avail.date >= datetime.now() and avail.runner_entry_id == user.entry_id]
-    reserved_availabilities = [avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id]
+    your_availabilities = [avail for avail in availabilities if
+                           avail.date >= datetime.now() and avail.runner_entry_id == user.entry_id]
+    reserved_availabilities = [avail for avail in availabilities if
+                               avail.reserved and avail.runner_entry_id == user.entry_id]
 
-    completed_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
-    incomplete_reserved_orders=[avail for avail in availabilities if avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 0]
-
+    completed_reserved_orders = [avail for avail in availabilities if
+                                 avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
+    incomplete_reserved_orders = [avail for avail in availabilities if
+                                  avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 0]
 
     return render_template("staff-dashboard.html",
                            user=user,
@@ -648,6 +672,7 @@ def process_new_availability():
             date=request.form.get("date"),
             block=request.form.get("block"),
             is_complete=0,
+            location=0
         )
 
     return redirect("/staff-dashboard", 302)

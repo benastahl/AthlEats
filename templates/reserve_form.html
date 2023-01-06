@@ -330,15 +330,52 @@
 
                         <label for="restaurant">Choose A Restaurant:</label><br>
                         <select id="restaurant" name="restaurant" required>
-                            <option disabled selected value=""></option>
-                            <option value="Chipotle">Chipotle</option>
-                            <option value="Panera">Panera</option>
-                            <option value="McDonalds">McDonalds</option>
-                            <option value="Five-Guys">Five Guys</option>
-                            <option value="Wayland-Pizza-House">Wayland Pizza House</option>
-                            <option value="Chick-Fil-A">Chick-Fil-a</option>
-                            <option value="Dunkin">Dunkin Donuts</option>
-
+                            {% if location == 0 %}
+                                <option disabled selected value=""></option>
+                                <option value="Chipotle">Chipotle</option>
+                                <option value="Panera">Panera</option>
+                                <option value="McDonalds">McDonalds</option>
+                                <option value="Five-Guys">Five Guys</option>
+                                <option value="Wayland-Pizza-House">Wayland Pizza House</option>
+                                <option value="Chick-Fil-A">Chick-Fil-a</option>
+                                <option value="Dunkin">Dunkin Donuts</option>
+                            {% elif location == 1 %}
+                                <option disabled selected value=""></option>
+                                <option value="Chipotle">Chipotle</option>
+                                <option value="Panera">Panera</option>
+                                <option disabled value="McDonalds">McDonalds</option>
+                                <option value="Five-Guys">Five Guys</option>
+                                <option disabled value="Wayland-Pizza-House">Wayland Pizza House</option>
+                                <option disabled value="Chick-Fil-A">Chick-Fil-a</option>
+                                <option disabled value="Dunkin">Dunkin Donuts</option>
+                            {% elif location == 2 %}
+                                <option disabled selected value=""></option>
+                                <option disabled value="Chipotle">Chipotle</option>
+                                <option disabled value="Panera">Panera</option>
+                                <option value="McDonalds">McDonalds</option>
+                                <option disabled value="Five-Guys">Five Guys</option>
+                                <option disabled value="Wayland-Pizza-House">Wayland Pizza House</option>
+                                <option value="Chick-Fil-A">Chick-Fil-a</option>
+                                <option disabled value="Dunkin">Dunkin Donuts</option>
+                            {% elif location == 3 %}
+                                <option disabled selected value=""></option>
+                                <option disabled value="Chipotle">Chipotle</option>
+                                <option disabled value="Panera">Panera</option>
+                                <option disabled value="McDonalds">McDonalds</option>
+                                <option disabled value="Five-Guys">Five Guys</option>
+                                <option value="Wayland-Pizza-House">Wayland Pizza House</option>
+                                <option disabled value="Chick-Fil-A">Chick-Fil-a</option>
+                                <option disabled value="Dunkin">Dunkin Donuts</option>
+                            {% elif location == 4 %}
+                                <option disabled selected value=""></option>
+                                <option disabled value="Chipotle">Chipotle</option>
+                                <option disabled value="Panera">Panera</option>
+                                <option disabled value="McDonalds">McDonalds</option>
+                                <option disabled value="Five-Guys">Five Guys</option>
+                                <option disabled value="Wayland-Pizza-House">Wayland Pizza House</option>
+                                <option disabled value="Chick-Fil-A">Chick-Fil-a</option>
+                                <option value="Dunkin">Dunkin Donuts</option>
+                            {% endif %}
                         </select>
                         <label for="phone-number">Phone Number:</label>
                         <input type="tel" id="phone-number" name="phone-number" placeholder="000-000-0000" maxlength="10"><br>
