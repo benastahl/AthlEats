@@ -423,7 +423,7 @@
   <!-- Fee Calculator -->
   <script>
     function calculate_fees(price) {
-        fee = price * .30;
+        const fee = Math.round((price * .3)*100)/100 ;
 
         return fee;
     }
