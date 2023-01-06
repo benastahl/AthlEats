@@ -22,6 +22,8 @@ google_username = os.getenv("GOOGLE_USERNAME")
 google_password = os.getenv("GOOGLE_PASSWORD")
 google_app_password = os.getenv("GOOGLE_APP_PASSWORD")
 flask_secret_password = os.getenv("FLASK_SECRET_PASSWORD")
+receipt_access = os.getenv("RECEIPT_ACCESS")
+receipt_folder_id = os.getenv("RECEIPT_FOLDER_ID")
 
 drive_api_key = os.getenv("DRIVE_API_KEY")
 

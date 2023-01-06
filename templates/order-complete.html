@@ -82,7 +82,7 @@
                     </span>
 
                     <span class="reserve-data-header">
-                        Email us if there are any problems at: athleats.wayland@gmail.com<br>
+                        Email us if there are any questions or problems at: athleats.wayland@gmail.com<br>
                     </span>
 
                     {% if user.entry_id == order.runner_entry_id or user.admin %}
@@ -92,6 +92,10 @@
                             Update Order </button>
                     </form>
                     {% endif %}
+
+                {% if user.email == order.email or user.entry_id == order.runner_entry_id or user.admin %}
+                    <img src="https://drive.google.com/uc?export=view&id={{ order.receipt_id }}" alt="Receipt Photo">
+                {% endif %}
 
 
 {#                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2950.8587835227354!2d-71.40347662380701!3d42.30287857119835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3888c2e5632bb%3A0x87d88d4862b86fc6!2sMcDonald&#39;s!5e0!3m2!1sen!2snl!4v1672059954839!5m2!1sen!2snl" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>#}
@@ -103,7 +107,6 @@
 
       </div>
     </section>
-
   </body>
 
   {% if user %}

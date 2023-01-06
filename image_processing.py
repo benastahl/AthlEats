@@ -5,9 +5,12 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseUpload
 from PIL import Image
 from io import BytesIO
+import json
+
+from controls import receipt_access, receipt_folder_id
 
 
-def get_service(api_name='drive', api_version='v3', scopes='https://www.googleapis.com/auth/drive', key_file_location='receipt-storage-372419-0812a91ef949.json'):
+def get_service(api_name='drive', api_version='v3', scopes='https://www.googleapis.com/auth/drive'):
     """Get a service that communicates to a Google API.
 
     Args:
@@ -20,8 +23,8 @@ def get_service(api_name='drive', api_version='v3', scopes='https://www.googleap
         A service that is connected to the specified API.
     """
 
-    credentials = service_account.Credentials.from_service_account_file(
-    key_file_location)
+    service_account_info = json.loads(receipt_access)
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
 
     scoped_credentials = credentials.with_scopes(scopes)
 
@@ -39,8 +42,6 @@ def upload(file, file_name):
     # Define the auth scopes to request.
     scopes = ['https://www.googleapis.com/auth/drive',
             'https://www.googleapis.com/auth/drive.file']
-    key_file_location = 'receipt-storage-372419-0812a91ef949.json'
-
     try:
 
         file_metadata = {
@@ -50,21 +51,23 @@ def upload(file, file_name):
             # folder to which file is uploaded
             # I'm too lazy to make it dynamic so if you share it a new folder
             # list the files and choose change this to that folder id
-            'parents': ['13Wgl6RYFvZaWuErS8LXY-LzkDeAbQ6GA']
+            'parents': [receipt_folder_id]
                          }
 
         # Authenticate and construct service.
         service = get_service(
             api_name='drive',
             api_version='v3',
-            scopes=scopes,
-            key_file_location=key_file_location)
+            scopes=scopes)
 
         # Call the Drive v3 API
 
         media = MediaIoBaseUpload(file, mimetype='image/png', resumable=True)
-        service.files().create(body=file_metadata, media_body=media).execute()
+        fileCreate = service.files().create(body=file_metadata, media_body=media)
+        fileCreateExecution = fileCreate.execute()
+        fileID = fileCreateExecution['id']
 
+        return fileID
         # list_files(key_file_location)
 
     except HttpError as error:
@@ -141,9 +144,7 @@ def list_files(key_file_location):
         service = get_service(
             api_name='drive',
             api_version='v3',
-            scopes=[scope],
-            key_file_location=key_file_location)
-
+            scopes=[scope])
         # Call the Drive v3 API
         results = service.files().list(
             pageSize=10, fields="nextPageToken, files(id, name)").execute()
@@ -161,5 +162,5 @@ def list_files(key_file_location):
 
 if __name__ == '__main__':
     # this will delete everything, use at your own risk
-    # purge(key_file_location='receipt-storage-372419-0812a91ef949.json')
-    list_files(key_file_location='receipt-storage-372419-0812a91ef949.json')
+    # purge(key_file_location='secret_data_lol.txt')
+    list_files(key_file_location='secret_data_lol.txt')

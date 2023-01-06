@@ -477,7 +477,6 @@ def process_reserve_form():
             pickup_name=request.form['pickup-name'],
             pickup_location=request.form['pickup-location'],
             receipt_id=receipt_id,
-
         )
 
 
