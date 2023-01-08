@@ -740,6 +740,7 @@ def display_admin_dashboard():
 
         if not user or not user.admin:
             return redirect("/", 302)
+
         orders = database.get_all_entries(table_name="orders")
         users = database.get_all_entries(table_name="users")
 
