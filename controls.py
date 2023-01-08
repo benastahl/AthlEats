@@ -217,6 +217,7 @@ class AthlEatsDatabase:
         entries = self.connection.execute(query_string).fetchall()
         if not entries:
             return []
+
         # assert entries, f"Failed to find a entry with kwargs given ({kwargs})."
         self.log(f"Successfully collected entries from table '{table_name}'", "s")
 
