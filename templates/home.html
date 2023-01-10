@@ -278,8 +278,14 @@
 
                   </div>
                   <div class="leaderboards-container">
-                      <div class="team-leaderboard">
-
+                      <h1>Leaderboards</h1>
+                      <div class="sport-leaderboard">
+                        <h3>{{ sport_season | capitalize }} Sports</h3>
+                          <ol>
+                              {% for team in leader_teams %}
+                              <li>{{ team }}</li>
+                              {% endfor %}
+                          </ol>
                       </div>
                       <!-- Runner dashboard? -->
                   </div>
