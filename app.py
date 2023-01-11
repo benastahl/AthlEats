@@ -415,7 +415,7 @@ def display_reserve_calendar():
         # Format time in table
         for avail in availabilities:
             avail.date_string = avail.date.strftime("%A, %m/%d/%y")
-            if avail.is_complete:
+            if not avail.is_complete:
                 true_availability.append(avail)
 
     return render_template("new_reserve_calendar.html",
