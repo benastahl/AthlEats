@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../static/styles/defaults.css">
+    <link rel="stylesheet" href="../static/styles/nav_bar.css">
+    <link rel="stylesheet" href="../static/styles/access_forms.css">
+    <link rel="stylesheet" href="../static/styles/about_us.css">
+    <link rel="icon" href="../static/images/athleats-logo.png">
+    <title> About Us - AthlEats </title>
+   </head>
+
+  <body>
+    <section class="home-section">
+      <nav>
+          <img onclick="location.href = '/'" class="athleats-logo" src="../static/images/athleats-logo.png" alt="AthlEats Logo">
+
+          {% if user %}
+              <div class="profile-details">
+                <i class="bx bx-user-circle guest-profile-picture"></i>
+                <span class="admin_name">{{user.first_name | capitalize}} {{user.last_name | capitalize }}</span>
+                <i class='arrow bx bx-chevron-down' ></i>
+
+              </div>
+              <div style="visibility: hidden" class="profile-dropdown">
+                      <ul>
+                          <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
+                          <li onclick="show_form('settings-form')" id="settings-selection">Settings</li>
+                          {% if user.staff %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
+                          {% endif %}
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "300px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+          {% endif %}
+
+      </nav>
+
+      <div class="home-content">
+        <div class="about-us-container">
+            <div class="about-us">
+
+                <h1>The creators of AthlEats</h1>
+                <div class="creators">
+                    <h3>Ben Stahl</h3>
+                    <div class="creator-details">
+
+                    </div>
+                </div>
+
+                <h1>Our mission</h1>
+                <div class="mission">
+
+                </div>
+
+            </div>
+        </div>
+
+      </div>
+    </section>
+
+  </body>
+
+  {% if user %}
+    <script src="../static/scripts/profile_dropdown.js"></script>
+  {% endif %}
+
+</html>
+

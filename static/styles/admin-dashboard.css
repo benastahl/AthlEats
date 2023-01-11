@@ -23,6 +23,34 @@
   margin: 0 40px 20px 0;
   width: 1400px;
 }
+
+.admin-stats {
+  height: 400px;
+}
+
+.my-chart .bar {
+  height: 300px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.my-chart {
+  height: 125px;
+  width: 225px;
+}
+
+.stats-container {
+  height: 500px;
+  width: 300px;
+  text-align: left;
+}
+
+.stats-horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .admin-table-container {
   margin-top: 20px;
   border: 1px solid lightgray;
@@ -192,4 +220,28 @@ table .bx {
 }
 #past-orders-data .header th {
   background-color: rgba(153, 51, 255, 0.8)
+}
+
+.admin-tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.admin-tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.admin-tab button:hover {
+  background-color: #ddd;
+}
+
+.admin-tab button.active {
+  background-color: #ccc;
 }

@@ -60,7 +60,7 @@
                 </div>
                 <div class="reserve-data-box">
                     <span class="reserve-data-header">
-                        Pickup Fee: ${{fee}} <br> <br>
+                        <strong> Pickup Fee: </strong> ${{fee}} <br>
                         Send this fee to one of the following: <br>
                         Venmo: @ben-stahl-10 <br>
                         Paypal: <br>
@@ -69,23 +69,27 @@
                     </span>
 
                     <span class="reserve-data-header">
-                        Pickup Location: {{order.pickup_location}} <br>
-                        Your runner: {{runner.first_name | capitalize}} {{runner.last_name | capitalize}}
-                    </span>
-
-                    <span class="reserve-data-header">
+                        <strong>Customer Details:</strong> <br>
+                        Pickup Location (on WHS campus): {{order.pickup_location}} <br>
+                        Your runner: {{runner.first_name | capitalize}} {{runner.last_name | capitalize}} <br>
                         Pickup Time: 3:10 / 2:25pm <br>
                         Restaurant: {{order.restaurant}} <br>
-                        Restaurant Pickup Time: {{order.restaurant_pickup_time}} <br>
-                        Restaurant Pickup Name: {{order.pickup_name}} <br>
-                        Order Phone Number: {{order.phone_number}} <br>
                     </span>
 
                     <span class="reserve-data-header">
                         Email us if there are any questions or problems at: athleats.wayland@gmail.com<br>
                     </span>
-
                     {% if user.entry_id == order.runner_entry_id or user.admin %}
+                    <span class="reserve-data-header">
+                        <strong>Staff Details:</strong> <br>
+                        Order entry id: {{order.entry_id}} <br>
+                        Restaurant: {{order.restaurant}} <br>
+                        Restaurant Pickup Time: {{order.restaurant_pickup_time}} <br>
+                        Restaurant Pickup Name: {{order.pickup_name}} <br> <br>
+                        <strong>Customer Contact Information: </strong> <br>
+                        User email: {{order.email}} <br>
+                        User Phone Number: {{order.phone_number}} <br>
+                    </span>
                     <form action="/order-complete" name="update-order" method="post">
                         <input type="hidden" id="entry_id" name="entry_id" value={{order.entry_id}}>
                         <button class="update-order-button" name="update-order" value="update-order" type="submit">

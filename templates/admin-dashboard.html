@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="../static/styles/defaults.css">
     <link rel="stylesheet" href="../static/styles/nav_bar.css">
     <link rel="stylesheet" href="../static/styles/access_forms.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
     <link rel="stylesheet" href="../static/styles/admin-dashboard.css">
     <link rel="icon" href="../static/images/athleats-logo.png">
+
+
     <title> Admin Dashboard - AthlEats </title>
    </head>
 
@@ -87,6 +90,7 @@
                                     <th>Fee</th>
                                     <th>Pickup Location</th>
                                     <th></th>
+                                    <th></th>
                                   </tr>
                                   {% for order in incomplete_orders %}
                                   <tr>
@@ -108,6 +112,7 @@
                                                   Update Order </button>
                                           </form>
                                       </td>
+                                      <td onclick="location.href = '/order/{{order.entry_id }}'; activateLoadingScreen(null)" class="bx bx-receipt"></td>
                                   </tr>
                                   {% endfor %}
 
@@ -147,6 +152,7 @@
                                     <th>Fee</th>
                                     <th>Pickup Location</th>
                                     <th></th>
+                                    <th></th>
                                   </tr>
                                   {% for order in completed_orders %}
                                   <tr>
@@ -162,6 +168,7 @@
                                       <td>${{calculate_fees(order.price)}}</td>
                                       <td>{{order.pickup_location}}</td>
                                       <td class="view-profile-button"><i class="bx bxs-user-account" ></i></td>
+                                      <td onclick="location.href = '/order/{{order.entry_id }}'; activateLoadingScreen(null)" class="bx bx-receipt"></td>
                                   </tr>
                                   {% endfor %}
 
@@ -259,6 +266,120 @@
 
               </div>
           </div>
+          <div class="admin-data-container">
+              <h3 class="admin-data-title">Statistics</h3>
+              <div class="admin-data-list">
+                  <div class="admin-data form-section">
+                      <div class="admin-tab">
+                          <button class="tablinks" onclick="openStats(event, 'weekly')">Past 7 Days</button>
+                          <button class="tablinks" onclick="openStats(event, 'monthly')">Past 30 Days</button>
+                          <button class="tablinks" onclick="openStats(event, 'all-time')">All-time</button>
+                      </div>
+                      <div id="weekly" class="stats-horizontal statstab">
+                          <div class="stats-container form-section">
+                              <h3 style="font-size:30px">Total Orders</h3>
+                              <div class="stats-horizontal">
+                                  <span style="font-size:30px"> {{total_orders}} </span>
+                                  <i style="size:30px" class='bx bx-up-arrow-alt'></i>
+                                  <span style="font-size:30px"> 10% </span>
+                              </div>
+                              <table class="charts-css line my-chart" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="--start: 0.0; --size: 0.2">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.2; --size: 0.3"> </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.8">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.8; --size: 0.9">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.9; --size: 1.0"> </td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="stats-container form-section">
+                              <h3 style="font-size:30px">Total Profits</h3>
+                              <div class="stats-horizontal">
+                                  <span style="font-size:30px"> ${{total_profits}} </span>
+                                  <i style="size:30px" class='bx bx-up-arrow-alt'></i>
+                                  <span style="font-size:30px"> 10% </span>
+                              </div>
+                              <table class="charts-css line my-chart" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="--start: 0.0; --size: 0.2">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.2; --size: 0.3"> </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.8">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.8; --size: 0.9">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.9; --size: 1.0"> </td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="stats-container form-section">
+                              <h3 style="font-size:30px">Average Order Value</h3>
+                              <div class="stats-horizontal">
+                                  <span style="font-size:30px"> ${{average_order_value}} </span>
+                                  <i style="size:30px" class='bx bx-up-arrow-alt'></i>
+                                  <span style="font-size:30px"> 10% </span>
+                              </div>
+                              <table class="charts-css line my-chart" >
+                                  <tbody>
+                                    <tr>
+                                      <td style="--start: 0.0; --size: 0.2">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.2; --size: 0.3"> </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.3">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.3; --size: 0.8">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.8; --size: 0.9">  </td>
+                                    </tr>
+                                    <tr>
+                                      <td style="--start: 0.9; --size: 1.0"> </td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
 
       </div>
     </section>
@@ -289,6 +410,24 @@
       }
     }
 </script>
+
+  <script>
+      function openStats(event, tab) {
+      var i, statstab, tablinks;
+      statstab = document.getElementsByClassName("statstab");
+      for (i = 0; i < statstab.length; i++) {
+        statstab[i].style.display = "none";
+      }
+
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.toggle("active");
+      }
+
+      document.getElementById(tab).style.display = "flex";
+      event.currentTarget.classList.toggle("active");
+      }
+  </script>
 
   {% if user %}
     <script src="../static/scripts/profile_dropdown.js"></script>
