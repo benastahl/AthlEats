@@ -746,8 +746,16 @@ def display_admin_dashboard():
 
     completed_orders = [order for order in orders if order.is_complete]
     incomplete_orders = [order for order in orders if not order.is_complete]
-
     staff_list = [user for user in users if user.staff]
+
+    total_profits = sum([calculate_fees(order.price) for order in completed_orders])
+    total_orders = len(completed_orders)
+    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2)
+    restaurants = {}
+    # new_users
+    #for order in completed_orders:
+    #most_popular_restaurant
+
 
     return render_template("admin-dashboard.html",
                            user=user,
@@ -755,6 +763,9 @@ def display_admin_dashboard():
                            completed_orders=completed_orders,
                            user_list=users,
                            staff_list=staff_list,
+                           total_profits=total_profits,
+                           total_orders=total_orders,
+                           average_order_value=average_order_value,
                            calculate_fees=calculate_fees
                            )
 
@@ -857,6 +868,16 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
+
+@app.route("/support-faq", methods=["GET"])
+def display_support():
+    # Redirects to dashboard if user has auth_token cookie (otherwise redirects to signup)
+    auth_token = request.cookies.get("auth_token")
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+
+    return render_template("support_FAQ.html", user=user)
 
 
 if __name__ == '__main__':
