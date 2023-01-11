@@ -411,6 +411,7 @@ def display_reserve_calendar():
 
         availabilities = database.get_all_entries(table_name="runner_availabilities")
 
+        # make a subset of the list with non completed availabilities
         true_availability = []
         # Format time in table
         for avail in availabilities:
