@@ -245,5 +245,5 @@ class AthlEatsDatabase:
         self.set_table("runner_availabilities")
         # Delete availabilities that are out of date and were NEVER RESERVED.
         # Does not delete any availabilities that were scheduled.
-        self.connection.execute("DELETE FROM runner_availabilities WHERE (date < CURRENT_DATE AND reserved = 0) OR is_complete")
+        self.connection.execute("DELETE FROM runner_availabilities WHERE date < CURRENT_DATE AND reserved = 0")
         self.log("Cleared all old (outdated) runner availabilities from database.", "p")
