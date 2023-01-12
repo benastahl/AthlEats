@@ -326,7 +326,7 @@
                         <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
 
                         <label for="receipt-upload">Upload receipt(s):</label><br>
-                        <input type="file" id="receipt-upload" name="receipt-upload" multiple><br>
+                        <input type="file" id="receipt-upload" name="receipt-upload" multiple required><br>
 
                         <label for="restaurant">Choose A Restaurant:</label><br>
                         <select id="restaurant" name="restaurant" required>
@@ -394,7 +394,11 @@
                         </select>
 
                         <label for="pickup-location">Select Pickup Location (must be on WHS campus)</label><br>
-                        <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
+                        <select id="pickup-location" name="pickup-location" required>
+                            <option disabled selected value=""></option>
+                            <option value="WHS Student Parking Lot">WHS Student Parking Lot</option>
+                            <option value="Football Field">Football Field</option>
+                        </select>
 
                         <label for="pickup-location">Pickup Name</label><br>
                         <input type="text" id="pickup-name" name="pickup-name" required><br>

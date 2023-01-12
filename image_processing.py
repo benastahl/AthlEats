@@ -61,9 +61,8 @@ def upload(file, file_name):
 
         # Call the Drive v3 API
         media = MediaIoBaseUpload(file, mimetype='image/png', resumable=True)
-        fileCreate = service.files().create(body=file_metadata, media_body=media)
-        fileCreateExecution = fileCreate.execute()
-        fileID = fileCreateExecution['id']
+        fileCreate = service.files().create(body=file_metadata, media_body=media).execute()
+        fileID = fileCreate['id']
 
         return fileID
         # list_files(key_file_location)
