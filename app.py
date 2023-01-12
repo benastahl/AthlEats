@@ -773,6 +773,9 @@ def display_admin_dashboard():
                            calculate_fees=calculate_fees
                            )
 
+def calc_total_profits(days):
+
+    return 2
 
 @app.route("/process-admin-order-update/<table>", methods=["POST"])
 def process_admin_order_update(table):
