@@ -82,9 +82,9 @@
                     <select required class="form-selection" name="sport_team" id="sport_team">
                         <option class="form-selection-placeholder" disabled selected>{{ sport_season }} sport team</option>
                         <option value="No Sport">No Sport</option>
-{#                        {% for team in sport_teams %}#}
-{#                        <option value="{{ team }}">{{ team }}</option>#}
-{#                        {% endfor %}#}
+                        {% for team in sport_teams %}
+                        <option value="{{ team }}">{{ team }}</option>
+                        {% endfor %}
                     </select>
                     <label for="tos"></label><select required class="form-selection" name="tos" id="tos">
                             <option class="form-selection-placeholder" value="" disabled selected>terms of service</option>
