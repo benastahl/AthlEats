@@ -459,6 +459,7 @@ def process_reserve_form():
 
     compressed_image = image_processing.compress_file(receipt)
     order_entry_id = str(uuid.uuid4())
+
     # file byte stream of compressed image to be uploaded and name
     receipt_id = image_processing.upload(compressed_image, order_entry_id)
     database = AthlEatsDatabase()
@@ -469,9 +470,7 @@ def process_reserve_form():
 
         # Checks if availability is valid/real and still available (not reserved)
         availability = database.get_entry(table_name="runner_availabilities", entry_id=availability_entry_id)
-        print("aaaaaaaa")
-        print(availability.location)
-        print(LOCATIONS[request.form['restaurant']])
+
         if availability.location is not None and availability.location != 0:
             if availability.location != LOCATIONS[request.form['restaurant']]:
                 return redirect("/reserve-calendar", 302)
