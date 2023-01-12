@@ -107,43 +107,43 @@ def send_email(sender_name, recipient, subject, body):
 #     return render_template("coconut.html")
 
 
-# @app.errorhandler(Exception)
-# def handle_outlier_exceptions(e):
-#     exception = traceback.TracebackException.from_exception(e)
-#     ending_cause = exception.stack[len(exception.stack) - 1]
-#
-#     exception_data = {
-#         "exception_type": exception.exc_type,
-#         "exception_desc": exception.__dict__['_str'],
-#         "lineno": ending_cause.lineno,
-#         "filename": ending_cause.filename
-#     }
-#
-#     # return error data
-#     for name, details in exception_data.items():
-#         print(f"{name} -> {details}")
-#     data = {
-#         "code": 500,
-#         "name": "Internal Server Error",
-#         "description": exception_data,
-#     }
-#     return render_template(
-#         "error-page.html",
-#         error_data=data
-#     )
-#
-#
-# @app.errorhandler(HTTPException)
-# def handle_exceptions(e):
-#     data = {
-#         "code": e.code,
-#         "name": e.name,
-#         "description": e.description,
-#     }
-#     return render_template(
-#         "error-page.html",
-#         error_data=data
-#     )
+@app.errorhandler(Exception)
+def handle_outlier_exceptions(e):
+    exception = traceback.TracebackException.from_exception(e)
+    ending_cause = exception.stack[len(exception.stack) - 1]
+
+    exception_data = {
+        "exception_type": exception.exc_type,
+        "exception_desc": exception.__dict__['_str'],
+        "lineno": ending_cause.lineno,
+        "filename": ending_cause.filename
+    }
+
+    # return error data
+    for name, details in exception_data.items():
+        print(f"{name} -> {details}")
+    data = {
+        "code": 500,
+        "name": "Internal Server Error",
+        "description": exception_data,
+    }
+    return render_template(
+        "error-page.html",
+        error_data=data
+    )
+
+
+@app.errorhandler(HTTPException)
+def handle_exceptions(e):
+    data = {
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    }
+    return render_template(
+        "error-page.html",
+        error_data=data
+    )
 
 
 @app.route("/", methods=["GET"])
