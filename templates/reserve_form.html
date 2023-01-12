@@ -326,7 +326,7 @@
                         <input type="number" id="input-dollar" name="input-dollar" step="0.01" onkeyup="set_price_calc()" placeholder="00.00"><br>
 
                         <label for="receipt-upload">Upload receipt(s):</label><br>
-                        <input type="file" id="receipt-upload" name="receipt-upload" multiple><br>
+                        <input type="file" id="receipt-upload" name="receipt-upload" multiple required><br>
 
                         <label for="restaurant">Choose A Restaurant:</label><br>
                         <select id="restaurant" name="restaurant" required>
@@ -383,24 +383,31 @@
                         <label for="restaurant-pickup-time">Select Restaurant Pickup Time:</label><br>
                         <select id="restaurant-pickup-time" name="restaurant-pickup-time" required>
                             <option disabled selected value=""></option>
-                            <option value="12:00">12:00pm</option>
+                            <option value="3:10">3:10</option>
+                            <!--- <option value="12:00">12:00pm</option>
                             <option value="12:30">12:30pm</option>
                             <option value="12:40">12:40pm</option>
                             <option value="1:00">1:00pm</option>
                             <option value="1:15">1:15pm</option>
-                            <option value="2:15">2:15pm</option>
+                            <option value="2:15">2:15pm</option> --->
+
 
 
                         </select>
 
                         <label for="pickup-location">Select Pickup Location (must be on WHS campus)</label><br>
-                        <input type="text" id="pickup-location" name="pickup-location" min="09:00" max="18:00" required><br>
+                        <select id="pickup-location" name="pickup-location" required>
+                            <option disabled selected value=""></option>
+                            <option value="WHS Student Parking Lot">WHS Student Parking Lot</option>
+                        </select>
 
                         <label for="pickup-location">Pickup Name</label><br>
                         <input type="text" id="pickup-name" name="pickup-name" required><br>
                     </div>
 
                     <div class="fee-output">Delivery Fee: </div>
+                    <span>Pickup time: 4:15 <br> </span>
+
                      <button id="submit-form-button" type="submit" value="order-form" >submit</button>
 
                 </form>
