@@ -753,7 +753,7 @@ def display_admin_dashboard():
 
     total_profits = sum([calculate_fees(order.price) for order in completed_orders])
     total_orders = len(completed_orders)
-    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2)
+    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2) if total_orders else 0
     restaurants = {}
     # new_users
     #for order in completed_orders:
