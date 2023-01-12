@@ -54,6 +54,7 @@
                     <h3>Availability Details</h3>
                 </div>
                 <div class="reserve-data-box">
+                    {% if not locations %}
                     <span class="reserve-data-header">
                         Id: {{ availability.entry_id }}<br>
                         Runner Id: {{ availability.runner_entry_id }}<br>
@@ -61,6 +62,15 @@
                         Reserved: {{ availability.reserved }}<br>
 
                     </span>
+                    {% else %}
+                    <span class="reserve-data-header">
+                        Id: {{ availability.entry_id }}<br>
+                        Runner Id: {{ availability.runner_entry_id }}<br>
+                        Runner Name: {{ runner.first_name | capitalize }} {{ runner.last_name | capitalize }}
+                        Reserved: {{ availability.reserved }}<br>
+                        Locations Available {{locations}}
+                    </span>
+                    {% endif %}
 
                 </div>
 

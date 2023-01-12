@@ -597,10 +597,18 @@ def display_availability_details(availability_entry_id):
     if not availability or not runner:
         return redirect("/", 302)
 
+    locations = None
+    if availability.location > 0:
+        locations = []
+        for place, code in LOCATIONS.items():
+            if code == availability.location:
+                locations.append(place)
+
     return render_template("availability_details.html",
                            user=user,
                            availability=availability,
                            runner=runner,
+                           locations=locations,
                            )
 
 
