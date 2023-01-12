@@ -78,7 +78,7 @@ LOCATIONS = {
     "Chipotle": 1,
     "Five Guys": 1,
     "McDonalds": 2,
-    "Chick-Fil-a": 2,
+    "Chick-Fil-A": 2,
     "Wayland Pizza House": 3,
     "Dunkin Donuts": 4
 }
@@ -485,7 +485,7 @@ def process_reserve_form():
         sport_team = str(request.form.get("sports-team"))  # TODO: Sports team leaderboard
         price = str(request.form['input-dollar'])
         fee = calculate_fees(price)
-
+        print("--------{}-----".format(type(str(request.form['pickup-location']))))
         order = database.create_entry(
             table_name="orders",
             entry_id=order_entry_id,
@@ -499,10 +499,11 @@ def process_reserve_form():
             restaurant_pickup_time=str(request.form['restaurant-pickup-time']),
             price=price,
             pickup_name=request.form['pickup-name'],
-            pickup_location=request.form['pickup-location'],
+            pickup_location= str(request.form['pickup-location']),
             receipt_id=receipt_id,
             location=LOCATIONS[request.form['restaurant']]
         )
+
 
     send_email(
         sender_name="WHS AthlEats Deliveries",
@@ -761,7 +762,7 @@ def display_admin_dashboard():
 
     total_profits = sum([calculate_fees(order.price) for order in completed_orders])
     total_orders = len(completed_orders)
-    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2)
+    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2) if total_orders else 0
     restaurants = {}
     # new_users
     #for order in completed_orders:
@@ -780,6 +781,9 @@ def display_admin_dashboard():
                            calculate_fees=calculate_fees
                            )
 
+def calc_total_profits(days):
+
+    return 2
 
 @app.route("/process-admin-order-update/<table>", methods=["POST"])
 def process_admin_order_update(table):
