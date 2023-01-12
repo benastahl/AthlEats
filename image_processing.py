@@ -40,7 +40,7 @@ def upload(file, file_name):
     """
 
     # Define the auth scopes to request.
-    scopes = 'https://www.googleapis.com/auth/drive'
+    scopes = ['https://www.googleapis.com/auth/drive']
     try:
 
         file_metadata = {
@@ -51,7 +51,7 @@ def upload(file, file_name):
             # I'm too lazy to make it dynamic so if you share it a new folder
             # list the files and choose change this to that folder id
             'parents': [receipt_folder_id]
-                         }
+        }
 
         # Authenticate and construct service.
         service = get_service(
@@ -60,7 +60,6 @@ def upload(file, file_name):
             scopes=scopes)
 
         # Call the Drive v3 API
-
         media = MediaIoBaseUpload(file, mimetype='image/png', resumable=True)
         fileCreate = service.files().create(body=file_metadata, media_body=media)
         fileCreateExecution = fileCreate.execute()
@@ -82,7 +81,7 @@ def purge(key_file_location, scope='https://www.googleapis.com/auth/drive'):
             api_name='drive',
             api_version='v3',
             scopes=[scope],
-            key_file_location=key_file_location)
+            )
 
         # Call the Drive v3 API
         results = service.files().list(
