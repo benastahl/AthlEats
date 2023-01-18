@@ -76,7 +76,7 @@ sport_season = "winter"  # Change to season (fall, winter, spring). Case sensiti
 LOCATIONS = {
     "Panera": 1,
     "Chipotle": 1,
-    "Five Guys": 1,
+    "Five-Guys": 1,
     "McDonalds": 2,
     "Chick-Fil-A": 2,
     "Wayland Pizza House": 3,
@@ -474,10 +474,10 @@ def process_reserve_form():
         if availability.location is not None and availability.location != 0:
             if availability.location != LOCATIONS[request.form['restaurant']]:
                 return redirect("/reserve-calendar", 302)
-        order_entry_id = str(uuid.uuid4())
         # Set reserved status of availability to true.
+        full_order_entry_id = f"{availability.order_entry_id},{order_entry_id}"
         database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1,
-                            order_entry_id=order_entry_id, location=LOCATIONS[request.form['restaurant']])
+                            order_entry_id=full_order_entry_id, location=LOCATIONS[request.form['restaurant']])
 
         # Collect runner user instance
         runner = database.get_entry(table_name="users", entry_id=availability.runner_entry_id)
@@ -503,7 +503,6 @@ def process_reserve_form():
             receipt_id=receipt_id,
             location=LOCATIONS[request.form['restaurant']]
         )
-
 
     send_email(
         sender_name="WHS AthlEats Deliveries",
@@ -635,6 +634,7 @@ def display_staff_dashboard():
     reserved_availabilities = [avail for avail in availabilities if
                                avail.reserved and avail.runner_entry_id == user.entry_id]
 
+    # TODO: one availability can have multiple orders and multiple order_ids all of which have to be shown
     completed_reserved_orders = [avail for avail in availabilities if
                                  avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
     incomplete_reserved_orders = [avail for avail in availabilities if
@@ -781,9 +781,11 @@ def display_admin_dashboard():
                            calculate_fees=calculate_fees
                            )
 
+
 def calc_total_profits(days):
 
     return 2
+
 
 @app.route("/process-admin-order-update/<table>", methods=["POST"])
 def process_admin_order_update(table):
@@ -883,6 +885,7 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
+
 
 @app.route("/support-faq", methods=["GET"])
 def display_support():
