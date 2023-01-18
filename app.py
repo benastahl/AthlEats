@@ -1,4 +1,5 @@
 import base64
+import copy
 import json
 import random
 import uuid
@@ -640,6 +641,20 @@ def display_staff_dashboard():
     incomplete_reserved_orders = [avail for avail in availabilities if
                                   avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 0]
 
+    reserved_orders = []
+    for avail in incomplete_reserved_orders:
+        if ',' in str(avail.order_entry_id):
+            orders = avail.order_entry_id.split(',')[1:]
+            for order in orders:
+                duplicate = copy.deepcopy(avail)
+                duplicate.order_entry_id = order
+                reserved_orders.append(duplicate)
+        else:
+            reserved_orders.append(avail)
+
+    for avail in reserved_orders:
+        print(avail.order_entry_id)
+
     return render_template("staff-dashboard.html",
                            user=user,
                            availabilities=availabilities,
@@ -647,7 +662,7 @@ def display_staff_dashboard():
                            incomplete_orders=incomplete_orders,
                            completed_orders=completed_orders,
                            completed_reserved_orders=completed_reserved_orders,
-                           incomplete_reserved_orders=incomplete_reserved_orders
+                           incomplete_reserved_orders=reserved_orders
                            )
 
 
