@@ -504,6 +504,7 @@ def process_reserve_form():
             location=LOCATIONS[request.form['restaurant']]
         )
 
+
     send_email(
         sender_name="WHS AthlEats Deliveries",
         recipient=runner.email,
@@ -634,7 +635,6 @@ def display_staff_dashboard():
     reserved_availabilities = [avail for avail in availabilities if
                                avail.reserved and avail.runner_entry_id == user.entry_id]
 
-    # TODO: one availability can have multiple orders and multiple order_ids all of which have to be shown
     completed_reserved_orders = [avail for avail in availabilities if
                                  avail.reserved and avail.runner_entry_id == user.entry_id and avail.is_complete == 1]
     incomplete_reserved_orders = [avail for avail in availabilities if
@@ -762,11 +762,12 @@ def display_admin_dashboard():
 
     total_profits = sum([calculate_fees(order.price) for order in completed_orders])
     total_orders = len(completed_orders)
-    average_order_value = round(sum([float(order.price) for order in completed_orders])/total_orders, 2) if total_orders else 0
+    average_order_value = round(sum([float(order.price) for order in completed_orders]) / total_orders,
+                                2) if total_orders else 0
     restaurants = {}
     # new_users
-    #for order in completed_orders:
-    #most_popular_restaurant
+    # for order in completed_orders:
+    # most_popular_restaurant
 
 
     return render_template("admin-dashboard.html",
@@ -783,6 +784,10 @@ def display_admin_dashboard():
 
 
 def calc_total_profits(days):
+    # today = datetime.date.today()
+    # datetime.date.today().strftime("%D %H:%M:%S")
+    # week_ago = today - datetime.timedelta(days=7)
+    # print(week_ago)
 
     return 2
 
@@ -885,7 +890,6 @@ def display_about():
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
     return render_template("about.html", user=user)
-
 
 @app.route("/support-faq", methods=["GET"])
 def display_support():

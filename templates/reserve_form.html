@@ -72,6 +72,7 @@
                     Jake Zocco's Contact Information: <br>Number: (508)-631-1234 <br> Snapchat: j.zocc0 <br> Instagram: j_zocc0 <br> Xbox: Z0kko (has 21 gold guns on MW2) <br> Tiktok: famous <br>
                 </div>
                 <div class="restaurant-selection">
+                    {% if location == 0 or location == 2 %}
                     <div onclick="show_restaurant_dropdown('mcdonalds')" class="restaurant-button" id="mcdonalds">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://bloximages.newyork1.vip.townnews.com/gazette.com/content/tncms/assets/v3/editorial/9/c3/9c36f7a0-f9c3-11e9-bd95-3354e1272f8a/5db75314c633a.image.png?resize=500%2C500" alt="">
@@ -115,6 +116,8 @@
                         </div>
 
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 1 %}
                     <div onclick="show_restaurant_dropdown('chipotle')" class="restaurant-button" id="chipotle">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://cdn.comparably.com/27489205/l/102480_logo_chipotle.png" alt="">
@@ -134,7 +137,7 @@
                             Enter your name as <span class = "bold"> ATH_(your name)</span>, This allows us to grab your order quicker. <br>
                             <br>
                             Step 4: <br>
-                            Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35</span> <br>
+                            Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10</span> <br>
                             <br>
                             Step 5: <br>
                             After finishing placing your order, go to your <span class="bold">email</span> and take a screenshot of your receipt<br>
@@ -149,6 +152,8 @@
                         </div>
 
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 1 %}
                     <div onclick="show_restaurant_dropdown('panera')" class="restaurant-button" id="panera">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://cdn.cookielaw.org/logos/fc20682e-f5f6-4af8-b143-730cb76bc480/ffaa9d37-f164-4501-b306-d1ea301fa3f5/PaneraLogo.png" alt="">
@@ -168,7 +173,7 @@
                             Enter your Last name as <span class = "bold"> ATH_(last name)</span>, This allows us to grab your order quicker. <br>
                             <br>
                             Step 4: <br>
-                            Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35</span> <br>
+                            Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10 </span> <br>
                             <br>
                             Step 5: <br>
                             Go to your Email and screenshot your order information <br>
@@ -182,6 +187,8 @@
                         </div>
 
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 1 %}
                     <div onclick="show_restaurant_dropdown('five-guys')" class="restaurant-button" id="five-guys">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrt9TGCJQ0cvuGDkjhcPiY_V28HopbJ950qPwmIFjsFnypRq3Bxp9GNbgji8ebAzWpuF0&usqp=CAU" alt="">
@@ -195,7 +202,7 @@
                         Select order location to <span class = "bold"> Natick, 841 Worcester Street</span>, then order your food <br>
                         <br>
                         Step 3: <br>
-                        Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35</span> <br>
+                        Set your pick-up time to one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10</span> <br>
                         <br>
                         Step 4:<br>
                         Enter your name as <span class = "bold"> ATH_(your name)</span>, This allows us to grab your order quicker. <br>
@@ -208,6 +215,8 @@
                             </div>
                             <br>
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 2 %}
                     <div onclick="show_restaurant_dropdown('Chick-fila')" class="restaurant-button" id="Chick-fila">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX7W0TgB62uLx7ezJb0lgGcDeI9tOleGxOAg&usqp=CAU" alt="">
@@ -215,7 +224,7 @@
                         </div>
                         <div class="dropdown-content">
                             <span class = "bold">HEADS UP!</span>
-                            Try to order your food 10-15 before the following times: <span class = "bold"> 12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35</span> <br>
+                            Try to order your food 10-15 before the following times: <span class = "bold"> 12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10</span> <br>
                             This is because McDonalds doesn't have a reserve order system and you don't want your food to get too cold. <br>
                             <br>
                             Step 1: <br>
@@ -235,6 +244,8 @@
 
                         </div>
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 3 %}
                     <div onclick="show_restaurant_dropdown('wayland-pizza-house')" class="restaurant-button" id="wayland-pizza-house">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://waylandpizza.com/img/logo.png" alt="">
@@ -252,7 +263,7 @@
                             <br>
                             Step 4: <br>
                             Go to Available time choice and select <span class ="bold"> Later </span>. Then set your date to <span class="bold"> Today </span>
-                            and set your times as one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35</span> <br>
+                            and set your times as one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10</span> <br>
                             <br>
                             Step 5: <br>
                             Go to your email and take a screen shot of your ordering information. It should look like this:
@@ -263,6 +274,8 @@
 
                         </div>
                     </div>
+                    {% endif %}
+                    {% if location == 0 or location == 4 %}
                     <div onclick="show_restaurant_dropdown('dunkin')" class="restaurant-button" id="dunkin">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALcAAAC3CAMAAABnsD+tAAAAY1BMVEX////yDJD/bgz/toX/kkj8wuP1SKv/28LzGpf/7eH/dxr/iTn94fH/yKT0OaT/9vD/pGf/5NH/v5T3Z7n5lM76pNX0Kp34dsD4hcf90er/gCr+8Pj7s9z/m1f/0rP2V7L/rXaZMy6JAAACi0lEQVR4nO2bYVPiMBBA01KQ0hYBQRTBu///K49ztCKyIZuEejv33udO5s1OsskmW+cAAAAAAAAAAAAAAAAAAAAAAADgv6JeVbPyMlU16pbBA20eHovLzCfb9Tiz9UJw7pkdujpgoPVUkO6ZPD1n0+6kUH+l6e7947Tza9ZvPG7bPNpB1m9RX/iC/nw12J9RzzBhwrX/Ipu34do5zJcq7WPMR8JAYZPkxDxttlRK77LcXcwua6V2UUzXCdp3au0jl0IupT9vyF+ivQ8x3uXhW2bZR2gfQx6dFMNS4Deac/GHKO9iuo/T1q5KUVy7Kns2Ud6vsd7n4rHakeKjaO8z8XjvqDme4F0u8ngX04iskuJdrvJ4F5OBvWcnG1CKd/E0rHdZZfIu1Ft+mnfZZfJWz5RE712fU9K8C+3pMNH786SS6K0NeKr3LpO3NuCp3v0MT/X+NbD3R0pJ9VamFMm7uXtntdj5xWu/9/id/fbKyUtXREjeJ5nZvXpLopXf+2Sc1nvWnWf3Ppp7TumHYO8rFxWqU0qYt6sbWVzh7S0vVBVEoLe7lyO+1Hh7xLe38PbUzyuV94tYP6u2nmBvJ14h/lZ5u7H05fQ23rXkXem85Ur0Nt5OWpqN0nsjfarZ6hXe4taq9G4H9hZXptLbSfefN/IWJ7jWeyJ8qqnWFN4O70G9rc4Tq+vSah40uu9Y3eeNnquMnmON1g1G6zSbdbGlewir9z7B/GP3bMEYvde0eo9s9N7e6juJ0Xcpo++AVt9djb5zG+0r+NE+Dqt9M1b7lKz2hcnlrpef78Oz2vdotc/UbF+v1T5qs33rZv8TMPtfhrP6HwwAAAAAAAAAAAAAAAAAAAAAAAAAACTyBxgMQLi1eTDYAAAAAElFTkSuQmCC" alt="">
@@ -274,6 +287,8 @@
                             <a href="https://www.dunkindonuts.com/en/mobile-app?_gl=1*1j6sl91*_ga*MjA5MTIzMDU5Mi4xNjcwOTg5NDAx*_ga_LNT1RQ3VYN*MTY3MDk4OTQwMS4xLjEuMTY3MDk4OTQ0Mi4xOS4wLjA." target="_blank"> App</a> <br>
                             Step 2: <br>
                             Select order location to <span class="bold">Wayland, 15 E Plain St</span>, then order your food<br>
+                            Go to Available time choice and select <span class ="bold"> Later </span>. Then set your date to <span class="bold"> Today </span>
+                            and set your times as one of the following: <span class = "bold">12:30, 1:15, 2:15</span> or on Wednesday <span class = "bold"> 12:00, 12:40, 1:35, 3:10</span> <br>
                             Step 3: <br>
                             Screenshot your receipt, <span class="bold">MUST</span> contain the following: <br>
                             Order Number, Date, Pickup Time, Price <br> <br>
@@ -297,6 +312,7 @@
 
                         </div>
                     </div>
+                    {% endif %}
                     <div onclick="show_restaurant_dropdown('burger-king')" class="restaurant-button" id="burger-king">
                         <div class="restaurant-header">
                             <img class="restaurant-logo" src="https://toppng.com/uploads/preview/burger-king-logo-png-free-11659261612rezuqygx2w.png" alt="">
@@ -307,6 +323,7 @@
 
                         </div>
                     </div>
+
                 </div>
 
 
