@@ -476,7 +476,10 @@ def process_reserve_form():
             if availability.location != LOCATIONS[request.form['restaurant']]:
                 return redirect("/reserve-calendar", 302)
         # Set reserved status of availability to true.
-        full_order_entry_id = f"{availability.order_entry_id},{order_entry_id}"
+        if availability.order_entry_id == '':
+            full_order_entry_id = order_entry_id
+        else:
+            full_order_entry_id = f"{availability.order_entry_id},{order_entry_id}"
         database.edit_entry(table_name="runner_availabilities", entry_id=availability_entry_id, reserved=1,
                             order_entry_id=full_order_entry_id, location=LOCATIONS[request.form['restaurant']])
 
@@ -644,7 +647,7 @@ def display_staff_dashboard():
     reserved_orders = []
     for avail in incomplete_reserved_orders:
         if ',' in str(avail.order_entry_id):
-            orders = avail.order_entry_id.split(',')[1:]
+            orders = avail.order_entry_id.split(',')
             for order in orders:
                 duplicate = copy.deepcopy(avail)
                 duplicate.order_entry_id = order
