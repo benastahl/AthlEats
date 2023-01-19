@@ -80,7 +80,7 @@ LOCATIONS = {
     "Five-Guys": 1,
     "McDonalds": 2,
     "Chick-Fil-A": 2,
-    "Wayland Pizza House": 3,
+    "Wayland-Pizza-House": 3,
     "Dunkin Donuts": 4
 }
 
