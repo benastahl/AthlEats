@@ -423,6 +423,7 @@ def display_reserve_calendar():
     return render_template("new_reserve_calendar.html",
                            user=user,
                            availabilities=true_availability,
+
                            )
 
 
@@ -436,6 +437,8 @@ def display_reserve_form():
         availability = database.get_entry(table_name="runner_availabilities", entry_id=entry_id)
         user = database.get_entry(table_name="users", auth_token=auth_token)
 
+
+
     if not availability:
         return redirect("/reserve-calendar", 302)
     if not user:
@@ -443,12 +446,14 @@ def display_reserve_form():
     if availability.location is not None and availability.location != 0:
         return render_template("reserve_form.html",
                                user=user,
-                               location=availability.location
+                               location=availability.location,
+                               block=availability.block
                                )
     else:
         return render_template("reserve_form.html",
                                user=user,
-                               location=0
+                               location=0,
+                               block=availability.block
                                )
 
 
@@ -505,7 +510,8 @@ def process_reserve_form():
             pickup_name=request.form['pickup-name'],
             pickup_location= str(request.form['pickup-location']),
             receipt_id=receipt_id,
-            location=LOCATIONS[request.form['restaurant']]
+            location=LOCATIONS[request.form['restaurant']],
+            pickup_time=str(request.form['pickup-time'])
         )
 
 

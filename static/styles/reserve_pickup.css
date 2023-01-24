@@ -5,13 +5,17 @@
 
 /* Reserve Form */
 #reserve-form .reserve-form {
-  max-width: 750px;
+  max-width: 760px;
   height: 100%;
   margin: 0 auto 10px auto;
 }
 
 .form-section {
     text-align: left;
+}
+
+.time-form {
+    max-width: 550px;
 }
 
 .left-section {

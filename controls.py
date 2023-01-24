@@ -59,7 +59,8 @@ tables = {
             "pickup_name:TEXT",
             "pickup_location:TEXT",
             "receipt_id:TEXT",
-            "location:INT"
+            "location:INT",
+            "pickup_time:TEXT",
         ],
         "instance": Order
     },
