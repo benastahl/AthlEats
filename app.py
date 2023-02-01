@@ -708,7 +708,7 @@ def process_new_availability():
             date=request.form.get("date"),
             block=request.form.get("block"),
             is_complete=0,
-            location=0
+            location=request.form.get("location")
         )
 
     return redirect("/staff-dashboard", 302)
