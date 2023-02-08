@@ -66,6 +66,17 @@ class RunnerAvailability:
         self.is_complete = int(is_complete)
         self.location = location
 
+class Menu:
+
+    def __init__(self, name, price, stock, units_sold, profit_from_unit, unit_type, img):
+        self.name = name
+        self.price = price
+        self.stock = stock
+        self.units_sold = units_sold
+        self.profit_from_unit = profit_from_unit
+        self.unit_type = unit_type
+        self.img = img
+
 
 
 # Experimental

@@ -62,7 +62,7 @@
       <div class="reserve-slots-container">
           <div class="reserve-slots" id="availability">
                 <div class="header">
-                    Our Availabilities
+                    Restaurant Availabilities
                     <div class="search-box">
                         <label>
                             <input onkeyup="filterTimesTable()" type="text" placeholder="Search by date...">
@@ -127,6 +127,76 @@
                         </div>
                     {% endif %}
                 </div>
+
+          </div>
+          <div class="reserve-slots" id="availability">
+                <div class="header">
+                    Snacks Availabilities
+                    <div class="search-box">
+                        <label>
+                            <input onkeyup="filterTimesTable()" type="text" placeholder="Search by date...">
+                        </label>
+                        <i class='bx bx-filter-alt' ></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    {% if availabilities %}
+                        <table class="time-slots-table">
+                            <tbody>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Drop-off Time</th>
+                                    <th>Restaurants Available</th>
+                                    <th id="icon-box"></th>
+                                    <th id="icon-box"></th>
+                                </tr>
+                                {% for availability in availabilities %}
+                                <tr>
+                                    <td>{{ availability.date_string }}</td>
+                                    {% if availability.block == '1:35-2:25pm' %}
+                                    <td>2:05-2:25pm</td>
+
+                                    {% elif availability.block == '2:15-3:10pm' %}
+                                    <td>2:50-3:10pm</td>
+
+                                    {% elif availability.block == '3:10-4:00pm' %}
+                                    <td>3:40-4:00pm</td>
+
+                                    {% elif availability.block == '4:00-5:00pm' %}
+                                    <td>4:40-5:00pm</td>
+                                    {% else %}
+                                    <td></td>
+                                    {% endif %}
+
+                                    {% if availability.location == 0 %}
+                                    <td> All </td>
+                                    {% endif %}
+                                    {% if availability.location == 1 %}
+                                    <td> Chipotle, Panera, Five Guys </td>
+                                    {% endif %}
+                                    {% if availability.location == 2 %}
+                                    <td> McDonalds, Chick-Fil-A </td>
+                                    {% endif %}
+                                    {% if availability.location == 3 %}
+                                    <td> Wayland Pizza House </td>
+                                    {% endif %}
+                                    {% if availability.location == 4 %}
+                                    <td> Dunkin Donuts </td>
+                                    {% endif %}
+                                    <td onclick="location.href = '/availability/{{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-info-circle"> </td>
+                                    <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-check-square"> </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                      </table>
+                    {% else %}
+                        <div class="no-availabilities-message-container">
+                            No times available currently
+                        </div>
+                    {% endif %}
+                </div>
+
           </div>
       </div>
 

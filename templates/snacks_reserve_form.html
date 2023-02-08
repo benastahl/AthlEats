@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../static/styles/defaults.css">
+    <link rel="stylesheet" href="../static/styles/nav_bar.css">
+    <link rel="stylesheet" href="../static/styles/calendar.css">
+    <link rel="stylesheet" href="../static/styles/new_reserve_calendar.css">
+    <link rel="stylesheet" href="../static/styles/snacks.css">
+    <link rel="icon" href="../static/images/athleats-logo.png">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Reservation Calendar - AthlEats </title>
+   </head>
+
+  <!-- Loading Activation -->
+  <link href="../static/styles/loading.css" rel="stylesheet">
+  <div class="loading-overlay"></div>
+  <script src="../static/scripts/loading.js" ></script>
+
+  <body>
+    <section class="home-section">
+      <nav>
+          <img onclick="location.href = '/'; activateLoadingScreen(null);" class="athleats-logo" src="../static/images/athleats-logo.png" alt="athleats-logo">
+
+{#          <span onclick="location.href = '/'" class="navbar-title">UnderclassmenEats</span>#}
+            {% if not user %}
+              <div class="access-buttons-section">
+                  <button onclick="show_form('login-form')" id="login-button" class="access-button"> LOGIN </button>
+                  <button onclick="show_form('signup-form')" id="signup-button" class="access-button"> SIGNUP </button>
+              </div>
+          {% else %}
+              <div class="profile-details">
+                <i class="bx bx-user-circle guest-profile-picture"></i>
+                <span class="admin_name">{{user.first_name | capitalize}} {{user.last_name | capitalize }}</span>
+                <i class='arrow bx bx-chevron-down' ></i>
+
+              </div>
+              <div style="visibility: hidden" class="profile-dropdown">
+                      <ul>
+                          <li id="profile-selection" onclick="location.href = '/profile'" ><a href="/profile">Profile</a></li>
+                          <li onclick="document.location.href = document.location.origin + '/settings'" id="settings-selection">Settings</li>
+                          {% if user.staff %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "250px";</script>
+                              <li onclick="location.href = '/staff-dashboard'" ><a href="/staff-dashboard">Staff Dashboard</a></li>
+                          {% endif %}
+                          {% if user.admin %}
+                              <script>document.querySelector(".profile-dropdown").style.marginTop = "300px";</script>
+                              <li onclick="location.href = '/admin-dashboard'" ><a href="/admin-dashboard">Admin Dashboard</a></li>
+
+                          {% endif %}
+                          <li onclick="location.href = '/logout'" class="last-option"><a href="/logout">Logout</a></li>
+                      </ul>
+                </div>
+
+          {% endif %}
+
+
+      </nav>
+
+      <div class="home-content">
+          <div class="order-page-content">
+              <div class="order-tab">
+                  <button class="tab-button" onclick="openTab(event, 'Drinks')" id="defaultOpen"> Drinks </button>
+                  <button class="tab-button" onclick="openTab(event, 'Snacks')"> Snacks </button>
+                  <button class="tab-button" onclick="openTab(event, 'Candy')"> Candy </button>
+              </div>
+
+
+              <div id="Drinks"  class="order-container">
+                  <div class="order-header">
+                      Drinks
+                  </div>
+                  <div class="order-options">
+                      {% for unit in drink_menu %}
+                          {% if loop.index < 8 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                              <div class="unit-header">
+                                  {{ unit.name }}
+                              </div>
+                              <div class="unit-price">
+                                  ${{ unit.price }}
+                              </div>
+                              <div class="unit-stock">
+                                  Stock: {{ unit.stock }}
+                              </div>
+                            </div>
+                          {% elif loop.index < 16 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                              <div class="unit-header">
+                                  {{ unit.name }}
+                              </div>
+                              <div class="unit-price">
+                                  {{ unit.price }}
+                              </div>
+                              <div class="unit-stock">
+                                  Stock: {{ unit.stock }}
+                              </div>
+                            </div>
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+              </div>
+
+              <div id="Snacks"  class="order-container">
+                  <div class="order-header">
+                      Snacks
+                  </div>
+                  <div class="order-options">
+                      {% for unit in menu %}
+                          {% if loop.index < 8 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                            </div>
+                          {% elif loop.index < 16 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                            </div>
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+              </div>
+
+              <div id="Candy"  class="order-container">
+                  <div class="order-header">
+                      Candy
+                  </div>
+                  <div class="order-options">
+                      {% for unit in menu %}
+                          {% if loop.index < 8 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                            </div>
+                          {% elif loop.index < 16 %}
+                            <div class="unit-page">
+                              <div class="unit-img">
+                                  <img src="../static/images/{{ unit.img }}" alt="{{ unit.img }}">
+                              </div>
+                            </div>
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+              </div>
+
+
+
+          </div>
+      </div>
+    </section>
+  </body>
+
+
+    <!-- Calendar Day Details Popup -->
+    <script>
+        function show_day_details(day) {
+            let dayy = parseInt(day);
+            console.log("day-details-" + dayy);
+            let day_popup = document.getElementById("day-details-" + dayy);
+
+            if (day_popup) {
+                console.log("Activated");
+                day_popup.classList.toggle("active");
+            }
+        }
+    </script>
+
+    <!-- Calendar Dropdown -->
+    <script>
+        function dropdownFunc() {
+            document.getElementById("month-dropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+            let dropdowns = document.getElementsByClassName("month-dropdown");
+            let i;
+            for (i = 0; i < dropdowns.length; i++) {
+              let openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
+
+    </script>
+
+    <!-- Search/Filter Bar -->
+    <script>
+        function filterTimesTable() {
+          // Declare variables
+          let input, filter, table, tr, td, i, txtValue;
+          input = document.querySelector(".search-box input");
+          filter = input.value.toUpperCase();
+          table = document.querySelector(".time-slots-table");
+          tr = table.getElementsByTagName("tr");
+
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+        }
+    </script>
+    <script>
+      function openTab(event, tab) {
+      var i, order_container, tab_button;
+      order_container = document.getElementsByClassName("order-container");
+      for (i = 0; i < order_container.length; i++) {
+        order_container[i].style.display = "none";
+      }
+
+      tab_button = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tab_button.length; i++) {
+        tab_button[i].classList.toggle("active");
+      }
+
+      document.getElementById(tab).style.display = "flex";
+      event.currentTarget.classList.toggle("active");
+      }
+    </script>
+    <script>
+
+    document.getElementById("defaultOpen").click();
+    </script>
+
+    {% if user %}
+    <script src="../static/scripts/profile_dropdown.js"></script>
+    {% endif %}
+</html>

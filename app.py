@@ -426,7 +426,6 @@ def display_reserve_calendar():
 
                            )
 
-
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
     auth_token = request.cookies.get("auth_token")
@@ -622,6 +621,25 @@ def display_availability_details(availability_entry_id):
                            locations=locations,
                            )
 
+@app.route("/snacks-reserve", methods=["GET"])
+def display_snacks_form():
+    auth_token = request.cookies.get("auth_token")
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+        drink_menu = database.get_all_entries(table_name="menu", unit_type="drink")
+        snack_menu = database.get_all_entries(table_name="menu", unit_type="snack")
+        candy_menu = database.get_all_entries(table_name="menu", unit_type="candy")
+        if not user:
+            return redirect("/", 302)
+    return render_template("snacks_reserve_form.html",
+                           user=user,
+                           drink_menu=drink_menu,
+                           snack_menu=snack_menu,
+                           candy_menu=candy_menu
+                          )
+
+
 
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
@@ -673,6 +691,8 @@ def display_staff_dashboard():
                            completed_reserved_orders=completed_reserved_orders,
                            incomplete_reserved_orders=reserved_orders
                            )
+
+
 
 
 @app.route("/order-complete", methods=["POST"])
