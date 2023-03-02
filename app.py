@@ -639,6 +639,15 @@ def display_snacks_form():
                            candy_menu=candy_menu
                           )
 
+@app.route("/AddTocart", methods=["POST"])
+def AddToCart():
+    entry_id = request.form.get("entry_id")
+    database = AthlEatsDatabase()
+
+
+
+
+
 
 
 @app.route("/staff-dashboard", methods=["GET"])

@@ -86,7 +86,12 @@
                               </div>
                               <div class="unit-stock">
                                   Stock: {{ unit.stock }}
-                              </div>
+                              </div> </br>
+                              <form class="cart-action">
+                                  <input type="text" class="product-quantity" name="quantity" value="1" size="2" />
+                                  <input type="submit" value="Add to Cart" class="add-to-cart" />
+
+                              </form>
                             </div>
                           {% elif loop.index < 16 %}
                             <div class="unit-page">
@@ -102,6 +107,9 @@
                               <div class="unit-stock">
                                   Stock: {{ unit.stock }}
                               </div>
+                              <button class="add-to-cart">
+                                  Add to cart
+                              </button>
                             </div>
                           {% endif %}
                       {% endfor %}
