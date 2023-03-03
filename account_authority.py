@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class User:
-    def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin, sport_team):
+    def __init__(self, entry_id, email, grade, hashed_password, auth_token, creation_date, staff, admin, sport_team, cart):
         self.entry_id = entry_id
 
         self.first_name = email.split('@')[0].split('_')[0].capitalize()
@@ -14,6 +14,8 @@ class User:
         self.auth_token = auth_token
         self.creation_date = datetime.fromtimestamp(creation_date)
         self.sport_team = sport_team
+        self.cart = cart
+
 
         # Special Roles
         self.staff = bool(staff)
@@ -66,6 +68,17 @@ class RunnerAvailability:
         self.is_complete = int(is_complete)
         self.location = location
 
+class Menu:
+
+    def __init__(self, name, price, stock, units_sold, profit_from_unit, unit_type, img):
+        self.name = name
+        self.price = price
+        self.stock = stock
+        self.units_sold = units_sold
+        self.profit_from_unit = profit_from_unit
+        self.unit_type = unit_type
+        self.img = img
+
 
 
 # Experimental
@@ -96,3 +109,5 @@ class Statistics:
         # Finances
         self.gross_fees_income = gross_fees_income
         self.gross_spent_by_users = gross_spent_by_users
+
+

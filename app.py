@@ -426,7 +426,6 @@ def display_reserve_calendar():
 
                            )
 
-
 @app.route("/reserve-form", methods=["GET"])
 def display_reserve_form():
     auth_token = request.cookies.get("auth_token")
@@ -622,6 +621,34 @@ def display_availability_details(availability_entry_id):
                            locations=locations,
                            )
 
+@app.route("/snacks-reserve", methods=["GET"])
+def display_snacks_form():
+    auth_token = request.cookies.get("auth_token")
+    database = AthlEatsDatabase()
+    with database:
+        user = database.get_entry(table_name="users", auth_token=auth_token)
+        drink_menu = database.get_all_entries(table_name="menu", unit_type="drink")
+        snack_menu = database.get_all_entries(table_name="menu", unit_type="snack")
+        candy_menu = database.get_all_entries(table_name="menu", unit_type="candy")
+        if not user:
+            return redirect("/", 302)
+    return render_template("snacks_reserve_form.html",
+                           user=user,
+                           drink_menu=drink_menu,
+                           snack_menu=snack_menu,
+                           candy_menu=candy_menu
+                          )
+
+@app.route("/AddTocart", methods=["POST"])
+def AddToCart():
+    entry_id = request.form.get("entry_id")
+    database = AthlEatsDatabase()
+
+
+
+
+
+
 
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
@@ -675,6 +702,8 @@ def display_staff_dashboard():
                            )
 
 
+
+
 @app.route("/order-complete", methods=["POST"])
 def process_complete_order():
     entry_id = request.form.get("entry_id")
@@ -708,7 +737,7 @@ def process_new_availability():
             date=request.form.get("date"),
             block=request.form.get("block"),
             is_complete=0,
-            location=0
+            location=request.form.get("location")
         )
 
     return redirect("/staff-dashboard", 302)

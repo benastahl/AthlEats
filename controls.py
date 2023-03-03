@@ -8,7 +8,7 @@ from dotenv import load_dotenv, find_dotenv
 
 from datetime import datetime
 from termcolor import colored
-from account_authority import User, Order, RunnerAvailability
+from account_authority import User, Order, RunnerAvailability, Menu
 
 if not os.getenv("PUBLIC_ACTIVATED"):
     assert load_dotenv(find_dotenv()), "Failed to load environment."
@@ -40,7 +40,8 @@ tables = {
             "creation_date:INT",
             "staff:INT",
             "admin:INT",
-            "sport_team:TEXT"
+            "sport_team:TEXT",
+            "cart:TEXT"
         ],
         "instance": User
     },
@@ -76,6 +77,18 @@ tables = {
             "location:INT"
         ],
         "instance": RunnerAvailability
+    },
+    "menu": {
+        "attributes": [
+            "name:TEXT",
+            "price:TEXT",
+            "stock:INT",
+            "units_sold:INT",
+            "profit_from_unit:TEXT",
+            "unit_type:TEXT",
+            "img:TEXT"
+        ],
+        "instance": Menu
     }
 }
 
