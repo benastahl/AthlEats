@@ -183,8 +183,10 @@
                                     {% if availability.location == 4 %}
                                     <td> Dunkin Donuts </td>
                                     {% endif %}
+
                                     <td onclick="location.href = '/availability/{{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-info-circle"> </td>
-                                    <td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-check-square"> </td>
+                                    <td onclick="location.href = 'https://forms.gle/9NDHmBaUdnHucm2U6'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-check-square"> </td>
+                                    <!--<td onclick="location.href = '/reserve-form?availability={{ availability.entry_id }}'; activateLoadingScreen('icon-box')" id="icon-box" class="bx bxs-check-square"> </td> -->
 
                                 </tr>
                                 {% endfor %}
