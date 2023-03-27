@@ -645,11 +645,6 @@ def AddToCart():
     database = AthlEatsDatabase()
 
 
-
-
-
-
-
 @app.route("/staff-dashboard", methods=["GET"])
 def display_staff_dashboard():
     auth_token = request.cookies.get("auth_token")

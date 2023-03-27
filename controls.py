@@ -41,7 +41,6 @@ tables = {
             "staff:INT",
             "admin:INT",
             "sport_team:TEXT",
-            "cart:TEXT"
         ],
         "instance": User
     },
