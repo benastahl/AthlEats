@@ -71,7 +71,7 @@ sport_teams = {
         "Softball",
     ]
 }
-sport_season = "winter"  # Change to season (fall, winter, spring). Case sensitive.
+sport_season = "spring"  # Change to season (fall, winter, spring). Case sensitive.
 
 # locations
 LOCATIONS = {
